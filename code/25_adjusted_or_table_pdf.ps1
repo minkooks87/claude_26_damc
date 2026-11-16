@@ -1,6 +1,6 @@
 ﻿# 보정변수 단계별 보정 결과표(OR·p값)를 PDF로 만든다.
 # 입력: output/13_v3_main_analysis/12a_four_models.csv (code/13_v3_main_analysis.R의 결과, 새로 계산하지 않음)
-# 출력: Result/2026-11-16_보정변수_보정결과표.pdf (조원 정리 결과 폴더, Result/README.md 규칙)
+# 출력: Result/2026-11-16_보정변수_보정결과표(V3_이전기준).pdf (조원 정리 결과 폴더, Result/README.md 규칙)
 # 실행: 저장소 최상위 폴더에서  powershell -File code/25_adjusted_or_table_pdf.ps1
 # PDF 변환에는 Microsoft Edge의 headless 인쇄 기능을 쓴다.
 
@@ -91,7 +91,7 @@ $($t2 -join "`n")
 
 $tmpHtml = Join-Path $env:TEMP 'adjusted_or_table.html'
 [IO.File]::WriteAllText($tmpHtml, $html, (New-Object System.Text.UTF8Encoding($false)))
-$pdf = Join-Path $out '2026-11-16_보정변수_보정결과표.pdf'
+$pdf = Join-Path $out '2026-11-16_보정변수_보정결과표(V3_이전기준).pdf'
 $edge = @("${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe", "$env:ProgramFiles\Microsoft\Edge\Application\msedge.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
 & $edge --headless=new --disable-gpu --no-pdf-header-footer "--print-to-pdf=$pdf" "file:///$($tmpHtml -replace '\\','/')" | Out-Null
 Start-Sleep -Seconds 2
