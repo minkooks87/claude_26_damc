@@ -34,9 +34,14 @@ description: 6조 홍조 연구(국건영 2019–2021, 음주량 × 안면홍조
 | 프리셋 | 변수 |
 |---|---|
 | Crude | 없음 |
-| Model 1 | age |
-| Model 2 (주 모형) | age, f_edu, f_incm, f_year, f_smk, f_pa |
+| Model 1 | age, meno_cov |
+| Model 2 (주 모형) | age, f_edu, f_incm, f_year, f_smk, f_pa, meno_cov |
 | Model 3 | Model 2 + he_bmi, f_htn, f_dm, egfr10 |
+
+**폐경 상태(meno_cov)는 항상 들어간다.** Crude를 뺀 모든 묶음에 자동으로 추가되고, 사용자가 직접 만든 묶음에도 들어간다. 빼려면 묶음에 `-meno`를 적는다(예: `Model 2-meno`).
+- 여자 모형에만 들어간다. LW_ms(8기 PDF p.190)로 폐경 전(2·3·4), 폐경 후(5·6), 기타(7) 세 범주이고, 9(모름·무응답)는 결측이라 그 여성은 빠진다.
+- 남녀 통합 모형(부질문 2)에서는 성별 상호작용 밖에 여자 전용 지시변수(meno_post, meno_other)로 넣는다.
+- 폐경이 효과수정변수인 폐경 3원 검정과 `--pop=premeno`에서는 자동으로 뺀다.
 
 | 변수 | 뜻 | 변수 | 뜻 |
 |---|---|---|---|
@@ -47,6 +52,7 @@ description: 6조 홍조 연구(국건영 2019–2021, 음주량 × 안면홍조
 | he_bmi | 체질량지수 | egfr10 | eGFR(10 단위) |
 | f_htn | 고혈압 유병(HE_HP) | f_htn_dx | 고혈압 의사진단 |
 | f_dm | 당뇨병 유병(HE_DM_HbA1c) | f_dm_dx | 당뇨병 의사진단 |
+| meno_cov (또는 meno) | 폐경 상태(여자만, 기본 포함) | | |
 
 목록에 없는 변수를 요청받으면 스크립트가 멈춘다. 그 변수를 쓰려면 지침서에서 정의를 확인해 `code/13`에 변수를 만든 뒤 `scripts/ptest.R`의 `cov_avail`에 추가해야 한다고 사용자에게 알린다.
 

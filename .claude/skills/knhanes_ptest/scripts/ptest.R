@@ -25,24 +25,29 @@ suppressPackageStartupMessages({ library(data.table); library(survey) })
 .pt_t0 <- Sys.time()
 
 # ---- 0. 옵션 해석 (자료를 읽기 전에 잘못된 옵션을 먼저 걸러 낸다) ----
-cov_presets <- list("Crude" = character(0), "Model 1" = "age",
-                    "Model 2" = c("age", "f_edu", "f_incm", "f_year", "f_smk", "f_pa"),
-                    "Model 3" = c("age", "f_edu", "f_incm", "f_year", "f_smk", "f_pa", "he_bmi", "f_htn", "f_dm", "egfr10"))
+# 폐경 상태(meno_cov)는 2026-11-16 결정으로 Crude를 뺀 모든 보정 묶음에 기본으로 들어간다(여자에게만 작용).
+cov_presets <- list("Crude" = character(0), "Model 1" = c("age", "meno_cov"),
+                    "Model 2" = c("age", "f_edu", "f_incm", "f_year", "f_smk", "f_pa", "meno_cov"),
+                    "Model 3" = c("age", "f_edu", "f_incm", "f_year", "f_smk", "f_pa", "he_bmi", "f_htn", "f_dm", "egfr10", "meno_cov"))
 preset_alias <- c("crude" = "Crude", "m0" = "Crude", "model 1" = "Model 1", "model1" = "Model 1", "m1" = "Model 1",
                   "model 2" = "Model 2", "model2" = "Model 2", "m2" = "Model 2", "model 3" = "Model 3", "model3" = "Model 3", "m3" = "Model 3")
 cov_avail <- c(age = "연령(세)", age10 = "연령 10세 범주", f_edu = "교육수준", f_incm = "소득 4분위", f_year = "조사연도",
                f_smk = "현재흡연(2범주)", f_smk3 = "흡연 3범주", f_pa = "유산소 신체활동", he_bmi = "체질량지수",
                f_htn = "고혈압 유병(HE_HP)", f_dm = "당뇨병 유병(HE_DM_HbA1c)", f_htn_dx = "고혈압 의사진단",
-               f_dm_dx = "당뇨병 의사진단", egfr10 = "eGFR(10 단위)")
+               f_dm_dx = "당뇨병 의사진단", egfr10 = "eGFR(10 단위)", meno_cov = "폐경 상태(여자만: 폐경 전·폐경 후·기타)")
 parse_covset <- function(txt) {
   toks <- trimws(regmatches(txt, gregexpr("[+-]?[^+-]+", txt))[[1]]); toks <- sub("^\\+\\s*", "", toks); toks <- sub("^-\\s*", "-", toks); toks <- toks[nzchar(toks)]
-  vars <- character(0)
+  vars <- character(0); meno_removed <- FALSE
   for (tk in toks) {
     neg <- startsWith(tk, "-"); nm <- trimws(sub("^-", "", tk)); key <- tolower(nm)
+    if (key %in% c("meno", "폐경")) nm <- "meno_cov"
     add <- if (key %in% names(preset_alias)) cov_presets[[preset_alias[[key]]]] else if (nm %in% names(cov_avail)) nm else
       stop("알 수 없는 보정변수: '", nm, "'. 쓸 수 있는 것: ", paste(c(names(cov_presets), names(cov_avail)), collapse = ", "))
+    if (neg && "meno_cov" %in% add) meno_removed <- TRUE
     vars <- if (neg) setdiff(vars, add) else union(vars, add)
   }
+  # 보정이 있는 묶음에는 폐경 상태를 항상 넣는다('-meno'로 명시적으로 뺀 경우만 제외). Crude(보정 없음)는 그대로 둔다.
+  if (length(vars) && !meno_removed) vars <- union(vars, "meno_cov")
   vars
 }
 cov_txt  <- trimws(strsplit(.pt_opt("covars", "Model 2;Model 3"), ";", fixed = TRUE)[[1]]); cov_txt <- cov_txt[nzchar(cov_txt)]
@@ -71,6 +76,12 @@ sexes <- c("남자", "여자")
 v <- sdes$variables
 v$flush_ever <- factor(ifelse(is.na(v$flush_grp), NA, ifelse(v$flush_grp == "비홍조", "홍조 없음", "과거 또는 현재 홍조")), c("홍조 없음", "과거 또는 현재 홍조"))
 v$age10 <- cut(v$age, c(-Inf, 30, 40, 50, 60, 70, Inf), right = FALSE, labels = c("19-29", "30-39", "40-49", "50-59", "60-69", "70+"))
+# 폐경 상태 보정변수(여자만). LW_ms(8기 PDF p.190 / 인쇄 p.182): 2·3·4 폐경 전, 5·6 폐경 후, 7 기타(실제 응답이므로 별도 범주),
+# 9 모름·무응답은 code/13에서 이미 결측. 남녀 통합 모형에서는 여자에게만 작용하도록 지시변수(meno_post, meno_other)로 넣는다.
+v$meno_cov <- factor(ifelse(v$f_sex != "여자", NA, ifelse(v$lw_ms %in% 2:4, "폐경 전", ifelse(v$lw_ms %in% 5:6, "폐경 후", ifelse(v$lw_ms %in% 7, "기타", NA)))),
+                     c("폐경 전", "폐경 후", "기타"))
+v$meno_post  <- ifelse(v$f_sex == "남자", 0, ifelse(is.na(v$meno_cov), NA, as.numeric(v$meno_cov == "폐경 후")))
+v$meno_other <- ifelse(v$f_sex == "남자", 0, ifelse(is.na(v$meno_cov), NA, as.numeric(v$meno_cov == "기타")))
 lv <- NULL
 if (drink == "cut") {
   k <- length(cut_m); lv <- if (k == 1) c("저음주", "고음주") else if (k == 2) c("저음주", "중음주", "고음주") else paste0("수준", seq_len(k + 1))
@@ -112,29 +123,34 @@ ys <- switch(outcome, hua = "hua", uacid = "uacid", both = c("hua", "uacid"))
 for (y in ys) { fam <- if (y == "hua") quasibinomial() else gaussian()
   for (cn in names(cov_sets)) { covs <- cov_sets[[cn]]
     for (s in sexes) { D <- dsub(sd, d$f_sex == s)
+      # 폐경 상태는 여자 모형에만 넣는다(폐경 전 여자만 볼 때는 값이 하나라 뺀다)
+      covs_s <- if (s == "남자" || pop == "premeno") setdiff(covs, "meno_cov") else covs
       # 홍조 이력 3군(비홍조 기준·홍조 소실·지속 홍조) 한 모형에서 주질문과 부질문 1을 함께 본다
-      rh <- fit_svy(D, mk_form(y, "drk * flush_hist", covs), fam)
+      rh <- fit_svy(D, mk_form(y, "drk * flush_hist", covs_s), fam)
       nh <- function(g) paste0(base_terms, ":flush_hist", g)
       test("주질문", sprintf("지속 홍조 vs 비홍조 (%d df)", dfl), s, cn, rh, one(nh("지속 홍조")), y, c("비홍조", "지속 홍조"), "flush_hist")
       test("부질문 1", sprintf("홍조 소실 vs 비홍조 (%d df)", dfl), s, cn, rh, one(nh("홍조 소실")), y, c("비홍조", "홍조 소실"), "flush_hist")
       test("부질문 1(탐색)", sprintf("홍조 소실 vs 지속 홍조 (%d df)", dfl), s, cn, rh,
            Map(function(a, b) setNames(c(1, -1), c(a, b)), nh("홍조 소실"), nh("지속 홍조")), y, c("홍조 소실", "지속 홍조"), "flush_hist")
       test("참고", sprintf("홍조 이력 세 군 공동 (%d df)", 2 * dfl), s, cn, rh, one(c(nh("홍조 소실"), nh("지속 홍조"))), y, levels(d$flush_hist), "flush_hist")
-      r <- fit_svy(D, mk_form(y, "drk * flush_now", covs), fam)
+      r <- fit_svy(D, mk_form(y, "drk * flush_now", covs_s), fam)
       test("참고", sprintf("현재 홍조 vs 현재 비홍조 (%d df, 계획 발표의 주질문)", dfl), s, cn, r, one(paste0(base_terms, ":flush_now홍조")), y, levels(d$flush_now), "flush_now")
-      re <- fit_svy(D, mk_form(y, "drk * flush_ever", covs), fam)
+      re <- fit_svy(D, mk_form(y, "drk * flush_ever", covs_s), fam)
       test("탐색적 분석", sprintf("홍조 체질(과거 또는 현재) vs 홍조 없음 (%d df)", dfl), s, cn, re, one(paste0(base_terms, ":flush_ever과거 또는 현재 홍조")), y, levels(d$flush_ever), "flush_ever")
     }
     # 부질문 2: '지속 홍조 vs 비홍조' 차이가 남녀에서 다른가 — 보정변수 효과도 성별마다 다르게 둔 통합 모형의 3원 상호작용
-    r3 <- fit_svy(sd, as.formula(paste(y, "~ f_sex * (", paste(c("drk * flush_hist", covs), collapse = " + "), ")")), fam)
+    # 통합 모형: 폐경은 f_sex 상호작용 밖에 여자 전용 지시변수로 넣는다(남자는 0이라 여자에게만 작용)
+    covs_p <- setdiff(covs, "meno_cov")
+    meno_x <- if ("meno_cov" %in% covs && pop != "premeno") " + meno_post + meno_other" else ""
+    r3 <- fit_svy(sd, as.formula(paste0(y, " ~ f_sex * (", paste(c("drk * flush_hist", covs_p), collapse = " + "), ")", meno_x)), fam)
     n3 <- grep("f_sex", grep("^(f_sex.*:)?drk.*:flush_hist지속 홍조", names(coef(r3$fit)), value = TRUE), value = TRUE)
     test("부질문 2", sprintf("지속 홍조 vs 비홍조 차이 × 성별 (3원, %d df)", length(n3)), "남녀 전체", cn, r3, one(n3), y)
-    r3n <- fit_svy(sd, as.formula(paste(y, "~ f_sex * (", paste(c("drk * flush_now", covs), collapse = " + "), ")")), fam)
+    r3n <- fit_svy(sd, as.formula(paste0(y, " ~ f_sex * (", paste(c("drk * flush_now", covs_p), collapse = " + "), ")", meno_x)), fam)
     n3n <- grep("f_sex", grep("drk.*flush_now|flush_now.*drk", names(coef(r3n$fit)), value = TRUE), value = TRUE)
     test("참고", sprintf("현재 홍조 차이 × 성별 (3원, %d df)", length(n3n)), "남녀 전체", cn, r3n, one(n3n), y)
     if (pop != "premeno") {
       Dw <- dsub(sd, d$f_sex == "여자" & !is.na(d$meno))
-      rm3 <- fit_svy(Dw, as.formula(paste(y, "~ meno * (", paste(c("drk * flush_hist", covs), collapse = " + "), ")")), fam)
+      rm3 <- fit_svy(Dw, as.formula(paste(y, "~ meno * (", paste(c("drk * flush_hist", setdiff(covs, "meno_cov")), collapse = " + "), ")")), fam)   # 폐경이 효과수정변수이므로 보정변수에서는 뺀다
       nm3 <- grep("meno", grep("drk.*:flush_hist지속 홍조", names(coef(rm3$fit)), value = TRUE), value = TRUE)
       test("부질문 2(탐색)", sprintf("지속 홍조 vs 비홍조 차이 × 폐경 (3원, %d df)", length(nm3)), "여자", cn, rm3, one(nm3), y)
     }
@@ -148,6 +164,8 @@ options(width = 260, datatable.print.nrows = 500, datatable.print.class = FALSE)
 cat("\n================ knhanes_ptest ================\n")
 cat("기준:", label, "\n음주량:", drink_desc, "\n대상:", switch(pop, all = "전체", premeno = "남자 전체 + 폐경 전 여자", nopreg = "임신·수유 여성 제외"), "\n")
 for (cn in names(cov_sets)) cat(sprintf("보정 '%s': %s\n", cn, if (length(cov_sets[[cn]])) paste(cov_sets[[cn]], collapse = " + ") else "(없음)"))
+if (any(sapply(cov_sets, function(x) "meno_cov" %in% x))) cat("※ meno_cov(폐경 상태)는 여자 모형에만 들어가고, 남녀 통합 모형에서는 여자 전용 지시변수로 들어간다.",
+                                                         if (pop == "premeno") "폐경 전 여자만 보므로 이번에는 빠진다." else "", "\n")
 cat("\n[대상 인원]\n")
 if (drink == "cut") {
   cells <- d[, .(v = sprintf("%d (%d)", .N, sum(hua))), keyby = .(성별 = f_sex, 현재홍조 = flush_now, drk)]
