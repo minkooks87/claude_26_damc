@@ -112,27 +112,31 @@ ys <- switch(outcome, hua = "hua", uacid = "uacid", both = c("hua", "uacid"))
 for (y in ys) { fam <- if (y == "hua") quasibinomial() else gaussian()
   for (cn in names(cov_sets)) { covs <- cov_sets[[cn]]
     for (s in sexes) { D <- dsub(sd, d$f_sex == s)
-      r <- fit_svy(D, mk_form(y, "drk * flush_now", covs), fam)
-      test("주질문", sprintf("음주 × 현재 홍조 (%d df)", dfl), s, cn, r, one(paste0(base_terms, ":flush_now홍조")), y, levels(d$flush_now), "flush_now")
+      # 홍조 이력 3군(비홍조 기준·홍조 소실·지속 홍조) 한 모형에서 주질문과 부질문 1을 함께 본다
       rh <- fit_svy(D, mk_form(y, "drk * flush_hist", covs), fam)
       nh <- function(g) paste0(base_terms, ":flush_hist", g)
-      test("부질문 1", sprintf("음주 × 홍조 이력, 세 군 공동 (%d df)", 2 * dfl), s, cn, rh, one(c(nh("홍조 소실"), nh("지속 홍조"))), y, levels(d$flush_hist), "flush_hist")
-      test("부질문 1", sprintf("소실 vs 비홍조 (%d df, 핵심 대비)", dfl), s, cn, rh, one(nh("홍조 소실")), y, c("비홍조", "홍조 소실"), "flush_hist")
-      test("부질문 1", sprintf("지속 vs 비홍조 (%d df)", dfl), s, cn, rh, one(nh("지속 홍조")), y, c("비홍조", "지속 홍조"), "flush_hist")
-      test("부질문 1", sprintf("소실 vs 지속 (%d df, 탐색)", dfl), s, cn, rh,
+      test("주질문", sprintf("지속 홍조 vs 비홍조 (%d df)", dfl), s, cn, rh, one(nh("지속 홍조")), y, c("비홍조", "지속 홍조"), "flush_hist")
+      test("부질문 1", sprintf("홍조 소실 vs 비홍조 (%d df)", dfl), s, cn, rh, one(nh("홍조 소실")), y, c("비홍조", "홍조 소실"), "flush_hist")
+      test("부질문 1(탐색)", sprintf("홍조 소실 vs 지속 홍조 (%d df)", dfl), s, cn, rh,
            Map(function(a, b) setNames(c(1, -1), c(a, b)), nh("홍조 소실"), nh("지속 홍조")), y, c("홍조 소실", "지속 홍조"), "flush_hist")
+      test("참고", sprintf("홍조 이력 세 군 공동 (%d df)", 2 * dfl), s, cn, rh, one(c(nh("홍조 소실"), nh("지속 홍조"))), y, levels(d$flush_hist), "flush_hist")
+      r <- fit_svy(D, mk_form(y, "drk * flush_now", covs), fam)
+      test("참고", sprintf("현재 홍조 vs 현재 비홍조 (%d df, 계획 발표의 주질문)", dfl), s, cn, r, one(paste0(base_terms, ":flush_now홍조")), y, levels(d$flush_now), "flush_now")
       re <- fit_svy(D, mk_form(y, "drk * flush_ever", covs), fam)
-      test("탐색적 분석", sprintf("음주 × 홍조 체질(과거 또는 현재) (%d df)", dfl), s, cn, re, one(paste0(base_terms, ":flush_ever과거 또는 현재 홍조")), y, levels(d$flush_ever), "flush_ever")
+      test("탐색적 분석", sprintf("홍조 체질(과거 또는 현재) vs 홍조 없음 (%d df)", dfl), s, cn, re, one(paste0(base_terms, ":flush_ever과거 또는 현재 홍조")), y, levels(d$flush_ever), "flush_ever")
     }
-    # 부질문 2: 보정변수 효과도 성별마다 다르게 둔 통합 모형의 3원 상호작용(남녀 층화 모형과 대응)
-    r3 <- fit_svy(sd, as.formula(paste(y, "~ f_sex * (", paste(c("drk * flush_now", covs), collapse = " + "), ")")), fam)
-    n3 <- grep("f_sex", grep("drk.*flush_now|flush_now.*drk", names(coef(r3$fit)), value = TRUE), value = TRUE)
-    test("부질문 2", sprintf("음주 × 현재 홍조 × 성별 (3원, %d df)", length(n3)), "남녀 전체", cn, r3, one(n3), y)
+    # 부질문 2: '지속 홍조 vs 비홍조' 차이가 남녀에서 다른가 — 보정변수 효과도 성별마다 다르게 둔 통합 모형의 3원 상호작용
+    r3 <- fit_svy(sd, as.formula(paste(y, "~ f_sex * (", paste(c("drk * flush_hist", covs), collapse = " + "), ")")), fam)
+    n3 <- grep("f_sex", grep("^(f_sex.*:)?drk.*:flush_hist지속 홍조", names(coef(r3$fit)), value = TRUE), value = TRUE)
+    test("부질문 2", sprintf("지속 홍조 vs 비홍조 차이 × 성별 (3원, %d df)", length(n3)), "남녀 전체", cn, r3, one(n3), y)
+    r3n <- fit_svy(sd, as.formula(paste(y, "~ f_sex * (", paste(c("drk * flush_now", covs), collapse = " + "), ")")), fam)
+    n3n <- grep("f_sex", grep("drk.*flush_now|flush_now.*drk", names(coef(r3n$fit)), value = TRUE), value = TRUE)
+    test("참고", sprintf("현재 홍조 차이 × 성별 (3원, %d df)", length(n3n)), "남녀 전체", cn, r3n, one(n3n), y)
     if (pop != "premeno") {
       Dw <- dsub(sd, d$f_sex == "여자" & !is.na(d$meno))
-      rm3 <- fit_svy(Dw, as.formula(paste(y, "~ meno * (", paste(c("drk * flush_now", covs), collapse = " + "), ")")), fam)
-      nm3 <- grep("meno", grep("drk.*flush_now|flush_now.*drk", names(coef(rm3$fit)), value = TRUE), value = TRUE)
-      test("부질문 2(탐색)", sprintf("음주 × 현재 홍조 × 폐경 (3원, %d df)", length(nm3)), "여자", cn, rm3, one(nm3), y)
+      rm3 <- fit_svy(Dw, as.formula(paste(y, "~ meno * (", paste(c("drk * flush_hist", covs), collapse = " + "), ")")), fam)
+      nm3 <- grep("meno", grep("drk.*:flush_hist지속 홍조", names(coef(rm3$fit)), value = TRUE), value = TRUE)
+      test("부질문 2(탐색)", sprintf("지속 홍조 vs 비홍조 차이 × 폐경 (3원, %d df)", length(nm3)), "여자", cn, rm3, one(nm3), y)
     }
   }
 }
@@ -156,11 +160,13 @@ if (drink == "cut") {
 for (y in unique(res$결과)) {
   cat(sprintf("\n[%s: 상호작용 검정 p]\n", y))
   w <- dcast(res[결과 == y], 구분 + 검정 + 대상 ~ 보정, value.var = "p")
-  ord <- unique(res[결과 == y, .(구분, 검정, 대상)])[, o := .I]
-  w <- merge(ord, w, by = c("구분", "검정", "대상"))[order(o)][, o := NULL]
   for (cn in names(cov_sets)) w[[cn]] <- fp(w[[cn]])
   nts <- res[결과 == y & nzchar(비고), .(비고 = paste(unique(비고), collapse = "; ")), by = .(구분, 검정, 대상)]
-  w <- merge(w, nts, by = c("구분", "검정", "대상"), all.x = TRUE, sort = FALSE); w[is.na(비고), 비고 := ""]
+  w <- merge(w, nts, by = c("구분", "검정", "대상"), all.x = TRUE); w[is.na(비고), 비고 := ""]
+  qorder <- c("주질문", "부질문 1", "부질문 1(탐색)", "부질문 2", "부질문 2(탐색)", "탐색적 분석", "참고")
+  ord <- unique(res[결과 == y, .(구분, 검정, 대상)])[, o := .I]
+  ord[, `:=`(qo = match(구분, qorder), so = match(대상, c("남자", "여자", "남녀 전체")))]
+  w <- merge(ord, w, by = c("구분", "검정", "대상"))[order(qo, so, o)][, c("o", "qo", "so") := NULL]
   print(w)
   e1 <- res[결과 == y & df == 1 & nzchar(`효과(1 df)`), .(구분, 검정, 대상, 보정, `효과(1 df)`)]
   if (nrow(e1)) { cat(sprintf("\n[%s: 1 df 검정의 효과 크기 (%s, 95%% CI)]\n", y, if (y == "고요산혈증") "OR의 비" else "β 차이(mg/dL)")); print(e1) }
