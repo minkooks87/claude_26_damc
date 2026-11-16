@@ -5,7 +5,7 @@
 - PubMed: https://pubmed.ncbi.nlm.nih.gov/30762781/
 - 원문 파일: 2019, Kim & Choe, [보정변수-흡연] 흡연과 혈청 요산(KNHANES).pdf (PMC 공개본, CC BY-NC 4.0)
 - 요약 근거: 초록
-- 인용한 곳: `reference/보정변수_근거문헌.md` (흡연)
+- 쓰임: 보정변수 근거 (흡연)
 
 ## 연구 목적
 

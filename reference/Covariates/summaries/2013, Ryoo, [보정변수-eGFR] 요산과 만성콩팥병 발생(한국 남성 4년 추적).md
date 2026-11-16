@@ -5,7 +5,7 @@
 - PubMed: https://pubmed.ncbi.nlm.nih.gov/23772149/
 - 원문 파일: 2013, Ryoo, [보정변수-eGFR] 요산과 만성콩팥병 발생(한국 남성 4년 추적).pdf (PMC 공개본, CC BY-NC 3.0)
 - 요약 근거: 초록
-- 인용한 곳: `reference/보정변수_근거문헌.md` (eGFR)
+- 쓰임: 보정변수 근거 (eGFR)
 
 ## 연구 목적
 
