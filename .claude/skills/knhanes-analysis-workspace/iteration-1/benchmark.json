@@ -1,0 +1,475 @@
+{
+  "metadata": {
+    "skill_name": "knhanes-analysis",
+    "skill_path": "C:\\Users\\kjh07\\OneDrive\\바탕 화면\\knhanes\\.claude\\skills\\knhanes-analysis",
+    "executor_model": "claude-opus-5-5",
+    "timestamp": "2026-10-18T17:33:05",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "obesity-prevalence-2018",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 9,
+        "failed": 0,
+        "total": 9,
+        "time_seconds": 378.4,
+        "tokens": 147558,
+        "tool_calls": 31,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "보고서에 사용 변수의 정의·코드값 출처로 이용지침서 문서명과 쪽수를 적었다",
+          "passed": true,
+          "evidence": "보고서 표에 제7기 지침서 PDF/인쇄 쪽수(sex p.85, HE_obe p.189, 비만 정의 p.34 등)를 적었고 01_variable_definitions.csv에도 남겼다."
+        },
+        {
+          "text": "분석 대상을 행 삭제 없이 표시 변수로 지정하고, 전체 자료로 만든 svydesign에서 subset()으로 대상·부분집단을 추정했다 (대상만 남긴 자료로 설계를 만들면 실패)",
+          "passed": true,
+          "evidence": "전체 자료로 svydesign(가중치 결측은 0) 후 subset(inc==1), 성별·연령군도 subset으로 추정(01_obesity_prevalence_2018.R 144–217행)."
+        },
+        {
+          "text": "svydesign에 가중치 wt_itvex, 층 kstrata, 집락 psu를 모두 지정했다",
+          "passed": true,
+          "evidence": "svydesign(ids=~psu, strata=~kstrata, weights=~wt_analysis[=wt_itvex])"
+        },
+        {
+          "text": "결과 표에 비가중 표본 수(n)와 가중 추정치를 함께 적었다",
+          "passed": true,
+          "evidence": "결과표에 비가중 n(6,170/2,719/3,451)과 가중 %(SE), 95% CI를 함께 적었다."
+        },
+        {
+          "text": "사용 변수의 모름·무응답(9/99/999)·비해당(8/88/888) 코드 처리 여부와 근거를 확인해 밝혔다",
+          "passed": true,
+          "evidence": "이 분석 변수에 9/99 코드가 없음을 확인했고, HE_prg 8(비해당·남자) 처리 방법을 밝혔다."
+        },
+        {
+          "text": "공식 통계와 대조를 수행해 출처와 함께 결과를 제시했거나, 공식값을 확인하지 못했다면 그 사실과 이유를 밝혔다",
+          "passed": true,
+          "evidence": "e-나라지표 공식값과 대조했다. 연령표준화 차이로 여자 값이 CI 밖임을 설명했고, 연령군별 조율 2개는 공식값과 일치했다(05_official_check.csv)."
+        },
+        {
+          "text": "분석 스크립트를 새로 다시 실행해 결과가 동일한지 확인했다(재현성 확인)",
+          "passed": true,
+          "evidence": "_reproducibility.txt: result PASS (CSV 6개 md5 동일)"
+        },
+        {
+          "text": "프로젝트의 data/, code/, output/ 폴더에 파일을 만들거나 수정하지 않았다",
+          "passed": true,
+          "evidence": "실행 후 프로젝트 code/, output/, data/ 폴더의 파일 목록과 수정 시각이 실행 전과 같다."
+        },
+        {
+          "text": "남녀 비만 유병률이 기준값(2018, 19세 이상, wt_itvex, BMI≥25: 남 41.9%, 여 28.2%)과 각각 ±1.0%p 이내이거나, 벗어나면 대상 정의 차이(예: 임신부 제외)를 명시했다",
+          "passed": true,
+          "evidence": "남 41.9%, 여 28.1%(임신부 제외). 기준값(남 41.9, 여 28.2)과 ±1.0%p 이내이다."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "obesity-prevalence-2018",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.67,
+        "passed": 6,
+        "failed": 3,
+        "total": 9,
+        "time_seconds": 186.4,
+        "tokens": 98263,
+        "tool_calls": 19,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "보고서에 사용 변수의 정의·코드값 출처로 이용지침서 문서명과 쪽수를 적었다",
+          "passed": true,
+          "evidence": "보고서 '변수와 근거' 표에 제7기 지침서 인쇄 쪽(PDF 쪽)을 적었다."
+        },
+        {
+          "text": "분석 대상을 행 삭제 없이 표시 변수로 지정하고, 전체 자료로 만든 svydesign에서 subset()으로 대상·부분집단을 추정했다 (대상만 남긴 자료로 설계를 만들면 실패)",
+          "passed": false,
+          "evidence": "가중치 결측자(검진·설문 미참여자) 행을 지운 자료(d[!is.na(wt_itvex)])로 svydesign을 만들었다. 연령 대상은 subset()으로 골랐지만 '행 삭제 없이'라는 기준에는 맞지 않는다. 다만 미참여자 행 삭제는 이번 결과 수치에는 영향이 없었다. (02_obesity_prevalence_2018.R 40–42행)"
+        },
+        {
+          "text": "svydesign에 가중치 wt_itvex, 층 kstrata, 집락 psu를 모두 지정했다",
+          "passed": true,
+          "evidence": "svydesign(ids=~psu, strata=~kstrata, weights=~wt_itvex, nest=TRUE)"
+        },
+        {
+          "text": "결과 표에 비가중 표본 수(n)와 가중 추정치를 함께 적었다",
+          "passed": true,
+          "evidence": "표 1에 분석 대상 n·비만 n(비가중)과 가중 유병률, SE, CI를 함께 적었다."
+        },
+        {
+          "text": "사용 변수의 모름·무응답(9/99/999)·비해당(8/88/888) 코드 처리 여부와 근거를 확인해 밝혔다",
+          "passed": true,
+          "evidence": "HE_BMI·HE_obe에 9/99 코드가 없음을 01_check_vars.R로 확인했다고 밝혔다."
+        },
+        {
+          "text": "공식 통계와 대조를 수행해 출처와 함께 결과를 제시했거나, 공식값을 확인하지 못했다면 그 사실과 이유를 밝혔다",
+          "passed": false,
+          "evidence": "공식 통계값과 비교한 표나 문장이 없다. '공식 통계는 연령표준화라 다를 수 있다'고 언급만 했다."
+        },
+        {
+          "text": "분석 스크립트를 새로 다시 실행해 결과가 동일한지 확인했다(재현성 확인)",
+          "passed": false,
+          "evidence": "분석 스크립트를 새 세션에서 다시 실행해 결과를 비교한 흔적(코드·파일·보고서)이 없다."
+        },
+        {
+          "text": "프로젝트의 data/, code/, output/ 폴더에 파일을 만들거나 수정하지 않았다",
+          "passed": true,
+          "evidence": "실행 후 프로젝트 code/, output/, data/ 폴더의 파일 목록과 수정 시각이 실행 전과 같다."
+        },
+        {
+          "text": "남녀 비만 유병률이 기준값(2018, 19세 이상, wt_itvex, BMI≥25: 남 41.9%, 여 28.2%)과 각각 ±1.0%p 이내이거나, 벗어나면 대상 정의 차이(예: 임신부 제외)를 명시했다",
+          "passed": true,
+          "evidence": "남 41.9%, 여 28.1%(임신부 제외). 기준값과 ±1.0%p 이내이다."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "table1-young-adults-2016",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 354.3,
+        "tokens": 138975,
+        "tool_calls": 27,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "보고서에 사용 변수의 정의·코드값 출처로 이용지침서 문서명과 쪽수를 적었다",
+          "passed": true,
+          "evidence": "변수 정의 표에 PDF/인쇄 쪽(incm p.85, edu p.86, HE_BMI p.189 등)을 적었다."
+        },
+        {
+          "text": "분석 대상을 행 삭제 없이 표시 변수로 지정하고, 전체 자료로 만든 svydesign에서 subset()으로 대상·부분집단을 추정했다 (대상만 남긴 자료로 설계를 만들면 실패)",
+          "passed": true,
+          "evidence": "전체 자료로 설계 후 subset(inc==1), 성별 열도 subset(sub, sex==g)으로 계산했다(01_table1_young_adults_2016.R 138–187행)."
+        },
+        {
+          "text": "svydesign에 가중치 wt_itvex, 층 kstrata, 집락 psu를 모두 지정했다",
+          "passed": true,
+          "evidence": "svydesign(ids=~psu, strata=~kstrata, weights=~wt_analysis[=wt_itvex])"
+        },
+        {
+          "text": "결과 표에 비가중 표본 수(n)와 가중 추정치를 함께 적었다",
+          "passed": true,
+          "evidence": "Table 1에 전체·남·여 각각 n과 가중 %(SE)·평균(SE)을 적었다."
+        },
+        {
+          "text": "사용 변수의 모름·무응답(9/99/999)·비해당(8/88/888) 코드 처리 여부와 근거를 확인해 밝혔다",
+          "passed": true,
+          "evidence": "incm·edu에 9 코드가 없고 NA임을 확인했다고 밝혔다. 임신부 BMI 처리 근거(산출 프로그램 p.41)도 적었다."
+        },
+        {
+          "text": "공식 통계와 대조를 수행해 출처와 함께 결과를 제시했거나, 공식값을 확인하지 못했다면 그 사실과 이유를 밝혔다",
+          "passed": true,
+          "evidence": "2016 국민건강통계 남자 연령군별 비만율 5개와 대조했고 모두 CI 안이었다. 출처는 언론 보도라고 밝혔다."
+        },
+        {
+          "text": "분석 스크립트를 새로 다시 실행해 결과가 동일한지 확인했다(재현성 확인)",
+          "passed": true,
+          "evidence": "_reproducibility.txt: result PASS"
+        },
+        {
+          "text": "프로젝트의 data/, code/, output/ 폴더에 파일을 만들거나 수정하지 않았다",
+          "passed": true,
+          "evidence": "실행 후 프로젝트 code/, output/, data/ 폴더의 파일 목록과 수정 시각이 실행 전과 같다."
+        },
+        {
+          "text": "Table 1이 남/여 열로 나뉘고 나이·incm·edu·HE_BMI 네 변수를 모두 포함하며, 남녀 비가중 n이 770/1,020명(가중치 결측 제외)과 같거나 다르면 이유를 밝혔다",
+          "passed": true,
+          "evidence": "남·여 열, 나이·incm·edu·HE_BMI 포함, n 770/1,020으로 기준과 같다."
+        },
+        {
+          "text": "남녀 가중 평균 BMI가 기준값(남 24.6, 여 22.3)과 ±0.1 이내이다",
+          "passed": true,
+          "evidence": "가중 평균 BMI 남 24.6, 여 22.2(임신부 제외; 기준 22.28과 차이 0.08)로 ±0.1 이내이다."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "table1-young-adults-2016",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.7,
+        "passed": 7,
+        "failed": 3,
+        "total": 10,
+        "time_seconds": 262.9,
+        "tokens": 115814,
+        "tool_calls": 26,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "보고서에 사용 변수의 정의·코드값 출처로 이용지침서 문서명과 쪽수를 적었다",
+          "passed": true,
+          "evidence": "변수 정의 근거에 제7기 지침서 인쇄 쪽(p.85, p.86, p.189 등)을 적었다."
+        },
+        {
+          "text": "분석 대상을 행 삭제 없이 표시 변수로 지정하고, 전체 자료로 만든 svydesign에서 subset()으로 대상·부분집단을 추정했다 (대상만 남긴 자료로 설계를 만들면 실패)",
+          "passed": false,
+          "evidence": "가중치 결측자(검진·설문 미참여자) 행을 지운 자료(d[!is.na(wt_itvex)])로 svydesign을 만들었다. 연령 대상은 subset()으로 골랐지만 '행 삭제 없이'라는 기준에는 맞지 않는다. 다만 미참여자 행 삭제는 이번 결과 수치에는 영향이 없었다. (table1_2016_age19_39_by_sex.R 75–78행)"
+        },
+        {
+          "text": "svydesign에 가중치 wt_itvex, 층 kstrata, 집락 psu를 모두 지정했다",
+          "passed": true,
+          "evidence": "svydesign(ids=~psu, strata=~kstrata, weights=~wt_itvex)"
+        },
+        {
+          "text": "결과 표에 비가중 표본 수(n)와 가중 추정치를 함께 적었다",
+          "passed": true,
+          "evidence": "Table 1에 n(가중 %)과 평균(SE)을 함께 적었다."
+        },
+        {
+          "text": "사용 변수의 모름·무응답(9/99/999)·비해당(8/88/888) 코드 처리 여부와 근거를 확인해 밝혔다",
+          "passed": true,
+          "evidence": "incm/edu 9 코드 확인, educ 99 = 모름·무응답 처리, 8/88 없음을 밝혔다."
+        },
+        {
+          "text": "공식 통계와 대조를 수행해 출처와 함께 결과를 제시했거나, 공식값을 확인하지 못했다면 그 사실과 이유를 밝혔다",
+          "passed": false,
+          "evidence": "공식 통계값과 비교한 표나 문장이 없다."
+        },
+        {
+          "text": "분석 스크립트를 새로 다시 실행해 결과가 동일한지 확인했다(재현성 확인)",
+          "passed": false,
+          "evidence": "분석 스크립트를 새 세션에서 다시 실행해 결과를 비교한 흔적(코드·파일·보고서)이 없다."
+        },
+        {
+          "text": "프로젝트의 data/, code/, output/ 폴더에 파일을 만들거나 수정하지 않았다",
+          "passed": true,
+          "evidence": "실행 후 프로젝트 code/, output/, data/ 폴더의 파일 목록과 수정 시각이 실행 전과 같다."
+        },
+        {
+          "text": "Table 1이 남/여 열로 나뉘고 나이·incm·edu·HE_BMI 네 변수를 모두 포함하며, 남녀 비가중 n이 770/1,020명(가중치 결측 제외)과 같거나 다르면 이유를 밝혔다",
+          "passed": true,
+          "evidence": "남·여 열, 네 변수 포함, n 770/1,020이다."
+        },
+        {
+          "text": "남녀 가중 평균 BMI가 기준값(남 24.6, 여 22.3)과 ±0.1 이내이다",
+          "passed": true,
+          "evidence": "detail CSV 기준 남 24.58, 여 22.20(임신부 제외)으로 ±0.1 이내이다."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "logistic-smoking-htn-30s-2021",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 451.8,
+        "tokens": 163456,
+        "tool_calls": 32,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "보고서에 사용 변수의 정의·코드값 출처로 이용지침서 문서명과 쪽수를 적었다",
+          "passed": true,
+          "evidence": "HE_HP p.188, sm_presnt p.174, 산출 프로그램 p.40/p.43 등 PDF/인쇄 쪽을 적었다."
+        },
+        {
+          "text": "분석 대상을 행 삭제 없이 표시 변수로 지정하고, 전체 자료로 만든 svydesign에서 subset()으로 대상·부분집단을 추정했다 (대상만 남긴 자료로 설계를 만들면 실패)",
+          "passed": true,
+          "evidence": "전체 자료로 설계 후 subset(inc==1), 성별 하위모형도 subset(sub, sex==...)으로 추정했다(smoking_htn_30s_2021.R 187–274행)."
+        },
+        {
+          "text": "svydesign에 가중치 wt_itvex, 층 kstrata, 집락 psu를 모두 지정했다",
+          "passed": true,
+          "evidence": "svydesign(ids=~psu, strata=~kstrata, weights=~wt_analysis[=wt_itvex])"
+        },
+        {
+          "text": "결과 표에 비가중 표본 수(n)와 가중 추정치를 함께 적었다",
+          "passed": true,
+          "evidence": "Table 1과 회귀표에 비가중 n(고혈압 수)과 가중 %·OR을 함께 적었다."
+        },
+        {
+          "text": "사용 변수의 모름·무응답(9/99/999)·비해당(8/88/888) 코드 처리 여부와 근거를 확인해 밝혔다",
+          "passed": true,
+          "evidence": "BS1_1·BS3_1·DI1_2의 8(비해당)과 9 처리를 지침서 산출 프로그램 기준으로 밝혔다."
+        },
+        {
+          "text": "공식 통계와 대조를 수행해 출처와 함께 결과를 제시했거나, 공식값을 확인하지 못했다면 그 사실과 이유를 밝혔다",
+          "passed": true,
+          "evidence": "공표 유병률 대조는 못 했다고 이유와 함께 밝혔다. 대신 가중치 합이 추계인구와 일치하는지, 생성변수 재현이 100% 일치하는지를 출처 쪽수와 함께 대조했다."
+        },
+        {
+          "text": "분석 스크립트를 새로 다시 실행해 결과가 동일한지 확인했다(재현성 확인)",
+          "passed": true,
+          "evidence": "_reproducibility.txt: result PASS (CSV 9개)"
+        },
+        {
+          "text": "프로젝트의 data/, code/, output/ 폴더에 파일을 만들거나 수정하지 않았다",
+          "passed": true,
+          "evidence": "실행 후 프로젝트 code/, output/, data/ 폴더의 파일 목록과 수정 시각이 실행 전과 같다."
+        },
+        {
+          "text": "설계 객체에 로지스틱 회귀(svyglm, binomial/quasibinomial)를 적합해 현재흡연의 보정 OR과 95% CI를 제시했다",
+          "passed": true,
+          "evidence": "svyglm(quasibinomial) 보정 OR 1.75 (0.87–3.49)"
+        },
+        {
+          "text": "고혈압과 현재흡연의 정의(사용 변수와 코드)를 지침서 근거로 명시했다",
+          "passed": true,
+          "evidence": "HE_HP 3=고혈압(SBP≥140/DBP≥90/약 복용), sm_presnt 정의를 지침서 쪽수와 함께 적었다."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "logistic-smoking-htn-30s-2021",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.7,
+        "passed": 7,
+        "failed": 3,
+        "total": 10,
+        "time_seconds": 235.6,
+        "tokens": 110176,
+        "tool_calls": 17,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "보고서에 사용 변수의 정의·코드값 출처로 이용지침서 문서명과 쪽수를 적었다",
+          "passed": true,
+          "evidence": "변수 정의 표에 제8기 지침서 인쇄 쪽(p.174, p.188, p.92 등)을 적었다."
+        },
+        {
+          "text": "분석 대상을 행 삭제 없이 표시 변수로 지정하고, 전체 자료로 만든 svydesign에서 subset()으로 대상·부분집단을 추정했다 (대상만 남긴 자료로 설계를 만들면 실패)",
+          "passed": false,
+          "evidence": "가중치 결측자(검진·설문 미참여자) 행을 지운 자료(d[!is.na(wt_itvex)])로 svydesign을 만들었다. 연령 대상은 subset()으로 골랐지만 '행 삭제 없이'라는 기준에는 맞지 않는다. 다만 미참여자 행 삭제는 이번 결과 수치에는 영향이 없었다. (smoking_htn_30s_2021.R 101–107행: 가중치 없는 레코드 제외 후 svydesign)"
+        },
+        {
+          "text": "svydesign에 가중치 wt_itvex, 층 kstrata, 집락 psu를 모두 지정했다",
+          "passed": true,
+          "evidence": "svydesign(ids=~psu, strata=~kstrata, weights=~wt_itvex, nest=TRUE)"
+        },
+        {
+          "text": "결과 표에 비가중 표본 수(n)와 가중 추정치를 함께 적었다",
+          "passed": true,
+          "evidence": "표 1·표 2에 비가중 n과 가중 %·OR을 함께 적었다."
+        },
+        {
+          "text": "사용 변수의 모름·무응답(9/99/999)·비해당(8/88/888) 코드 처리 여부와 근거를 확인해 밝혔다",
+          "passed": true,
+          "evidence": "BS1_1·BS3_1의 9는 결측, BS3_1=8과 DI1_2=8은 지침서 산출식에 따라 처리했다고 밝혔다."
+        },
+        {
+          "text": "공식 통계와 대조를 수행해 출처와 함께 결과를 제시했거나, 공식값을 확인하지 못했다면 그 사실과 이유를 밝혔다",
+          "passed": false,
+          "evidence": "공식 통계값과 비교한 표나 문장이 없다. 생성변수 재계산 일치 확인은 했지만 공식 통계 대조는 아니다."
+        },
+        {
+          "text": "분석 스크립트를 새로 다시 실행해 결과가 동일한지 확인했다(재현성 확인)",
+          "passed": false,
+          "evidence": "분석 스크립트를 새 세션에서 다시 실행해 결과를 비교한 흔적(코드·파일·보고서)이 없다."
+        },
+        {
+          "text": "프로젝트의 data/, code/, output/ 폴더에 파일을 만들거나 수정하지 않았다",
+          "passed": true,
+          "evidence": "실행 후 프로젝트 code/, output/, data/ 폴더의 파일 목록과 수정 시각이 실행 전과 같다."
+        },
+        {
+          "text": "설계 객체에 로지스틱 회귀(svyglm, binomial/quasibinomial)를 적합해 현재흡연의 보정 OR과 95% CI를 제시했다",
+          "passed": true,
+          "evidence": "svyglm(quasibinomial) 보정 OR 1.75 (0.87–3.49)"
+        },
+        {
+          "text": "고혈압과 현재흡연의 정의(사용 변수와 코드)를 지침서 근거로 명시했다",
+          "passed": true,
+          "evidence": "sm_presnt·HE_HP 정의와 원변수 코드를 지침서 쪽수와 함께 적었다."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 394.833,
+        "stddev": 41.466,
+        "min": 354.3,
+        "max": 451.8
+      },
+      "tokens": {
+        "mean": 149996.333,
+        "stddev": 10141.957,
+        "min": 138975,
+        "max": 163456
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.69,
+        "stddev": 0.014,
+        "min": 0.67,
+        "max": 0.7
+      },
+      "time_seconds": {
+        "mean": 228.3,
+        "stddev": 31.655,
+        "min": 186.4,
+        "max": 262.9
+      },
+      "tokens": {
+        "mean": 108084.333,
+        "stddev": 7316.224,
+        "min": 98263,
+        "max": 115814
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.31",
+      "time_seconds": "+166.5",
+      "tokens": "+41912"
+    }
+  },
+  "notes": [
+    "스킬 없이도 지침서 쪽수, 설계변수 지정, 비가중 n+가중 추정치 병기, 결측 코드 확인은 모두 통과했다. 이 항목들은 CLAUDE.md 규칙만으로 충족되어 스킬 효과를 구분하지 못한다.",
+    "차이는 세 기준에서만 났다: 공식 통계 대조(스킬 3/3, 기준선 0/3), 재현성 확인(3/3 vs 0/3), 행 삭제 없는 설계(3/3 vs 0/3).",
+    "기준선의 '행 삭제'는 가중치 결측자(조사 미참여자)만 지운 것으로, 결과 수치에는 영향이 없었다. 실질적 품질 차이는 공식 통계 대조와 재현성 두 가지다.",
+    "정답 확인 기준(비만 유병률, BMI 평균, OR)은 두 구성 모두 통과했다. 핵심 추정치는 스킬 없이도 정확했다(eval 3의 보정 OR 1.75는 두 구성이 같음).",
+    "스킬 사용 시 시간은 평균 약 1.6배, 토큰은 약 1.3배 더 들었다. 추가 단계(공식 통계 찾기, 재현성 재실행) 때문으로 추정한다(실행 기록은 열어 보지 않음).",
+    "모든 실행에서 report.md 저장이 하위 에이전트 정책으로 막혀, 최종 메시지를 평가 진행자가 report.md로 옮겨 적었다."
+  ]
+}

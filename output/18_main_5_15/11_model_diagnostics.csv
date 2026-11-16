@@ -1,0 +1,443 @@
+﻿where,formula,n,n_coef,df_resid,converged,n_na_coef,max_abs_coef
+주질문 남자 Crude,hua ~ drink3 * flush_now,5411,6,532,TRUE,0,0.3186
+주질문 남자 Crude 추세,hua ~ drink_ord * flush_now,5411,4,534,TRUE,0,0.3427
+주질문 남자 Crude 주효과,hua ~ drink3 + flush_now,5411,4,534,TRUE,0,0.2579
+주질문 남자 Crude,uacid ~ drink3 * flush_now,5411,6,532,TRUE,0,0.1732
+주질문 남자 Crude 추세,uacid ~ drink_ord * flush_now,5411,4,534,TRUE,0,0.1641
+주질문 남자 Crude 주효과,uacid ~ drink3 + flush_now,5411,4,534,TRUE,0,0.1924
+주질문 남자 Model 1,hua ~ drink3 * flush_now + age,5411,7,531,TRUE,0,0.3219
+주질문 남자 Model 1 추세,hua ~ drink_ord * flush_now + age,5411,5,533,TRUE,0,0.3331
+주질문 남자 Model 1 주효과,hua ~ drink3 + flush_now + age,5411,5,533,TRUE,0,0.308
+주질문 남자 Model 1,uacid ~ drink3 * flush_now + age,5411,7,531,TRUE,0,0.1713
+주질문 남자 Model 1 추세,uacid ~ drink_ord * flush_now + age,5411,5,533,TRUE,0,0.1535
+주질문 남자 Model 1 주효과,uacid ~ drink3 + flush_now + age,5411,5,533,TRUE,0,0.1949
+주질문 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3964
+주질문 남자 Model 2 추세,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.3978
+주질문 남자 Model 2 주효과,hua ~ drink3 + flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.4063
+주질문 남자 Model 2,uacid ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.2
+주질문 남자 Model 2 추세,uacid ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.1558
+주질문 남자 Model 2 주효과,uacid ~ drink3 + flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.2178
+주질문 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8042
+주질문 남자 Model 3 추세,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8083
+주질문 남자 Model 3 주효과,hua ~ drink3 + flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8046
+주질문 남자 Model 3,uacid ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.5786
+주질문 남자 Model 3 추세,uacid ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.5808
+주질문 남자 Model 3 주효과,uacid ~ drink3 + flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.5791
+주질문 여자 Crude,hua ~ drink3 * flush_now,5368,6,530,TRUE,0,0.7996
+주질문 여자 Crude 추세,hua ~ drink_ord * flush_now,5368,4,532,TRUE,0,0.4005
+주질문 여자 Crude 주효과,hua ~ drink3 + flush_now,5368,4,532,TRUE,0,0.9069
+주질문 여자 Crude,uacid ~ drink3 * flush_now,5368,6,530,TRUE,0,0.3695
+주질문 여자 Crude 추세,uacid ~ drink_ord * flush_now,5368,4,532,TRUE,0,0.1798
+주질문 여자 Crude 주효과,uacid ~ drink3 + flush_now,5368,4,532,TRUE,0,0.3741
+주질문 여자 Model 1,hua ~ drink3 * flush_now + age,5368,7,529,TRUE,0,0.8515
+주질문 여자 Model 1 추세,hua ~ drink_ord * flush_now + age,5368,5,531,TRUE,0,0.4315
+주질문 여자 Model 1 주효과,hua ~ drink3 + flush_now + age,5368,5,531,TRUE,0,0.9533
+주질문 여자 Model 1,uacid ~ drink3 * flush_now + age,5368,7,529,TRUE,0,0.3684
+주질문 여자 Model 1 추세,uacid ~ drink_ord * flush_now + age,5368,5,531,TRUE,0,0.1793
+주질문 여자 Model 1 주효과,uacid ~ drink3 + flush_now + age,5368,5,531,TRUE,0,0.3729
+주질문 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.891
+주질문 여자 Model 2 추세,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.8866
+주질문 여자 Model 2 주효과,hua ~ drink3 + flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.883
+주질문 여자 Model 2,uacid ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.3303
+주질문 여자 Model 2 추세,uacid ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.1945
+주질문 여자 Model 2 주효과,uacid ~ drink3 + flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.3401
+주질문 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7855
+주질문 여자 Model 3 추세,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.7801
+주질문 여자 Model 3 주효과,hua ~ drink3 + flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.8515
+주질문 여자 Model 3,uacid ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.3209
+주질문 여자 Model 3 추세,uacid ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.2215
+주질문 여자 Model 3 주효과,uacid ~ drink3 + flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.3208
+부질문1 남자 Crude,hua ~ drink3 * flush_hist,5110,9,529,TRUE,0,0.7251
+부질문1 남자 Crude 추세,hua ~ drink_ord * flush_hist,5110,6,532,TRUE,0,0.5422
+부질문1 남자 Crude,uacid ~ drink3 * flush_hist,5110,9,529,TRUE,0,0.1772
+부질문1 남자 Crude 추세,uacid ~ drink_ord * flush_hist,5110,6,532,TRUE,0,0.1697
+부질문1 남자 Model 1,hua ~ drink3 * flush_hist + age,5110,10,528,TRUE,0,0.6098
+부질문1 남자 Model 1 추세,hua ~ drink_ord * flush_hist + age,5110,7,531,TRUE,0,0.3659
+부질문1 남자 Model 1,uacid ~ drink3 * flush_hist + age,5110,10,528,TRUE,0,0.1781
+부질문1 남자 Model 1 추세,uacid ~ drink_ord * flush_hist + age,5110,7,531,TRUE,0,0.1428
+부질문1 남자 Model 2,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,20,518,TRUE,0,0.5684
+부질문1 남자 Model 2 추세,hua ~ drink_ord * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,17,521,TRUE,0,0.3637
+부질문1 남자 Model 2,uacid ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,20,518,TRUE,0,0.2073
+부질문1 남자 Model 2 추세,uacid ~ drink_ord * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,17,521,TRUE,0,0.1276
+부질문1 남자 Model 3,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,24,514,TRUE,0,0.8203
+부질문1 남자 Model 3 추세,hua ~ drink_ord * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,21,517,TRUE,0,0.7788
+부질문1 남자 Model 3,uacid ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,24,514,TRUE,0,0.5437
+부질문1 남자 Model 3 추세,uacid ~ drink_ord * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,21,517,TRUE,0,0.5466
+부질문1 여자 Crude,hua ~ drink3 * flush_hist,4968,9,527,TRUE,0,0.7607
+부질문1 여자 Crude 추세,hua ~ drink_ord * flush_hist,4968,6,530,TRUE,0,0.383
+부질문1 여자 Crude,uacid ~ drink3 * flush_hist,4968,9,527,TRUE,0,0.4632
+부질문1 여자 Crude 추세,uacid ~ drink_ord * flush_hist,4968,6,530,TRUE,0,0.1877
+부질문1 여자 Model 1,hua ~ drink3 * flush_hist + age,4968,10,526,TRUE,0,0.8169
+부질문1 여자 Model 1 추세,hua ~ drink_ord * flush_hist + age,4968,7,529,TRUE,0,0.4167
+부질문1 여자 Model 1,uacid ~ drink3 * flush_hist + age,4968,10,526,TRUE,0,0.4636
+부질문1 여자 Model 1 추세,uacid ~ drink_ord * flush_hist + age,4968,7,529,TRUE,0,0.1865
+부질문1 여자 Model 2,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4968,20,516,TRUE,0,1.0154
+부질문1 여자 Model 2 추세,hua ~ drink_ord * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4968,17,519,TRUE,0,1.0007
+부질문1 여자 Model 2,uacid ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4968,20,516,TRUE,0,0.459
+부질문1 여자 Model 2 추세,uacid ~ drink_ord * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4968,17,519,TRUE,0,0.2132
+부질문1 여자 Model 3,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,24,512,TRUE,0,0.9855
+부질문1 여자 Model 3 추세,hua ~ drink_ord * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,21,515,TRUE,0,0.9008
+부질문1 여자 Model 3,uacid ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,24,512,TRUE,0,0.3169
+부질문1 여자 Model 3 추세,uacid ~ drink_ord * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,21,515,TRUE,0,0.2245
+부질문1 현재 비홍조자 남자 Model 2,hua ~ drink3 * past_flush + age + f_edu + f_incm + f_year + f_smk + f_pa,3522,17,517,TRUE,0,0.5693
+부질문1 현재 비홍조자 남자 Model 2,uacid ~ drink3 * past_flush + age + f_edu + f_incm + f_year + f_smk + f_pa,3522,17,517,TRUE,0,0.2085
+부질문1 현재 비홍조자 남자 Model 3,hua ~ drink3 * past_flush + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3522,21,513,TRUE,0,0.7907
+부질문1 현재 비홍조자 남자 Model 3,uacid ~ drink3 * past_flush + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3522,21,513,TRUE,0,0.535
+부질문1 현재 비홍조자 여자 Model 2,hua ~ drink3 * past_flush + age + f_edu + f_incm + f_year + f_smk + f_pa,3509,17,516,TRUE,0,1.0997
+부질문1 현재 비홍조자 여자 Model 2,uacid ~ drink3 * past_flush + age + f_edu + f_incm + f_year + f_smk + f_pa,3509,17,516,TRUE,0,0.4559
+부질문1 현재 비홍조자 여자 Model 3,hua ~ drink3 * past_flush + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3509,21,512,TRUE,0,1.0151
+부질문1 현재 비홍조자 여자 Model 3,uacid ~ drink3 * past_flush + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3509,21,512,TRUE,0,0.2924
+부질문1 2문항 분류 남자 Crude,hua ~ drink3 * flush_ever,5411,6,532,TRUE,0,0.4569
+부질문1 2문항 분류 남자 Crude 추세,hua ~ drink_ord * flush_ever,5411,4,534,TRUE,0,0.3938
+부질문1 2문항 분류 남자 Crude,uacid ~ drink3 * flush_ever,5411,6,532,TRUE,0,0.1772
+부질문1 2문항 분류 남자 Crude 추세,uacid ~ drink_ord * flush_ever,5411,4,534,TRUE,0,0.176
+부질문1 2문항 분류 남자 Model 1,hua ~ drink3 * flush_ever + age,5411,7,531,TRUE,0,0.4436
+부질문1 2문항 분류 남자 Model 1 추세,hua ~ drink_ord * flush_ever + age,5411,5,533,TRUE,0,0.3536
+부질문1 2문항 분류 남자 Model 1,uacid ~ drink3 * flush_ever + age,5411,7,531,TRUE,0,0.1781
+부질문1 2문항 분류 남자 Model 1 추세,uacid ~ drink_ord * flush_ever + age,5411,5,533,TRUE,0,0.139
+부질문1 2문항 분류 남자 Model 2,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.4174
+부질문1 2문항 분류 남자 Model 2 추세,hua ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.3923
+부질문1 2문항 분류 남자 Model 2,uacid ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.2083
+부질문1 2문항 분류 남자 Model 2 추세,uacid ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.156
+부질문1 2문항 분류 남자 Model 3,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8047
+부질문1 2문항 분류 남자 Model 3 추세,hua ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8079
+부질문1 2문항 분류 남자 Model 3,uacid ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.5785
+부질문1 2문항 분류 남자 Model 3 추세,uacid ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.5806
+부질문1 2문항 분류 여자 Crude,hua ~ drink3 * flush_ever,5368,6,530,TRUE,0,0.7607
+부질문1 2문항 분류 여자 Crude 추세,hua ~ drink_ord * flush_ever,5368,4,532,TRUE,0,0.383
+부질문1 2문항 분류 여자 Crude,uacid ~ drink3 * flush_ever,5368,6,530,TRUE,0,0.3728
+부질문1 2문항 분류 여자 Crude 추세,uacid ~ drink_ord * flush_ever,5368,4,532,TRUE,0,0.1877
+부질문1 2문항 분류 여자 Model 1,hua ~ drink3 * flush_ever + age,5368,7,529,TRUE,0,0.8119
+부질문1 2문항 분류 여자 Model 1 추세,hua ~ drink_ord * flush_ever + age,5368,5,531,TRUE,0,0.414
+부질문1 2문항 분류 여자 Model 1,uacid ~ drink3 * flush_ever + age,5368,7,529,TRUE,0,0.3724
+부질문1 2문항 분류 여자 Model 1 추세,uacid ~ drink_ord * flush_ever + age,5368,5,531,TRUE,0,0.1876
+부질문1 2문항 분류 여자 Model 2,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.9032
+부질문1 2문항 분류 여자 Model 2 추세,hua ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.8992
+부질문1 2문항 분류 여자 Model 2,uacid ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.3346
+부질문1 2문항 분류 여자 Model 2 추세,uacid ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.1965
+부질문1 2문항 분류 여자 Model 3,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7952
+부질문1 2문항 분류 여자 Model 3 추세,hua ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.7905
+부질문1 2문항 분류 여자 Model 3,uacid ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.3264
+부질문1 2문항 분류 여자 Model 3 추세,uacid ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.2216
+부질문1 4군 남자 Model 2,hua ~ drink3 * flush_grp + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,23,515,TRUE,0,0.5677
+부질문1 4군 남자 Model 3,hua ~ drink3 * flush_grp + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,27,511,TRUE,0,0.8212
+부질문1 4군 여자 Model 2,hua ~ drink3 * flush_grp + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,23,513,TRUE,0,0.9156
+부질문1 4군 여자 Model 3,hua ~ drink3 * flush_grp + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,27,509,TRUE,0,0.9704
+부질문2 3원 Crude,hua ~ f_sex * (drink3 * flush_now),10779,12,526,TRUE,0,1.3912
+부질문2 3원 Crude,hua ~ drink3 * flush_now * f_sex,10779,12,526,TRUE,0,1.3912
+부질문2 홍조군 안 비홍조 Crude,hua ~ f_sex * (drink3),7031,6,532,TRUE,0,1.3912
+부질문2 홍조군 안 홍조 Crude,hua ~ f_sex * (drink3),3748,6,531,TRUE,0,1.2728
+부질문2 용량 3원 drink_ord Crude,hua ~ f_sex * (drink_ord * flush_now),10779,8,530,TRUE,0,1.4322
+부질문2 용량 3원 drinks7 Crude,hua ~ f_sex * (drinks7 * flush_now),10779,8,530,TRUE,0,1.4085
+부질문2 용량 3원 logdrk Crude,hua ~ f_sex * (logdrk * flush_now),10779,8,530,TRUE,0,1.5477
+부질문2 3원 Crude,uacid ~ f_sex * (drink3 * flush_now),10779,12,526,TRUE,0,1.5786
+부질문2 3원 Crude,uacid ~ drink3 * flush_now * f_sex,10779,12,526,TRUE,0,1.5786
+부질문2 홍조군 안 비홍조 Crude,uacid ~ f_sex * (drink3),7031,6,532,TRUE,0,1.5786
+부질문2 홍조군 안 홍조 Crude,uacid ~ f_sex * (drink3),3748,6,531,TRUE,0,1.4671
+부질문2 용량 3원 drink_ord Crude,uacid ~ f_sex * (drink_ord * flush_now),10779,8,530,TRUE,0,1.6164
+부질문2 용량 3원 drinks7 Crude,uacid ~ f_sex * (drinks7 * flush_now),10779,8,530,TRUE,0,1.6109
+부질문2 용량 3원 logdrk Crude,uacid ~ f_sex * (logdrk * flush_now),10779,8,530,TRUE,0,1.62
+부질문2 3원 Model 1,hua ~ f_sex * (drink3 * flush_now + age),10779,14,524,TRUE,0,2.731
+부질문2 3원 Model 1,hua ~ drink3 * flush_now * f_sex + age,10779,13,525,TRUE,0,1.3644
+부질문2 홍조군 안 비홍조 Model 1,hua ~ f_sex * (drink3 + age),7031,8,530,TRUE,0,2.7687
+부질문2 홍조군 안 홍조 Model 1,hua ~ f_sex * (drink3 + age),3748,8,529,TRUE,0,2.5118
+부질문2 용량 3원 drink_ord Model 1,hua ~ f_sex * (drink_ord * flush_now + age),10779,10,528,TRUE,0,2.7595
+부질문2 용량 3원 drinks7 Model 1,hua ~ f_sex * (drinks7 * flush_now + age),10779,10,528,TRUE,0,2.7171
+부질문2 용량 3원 logdrk Model 1,hua ~ f_sex * (logdrk * flush_now + age),10779,10,528,TRUE,0,2.9354
+부질문2 3원 Model 1,uacid ~ f_sex * (drink3 * flush_now + age),10779,14,524,TRUE,0,2.4326
+부질문2 3원 Model 1,uacid ~ drink3 * flush_now * f_sex + age,10779,13,525,TRUE,0,1.5558
+부질문2 홍조군 안 비홍조 Model 1,uacid ~ f_sex * (drink3 + age),7031,8,530,TRUE,0,2.4887
+부질문2 홍조군 안 홍조 Model 1,uacid ~ f_sex * (drink3 + age),3748,8,529,TRUE,0,2.2187
+부질문2 용량 3원 drink_ord Model 1,uacid ~ f_sex * (drink_ord * flush_now + age),10779,10,528,TRUE,0,2.4672
+부질문2 용량 3원 drinks7 Model 1,uacid ~ f_sex * (drinks7 * flush_now + age),10779,10,528,TRUE,0,2.4638
+부질문2 용량 3원 logdrk Model 1,uacid ~ f_sex * (logdrk * flush_now + age),10779,10,528,TRUE,0,2.4761
+부질문2 3원 Model 2,hua ~ f_sex * (drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),10779,34,504,TRUE,0,2.0228
+부질문2 3원 Model 2,hua ~ drink3 * flush_now * f_sex + age + f_edu + f_incm + f_year + f_smk + f_pa,10779,23,515,TRUE,0,1.3865
+부질문2 홍조군 안 비홍조 Model 2,hua ~ f_sex * (drink3 + age + f_edu + f_incm + f_year + f_smk + f_pa),7031,28,510,TRUE,0,1.5833
+부질문2 홍조군 안 홍조 Model 2,hua ~ f_sex * (drink3 + age + f_edu + f_incm + f_year + f_smk + f_pa),3748,28,509,TRUE,0,2.8886
+부질문2 용량 3원 drink_ord Model 2,hua ~ f_sex * (drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),10779,30,508,TRUE,0,2.0588
+부질문2 용량 3원 drinks7 Model 2,hua ~ f_sex * (drinks7 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),10779,30,508,TRUE,0,2.0207
+부질문2 용량 3원 logdrk Model 2,hua ~ f_sex * (logdrk * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),10779,30,508,TRUE,0,2.16
+부질문2 3원 Model 2,uacid ~ f_sex * (drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),10779,34,504,TRUE,0,2.3769
+부질문2 3원 Model 2,uacid ~ drink3 * flush_now * f_sex + age + f_edu + f_incm + f_year + f_smk + f_pa,10779,23,515,TRUE,0,1.571
+부질문2 홍조군 안 비홍조 Model 2,uacid ~ f_sex * (drink3 + age + f_edu + f_incm + f_year + f_smk + f_pa),7031,28,510,TRUE,0,2.439
+부질문2 홍조군 안 홍조 Model 2,uacid ~ f_sex * (drink3 + age + f_edu + f_incm + f_year + f_smk + f_pa),3748,28,509,TRUE,0,2.166
+부질문2 용량 3원 drink_ord Model 2,uacid ~ f_sex * (drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),10779,30,508,TRUE,0,2.4153
+부질문2 용량 3원 drinks7 Model 2,uacid ~ f_sex * (drinks7 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),10779,30,508,TRUE,0,2.4149
+부질문2 용량 3원 logdrk Model 2,uacid ~ f_sex * (logdrk * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),10779,30,508,TRUE,0,2.4006
+부질문2 3원 Model 3,hua ~ f_sex * (drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),10779,42,496,TRUE,0,1.5629
+부질문2 3원 Model 3,hua ~ drink3 * flush_now * f_sex + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,10779,27,511,TRUE,0,0.9917
+부질문2 홍조군 안 비홍조 Model 3,hua ~ f_sex * (drink3 + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),7031,36,502,TRUE,0,1.2132
+부질문2 홍조군 안 홍조 Model 3,hua ~ f_sex * (drink3 + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),3748,36,501,TRUE,0,2.3117
+부질문2 용량 3원 drink_ord Model 3,hua ~ f_sex * (drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),10779,38,500,TRUE,0,1.6103
+부질문2 용량 3원 drinks7 Model 3,hua ~ f_sex * (drinks7 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),10779,38,500,TRUE,0,1.4945
+부질문2 용량 3원 logdrk Model 3,hua ~ f_sex * (logdrk * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),10779,38,500,TRUE,0,1.687
+부질문2 3원 Model 3,uacid ~ f_sex * (drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),10779,42,496,TRUE,0,1.7943
+부질문2 3원 Model 3,uacid ~ drink3 * flush_now * f_sex + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,10779,27,511,TRUE,0,1.2942
+부질문2 홍조군 안 비홍조 Model 3,uacid ~ f_sex * (drink3 + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),7031,36,502,TRUE,0,1.8037
+부질문2 홍조군 안 홍조 Model 3,uacid ~ f_sex * (drink3 + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),3748,36,501,TRUE,0,1.6422
+부질문2 용량 3원 drink_ord Model 3,uacid ~ f_sex * (drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),10779,38,500,TRUE,0,1.8352
+부질문2 용량 3원 drinks7 Model 3,uacid ~ f_sex * (drinks7 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),10779,38,500,TRUE,0,1.8154
+부질문2 용량 3원 logdrk Model 3,uacid ~ f_sex * (logdrk * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),10779,38,500,TRUE,0,1.8132
+폐경 폐경 전 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3124,17,484,TRUE,0,1.9276
+폐경 폐경 전 Model 2 추세,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3124,15,486,TRUE,0,1.9335
+폐경 폐경 후 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,2018,17,491,TRUE,0,1.206
+폐경 폐경 후 Model 2 추세,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,2018,15,493,TRUE,0,0.6995
+폐경 3원 범주형 Model 2,hua ~ meno * (drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),5142,34,502,TRUE,0,2.0976
+폐경 3원 추세 Model 2,hua ~ meno * (drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),5142,30,506,TRUE,0,2.0755
+폐경 3원 주 5잔 이상 여부 Model 2,hua ~ meno * (drink2 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),5142,30,506,TRUE,0,2.0796
+폐경 폐경 전 Model 2,uacid ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3124,17,484,TRUE,0,0.7436
+폐경 폐경 전 Model 2 추세,uacid ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3124,15,486,TRUE,0,0.7416
+폐경 폐경 후 Model 2,uacid ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,2018,17,491,TRUE,0,0.4498
+폐경 폐경 후 Model 2 추세,uacid ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,2018,15,493,TRUE,0,0.2714
+폐경 3원 범주형 Model 2,uacid ~ meno * (drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),5142,34,502,TRUE,0,0.8249
+폐경 3원 추세 Model 2,uacid ~ meno * (drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),5142,30,506,TRUE,0,0.8148
+폐경 3원 주 5잔 이상 여부 Model 2,uacid ~ meno * (drink2 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa),5142,30,506,TRUE,0,0.8282
+폐경 폐경 전 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3124,21,480,TRUE,0,2.0117
+폐경 폐경 전 Model 3 추세,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3124,19,482,TRUE,0,2.0163
+폐경 폐경 후 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,2018,21,487,TRUE,0,1.3745
+폐경 폐경 후 Model 3 추세,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,2018,19,489,TRUE,0,0.7943
+폐경 3원 범주형 Model 3,hua ~ meno * (drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5142,42,494,TRUE,0,2.0924
+폐경 3원 추세 Model 3,hua ~ meno * (drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5142,38,498,TRUE,0,2.063
+폐경 3원 주 5잔 이상 여부 Model 3,hua ~ meno * (drink2 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5142,38,498,TRUE,0,2.07
+폐경 폐경 전 Model 3,uacid ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3124,21,480,TRUE,0,0.5594
+폐경 폐경 전 Model 3 추세,uacid ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3124,19,482,TRUE,0,0.5578
+폐경 폐경 후 Model 3,uacid ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,2018,21,487,TRUE,0,0.4662
+폐경 폐경 후 Model 3 추세,uacid ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,2018,19,489,TRUE,0,0.2744
+폐경 3원 범주형 Model 3,uacid ~ meno * (drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5142,42,494,TRUE,0,0.8516
+폐경 3원 추세 Model 3,uacid ~ meno * (drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5142,38,498,TRUE,0,0.8743
+폐경 3원 주 5잔 이상 여부 Model 3,uacid ~ meno * (drink2 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5142,38,498,TRUE,0,0.8522
+민감도 S0 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3964
+민감도 S0 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.4174
+민감도 S0 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,20,518,TRUE,0,0.5684
+민감도 S0 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8042
+민감도 S0 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8047
+민감도 S0 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,24,514,TRUE,0,0.8203
+민감도 S0 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.891
+민감도 S0 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.9032
+민감도 S0 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4968,20,516,TRUE,0,1.0154
+민감도 S0 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7855
+민감도 S0 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7952
+민감도 S0 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,24,512,TRUE,0,0.9855
+민감도 S1 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5610,17,521,TRUE,0,0.3335
+민감도 S1 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5610,17,521,TRUE,0,0.3933
+민감도 S1 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5292,20,518,TRUE,0,0.5145
+민감도 S1 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5610,21,517,TRUE,0,0.7464
+민감도 S1 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5610,21,517,TRUE,0,0.7468
+민감도 S1 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5292,24,514,TRUE,0,0.7258
+민감도 S1 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5386,17,519,TRUE,0,0.9152
+민감도 S1 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5386,17,519,TRUE,0,0.9264
+민감도 S1 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4986,20,516,TRUE,0,1.0389
+민감도 S1 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5386,21,515,TRUE,0,0.7822
+민감도 S1 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5386,21,515,TRUE,0,0.7914
+민감도 S1 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4986,24,512,TRUE,0,1.0138
+민감도 S2 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3964
+민감도 S2 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.4174
+민감도 S2 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,20,518,TRUE,0,0.5684
+민감도 S2 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8042
+민감도 S2 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8047
+민감도 S2 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,24,514,TRUE,0,0.8203
+민감도 S2 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.891
+민감도 S2 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.9032
+민감도 S2 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4968,20,516,TRUE,0,1.0154
+민감도 S2 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7855
+민감도 S2 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7952
+민감도 S2 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,24,512,TRUE,0,0.9855
+민감도 S3a 남자 Model 2,hua ~ drink3_b * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3956
+민감도 S3a 남자 Model 2 2문항 분류,hua ~ drink3_b * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.4748
+민감도 S3a 남자 Model 2 이력,hua ~ drink3_b * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,20,518,TRUE,0,0.6363
+민감도 S3a 남자 Model 3,hua ~ drink3_b * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8039
+민감도 S3a 남자 Model 3 2문항 분류,hua ~ drink3_b * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8052
+민감도 S3a 남자 Model 3 이력,hua ~ drink3_b * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,24,514,TRUE,0,0.8922
+민감도 S3a 여자 Model 2,hua ~ drink3_b * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.8882
+민감도 S3a 여자 Model 2 2문항 분류,hua ~ drink3_b * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.9019
+민감도 S3a 여자 Model 2 이력,hua ~ drink3_b * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4968,20,516,TRUE,0,1.006
+민감도 S3a 여자 Model 3,hua ~ drink3_b * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.8036
+민감도 S3a 여자 Model 3 2문항 분류,hua ~ drink3_b * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7918
+민감도 S3a 여자 Model 3 이력,hua ~ drink3_b * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,24,512,TRUE,0,1.0724
+민감도 S3b 남자 Model 2,hua ~ drink3_c * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3964
+민감도 S3b 남자 Model 2 2문항 분류,hua ~ drink3_c * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.4218
+민감도 S3b 남자 Model 2 이력,hua ~ drink3_c * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,20,518,TRUE,0,0.573
+민감도 S3b 남자 Model 3,hua ~ drink3_c * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8057
+민감도 S3b 남자 Model 3 2문항 분류,hua ~ drink3_c * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8062
+민감도 S3b 남자 Model 3 이력,hua ~ drink3_c * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,24,514,TRUE,0,0.8285
+민감도 S3b 여자 Model 2,hua ~ drink3_c * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.891
+민감도 S3b 여자 Model 2 2문항 분류,hua ~ drink3_c * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.9032
+민감도 S3b 여자 Model 2 이력,hua ~ drink3_c * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4968,20,516,TRUE,0,1.0154
+민감도 S3b 여자 Model 3,hua ~ drink3_c * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7855
+민감도 S3b 여자 Model 3 2문항 분류,hua ~ drink3_c * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7952
+민감도 S3b 여자 Model 3 이력,hua ~ drink3_c * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,24,512,TRUE,0,0.9855
+민감도 S4a 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3428,16,330,TRUE,0,0.5192
+민감도 S4a 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,3428,16,330,TRUE,0,0.6074
+민감도 S4a 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,3244,19,327,TRUE,0,0.9441
+민감도 S4a 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3428,20,326,TRUE,0,0.8232
+민감도 S4a 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3428,20,326,TRUE,0,0.8329
+민감도 S4a 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3244,23,323,TRUE,0,1.0714
+민감도 S4a 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3373,16,328,TRUE,0,0.9785
+민감도 S4a 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,3373,16,328,TRUE,0,0.9895
+민감도 S4a 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,3127,19,325,TRUE,0,13.0263
+민감도 S4a 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3373,20,324,TRUE,0,0.9835
+민감도 S4a 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3373,20,324,TRUE,0,0.9286
+민감도 S4a 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3127,23,321,TRUE,0,13.2506
+민감도 S4b 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3621,16,342,TRUE,0,0.4455
+민감도 S4b 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,3621,16,342,TRUE,0,0.4372
+민감도 S4b 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,3412,19,339,TRUE,0,0.448
+민감도 S4b 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3621,20,338,TRUE,0,0.8924
+민감도 S4b 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3621,20,338,TRUE,0,0.8919
+민감도 S4b 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3412,23,335,TRUE,0,0.8809
+민감도 S4b 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3636,16,341,TRUE,0,0.7978
+민감도 S4b 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,3636,16,341,TRUE,0,0.8076
+민감도 S4b 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,3349,19,338,TRUE,0,0.9148
+민감도 S4b 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3636,20,337,TRUE,0,0.8167
+민감도 S4b 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3636,20,337,TRUE,0,0.763
+민감도 S4b 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3349,23,334,TRUE,0,0.9026
+민감도 S4c 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3773,16,330,TRUE,0,0.4757
+민감도 S4c 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,3773,16,330,TRUE,0,0.4715
+민감도 S4c 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,3564,19,327,TRUE,0,0.6381
+민감도 S4c 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3773,20,326,TRUE,0,0.6972
+민감도 S4c 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3773,20,326,TRUE,0,0.6962
+민감도 S4c 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3564,23,323,TRUE,0,0.7883
+민감도 S4c 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,3727,16,329,TRUE,0,0.9254
+민감도 S4c 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,3727,16,329,TRUE,0,0.9343
+민감도 S4c 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,3460,19,326,TRUE,0,11.3038
+민감도 S4c 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3727,20,325,TRUE,0,0.8391
+민감도 S4c 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3727,20,325,TRUE,0,0.8427
+민감도 S4c 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,3460,23,322,TRUE,0,10.6809
+민감도 S6 남자 Model 2,hua ~ drink3 * flush_now_ko + age + f_edu + f_incm + f_year + f_smk + f_pa,4723,17,521,TRUE,0,0.3255
+민감도 S6 남자 Model 3,hua ~ drink3 * flush_now_ko + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4723,21,517,TRUE,0,0.7863
+민감도 S6 여자 Model 2,hua ~ drink3 * flush_now_ko + age + f_edu + f_incm + f_year + f_smk + f_pa,4609,17,516,TRUE,0,1.0172
+민감도 S6 여자 Model 3,hua ~ drink3 * flush_now_ko + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4609,21,512,TRUE,0,0.8938
+민감도 S8 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn_dx + f_dm_dx + egfr10,5575,21,517,TRUE,0,0.965
+민감도 S8 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn_dx + f_dm_dx + egfr10,5575,21,517,TRUE,0,0.9703
+민감도 S8 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn_dx + f_dm_dx + egfr10,5264,24,514,TRUE,0,0.9408
+민감도 S8 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn_dx + f_dm_dx + egfr10,5523,21,515,TRUE,0,0.7919
+민감도 S8 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn_dx + f_dm_dx + egfr10,5523,21,515,TRUE,0,0.8031
+민감도 S8 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn_dx + f_dm_dx + egfr10,5111,24,512,TRUE,0,0.9969
+민감도 R1 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5411,18,520,TRUE,0,0.4256
+민감도 R1 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5411,18,520,TRUE,0,0.4301
+민감도 R1 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5110,21,517,TRUE,0,0.5662
+민감도 R1 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,22,516,TRUE,0,0.8063
+민감도 R1 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,22,516,TRUE,0,0.8066
+민감도 R1 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,25,513,TRUE,0,0.8161
+민감도 R1 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5368,18,518,TRUE,0,0.8968
+민감도 R1 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5368,18,518,TRUE,0,0.9095
+민감도 R1 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk3 + f_pa,4968,21,515,TRUE,0,1.0209
+민감도 R1 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,22,514,TRUE,0,0.7872
+민감도 R1 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,22,514,TRUE,0,0.7971
+민감도 R1 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,25,511,TRUE,0,0.982
+민감도 R2 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3964
+민감도 R2 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.4174
+민감도 R2 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,5110,20,518,TRUE,0,0.5684
+민감도 R2 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8042
+민감도 R2 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8047
+민감도 R2 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,24,514,TRUE,0,0.8203
+민감도 R2 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5364,17,519,TRUE,0,0.8997
+민감도 R2 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5364,17,519,TRUE,0,0.9114
+민감도 R2 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa,4964,20,516,TRUE,0,1.0242
+민감도 R2 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5364,21,515,TRUE,0,0.7944
+민감도 R2 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5364,21,515,TRUE,0,0.8037
+민감도 R2 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4964,24,512,TRUE,0,0.976
+민감도 R3 남자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5411,18,520,TRUE,0,0.4256
+민감도 R3 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5411,18,520,TRUE,0,0.4301
+민감도 R3 남자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5110,21,517,TRUE,0,0.5662
+민감도 R3 남자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,22,516,TRUE,0,0.8063
+민감도 R3 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,22,516,TRUE,0,0.8066
+민감도 R3 남자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,25,513,TRUE,0,0.8161
+민감도 R3 여자 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5364,18,518,TRUE,0,0.9055
+민감도 R3 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk3 + f_pa,5364,18,518,TRUE,0,0.9179
+민감도 R3 여자 Model 2 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk3 + f_pa,4964,21,515,TRUE,0,1.0297
+민감도 R3 여자 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5364,22,514,TRUE,0,0.7961
+민감도 R3 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,5364,22,514,TRUE,0,0.8057
+민감도 R3 여자 Model 3 이력,hua ~ drink3 * flush_hist + age + f_edu + f_incm + f_year + f_smk3 + f_pa + he_bmi + f_htn + f_dm + egfr10,4964,25,511,TRUE,0,0.9722
+민감도 A1 남자 Model 2,hua ~ drink3 * flush_now + age10 + f_edu + f_incm + f_year + f_smk + f_pa,5411,21,517,TRUE,0,1.028
+민감도 A1 남자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age10 + f_edu + f_incm + f_year + f_smk + f_pa,5411,21,517,TRUE,0,1.0211
+민감도 A1 남자 Model 2 이력,hua ~ drink3 * flush_hist + age10 + f_edu + f_incm + f_year + f_smk + f_pa,5110,24,514,TRUE,0,1.0461
+민감도 A1 남자 Model 3,hua ~ drink3 * flush_now + age10 + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,25,513,TRUE,0,2.0069
+민감도 A1 남자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age10 + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,25,513,TRUE,0,2.0016
+민감도 A1 남자 Model 3 이력,hua ~ drink3 * flush_hist + age10 + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5110,28,510,TRUE,0,1.9931
+민감도 A1 여자 Model 2,hua ~ drink3 * flush_now + age10 + f_edu + f_incm + f_year + f_smk + f_pa,5368,21,515,TRUE,0,0.7066
+민감도 A1 여자 Model 2 2문항 분류,hua ~ drink3 * flush_ever + age10 + f_edu + f_incm + f_year + f_smk + f_pa,5368,21,515,TRUE,0,0.7158
+민감도 A1 여자 Model 2 이력,hua ~ drink3 * flush_hist + age10 + f_edu + f_incm + f_year + f_smk + f_pa,4968,24,512,TRUE,0,0.8291
+민감도 A1 여자 Model 3,hua ~ drink3 * flush_now + age10 + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,25,511,TRUE,0,1.7483
+민감도 A1 여자 Model 3 2문항 분류,hua ~ drink3 * flush_ever + age10 + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,25,511,TRUE,0,1.7468
+민감도 A1 여자 Model 3 이력,hua ~ drink3 * flush_hist + age10 + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,4968,28,508,TRUE,0,1.8713
+형태 의존성 남자 Model 2 flush_now 3.5·14잔(계획서),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3923
+형태 의존성 남자 Model 2 flush_now 5·15잔(주 기준),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3964
+형태 의존성 남자 Model 2 flush_now 5·15·30잔(4군),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,19,519,TRUE,0,0.3942
+형태 의존성 남자 Model 2 flush_now drink_ord,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.3978
+형태 의존성 남자 Model 2 flush_now drinks7,hua ~ drinks7 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.396
+형태 의존성 남자 Model 2 flush_now logdrk,hua ~ logdrk * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.3931
+형태 의존성 남자 Model 2 flush_ever 3.5·14잔(계획서),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.3942
+형태 의존성 남자 Model 2 flush_ever 5·15잔(주 기준),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,17,521,TRUE,0,0.4174
+형태 의존성 남자 Model 2 flush_ever 5·15·30잔(4군),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,19,519,TRUE,0,0.4763
+형태 의존성 남자 Model 2 flush_ever drink_ord,hua ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.3923
+형태 의존성 남자 Model 2 flush_ever drinks7,hua ~ drinks7 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.3811
+형태 의존성 남자 Model 2 flush_ever logdrk,hua ~ logdrk * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5411,15,523,TRUE,0,0.4042
+형태 의존성 남자 Model 3 flush_now 3.5·14잔(계획서),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8085
+형태 의존성 남자 Model 3 flush_now 5·15잔(주 기준),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8042
+형태 의존성 남자 Model 3 flush_now 5·15·30잔(4군),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,23,515,TRUE,0,0.8088
+형태 의존성 남자 Model 3 flush_now drink_ord,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8083
+형태 의존성 남자 Model 3 flush_now drinks7,hua ~ drinks7 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8236
+형태 의존성 남자 Model 3 flush_now logdrk,hua ~ logdrk * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8159
+형태 의존성 남자 Model 3 flush_ever 3.5·14잔(계획서),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8092
+형태 의존성 남자 Model 3 flush_ever 5·15잔(주 기준),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,21,517,TRUE,0,0.8047
+형태 의존성 남자 Model 3 flush_ever 5·15·30잔(4군),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,23,515,TRUE,0,0.8099
+형태 의존성 남자 Model 3 flush_ever drink_ord,hua ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8079
+형태 의존성 남자 Model 3 flush_ever drinks7,hua ~ drinks7 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8195
+형태 의존성 남자 Model 3 flush_ever logdrk,hua ~ logdrk * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5411,19,519,TRUE,0,0.8148
+형태 의존성 여자 Model 2 flush_now 3.5·14잔(계획서),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.9164
+형태 의존성 여자 Model 2 flush_now 5·15잔(주 기준),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.891
+형태 의존성 여자 Model 2 flush_now 5·15·30잔(4군),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,19,517,TRUE,0,0.9603
+형태 의존성 여자 Model 2 flush_now drink_ord,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.8866
+형태 의존성 여자 Model 2 flush_now drinks7,hua ~ drinks7 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.8963
+형태 의존성 여자 Model 2 flush_now logdrk,hua ~ logdrk * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.8911
+형태 의존성 여자 Model 2 flush_ever 3.5·14잔(계획서),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.9261
+형태 의존성 여자 Model 2 flush_ever 5·15잔(주 기준),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,17,519,TRUE,0,0.9032
+형태 의존성 여자 Model 2 flush_ever 5·15·30잔(4군),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,19,517,TRUE,0,0.9502
+형태 의존성 여자 Model 2 flush_ever drink_ord,hua ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.8992
+형태 의존성 여자 Model 2 flush_ever drinks7,hua ~ drinks7 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.9088
+형태 의존성 여자 Model 2 flush_ever logdrk,hua ~ logdrk * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa,5368,15,521,TRUE,0,0.9021
+형태 의존성 여자 Model 3 flush_now 3.5·14잔(계획서),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.8093
+형태 의존성 여자 Model 3 flush_now 5·15잔(주 기준),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7855
+형태 의존성 여자 Model 3 flush_now 5·15·30잔(4군),hua ~ drinkX * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,23,513,TRUE,0,0.9716
+형태 의존성 여자 Model 3 flush_now drink_ord,hua ~ drink_ord * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.7801
+형태 의존성 여자 Model 3 flush_now drinks7,hua ~ drinks7 * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.7944
+형태 의존성 여자 Model 3 flush_now logdrk,hua ~ logdrk * flush_now + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.7804
+형태 의존성 여자 Model 3 flush_ever 3.5·14잔(계획서),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.8168
+형태 의존성 여자 Model 3 flush_ever 5·15잔(주 기준),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,21,515,TRUE,0,0.7952
+형태 의존성 여자 Model 3 flush_ever 5·15·30잔(4군),hua ~ drinkX * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,23,513,TRUE,0,0.974
+형태 의존성 여자 Model 3 flush_ever drink_ord,hua ~ drink_ord * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.7905
+형태 의존성 여자 Model 3 flush_ever drinks7,hua ~ drinks7 * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.8035
+형태 의존성 여자 Model 3 flush_ever logdrk,hua ~ logdrk * flush_ever + age + f_edu + f_incm + f_year + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,5368,19,517,TRUE,0,0.7884
+연도별 남자 flush_now 2019 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa,1983,15,151,TRUE,0,0.6736
+연도별 남자 flush_now 2020 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa,1790,15,139,TRUE,0,0.7389
+연도별 남자 flush_now 2021 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa,1638,15,151,TRUE,0,0.7213
+연도 이질성 남자 flush_now Model 2,hua ~ f_year * (drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa),5411,45,493,TRUE,0,0.8999
+연도별 남자 flush_now 2019 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1983,19,147,TRUE,0,0.8944
+연도별 남자 flush_now 2020 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1790,19,135,TRUE,0,0.8852
+연도별 남자 flush_now 2021 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1638,19,147,TRUE,0,1.0438
+연도 이질성 남자 flush_now Model 3,hua ~ f_year * (drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5411,57,481,TRUE,0,1.0614
+연도별 남자 flush_ever 2019 Model 2,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa,1983,15,151,TRUE,0,0.6731
+연도별 남자 flush_ever 2020 Model 2,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa,1790,15,139,TRUE,0,0.9092
+연도별 남자 flush_ever 2021 Model 2,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa,1638,15,151,TRUE,0,0.7182
+연도 이질성 남자 flush_ever Model 2,hua ~ f_year * (drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa),5411,45,493,TRUE,0,0.8628
+연도별 남자 flush_ever 2019 Model 3,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1983,19,147,TRUE,0,0.8976
+연도별 남자 flush_ever 2020 Model 3,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1790,19,135,TRUE,0,1.1355
+연도별 남자 flush_ever 2021 Model 3,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1638,19,147,TRUE,0,1.0595
+연도 이질성 남자 flush_ever Model 3,hua ~ f_year * (drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5411,57,481,TRUE,0,1.1581
+연도별 여자 flush_now 2019 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa,1995,15,151,TRUE,0,1.2653
+연도별 여자 flush_now 2020 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa,1732,15,138,TRUE,0,1.1982
+연도별 여자 flush_now 2021 Model 2,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa,1641,15,150,TRUE,0,0.9612
+연도 이질성 여자 flush_now Model 2,hua ~ f_year * (drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa),5368,45,491,TRUE,0,1.8375
+연도별 여자 flush_now 2019 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1995,19,147,TRUE,0,1.4465
+연도별 여자 flush_now 2020 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1732,19,134,TRUE,0,1.0073
+연도별 여자 flush_now 2021 Model 3,hua ~ drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1641,19,146,TRUE,0,1.2523
+연도 이질성 여자 flush_now Model 3,hua ~ f_year * (drink3 * flush_now + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5368,57,479,TRUE,0,2.3777
+연도별 여자 flush_ever 2019 Model 2,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa,1995,15,151,TRUE,0,1.1236
+연도별 여자 flush_ever 2020 Model 2,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa,1732,15,138,TRUE,0,1.199
+연도별 여자 flush_ever 2021 Model 2,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa,1641,15,150,TRUE,0,0.8858
+연도 이질성 여자 flush_ever Model 2,hua ~ f_year * (drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa),5368,45,491,TRUE,0,1.6495
+연도별 여자 flush_ever 2019 Model 3,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1995,19,147,TRUE,0,1.4118
+연도별 여자 flush_ever 2020 Model 3,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1732,19,134,TRUE,0,1.0066
+연도별 여자 flush_ever 2021 Model 3,hua ~ drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10,1641,19,146,TRUE,0,1.2056
+연도 이질성 여자 flush_ever Model 3,hua ~ f_year * (drink3 * flush_ever + age + f_edu + f_incm + f_smk + f_pa + he_bmi + f_htn + f_dm + egfr10),5368,57,479,TRUE,0,2.2644

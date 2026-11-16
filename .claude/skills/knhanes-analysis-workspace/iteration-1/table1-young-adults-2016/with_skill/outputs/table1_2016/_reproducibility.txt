@@ -1,0 +1,13 @@
+script: .claude/skills/knhanes-analysis-workspace/iteration-1/table1-young-adults-2016/with_skill/outputs/01_table1_young_adults_2016.R
+time: 2026-10-18 17:27:44
+result: PASS
+                        file                             run1
+ 01_variable_definitions.csv 75ea45ca89d83f2ab060bc5ef123321c
+     02_participant_flow.csv 710f23ccd687ad4ac96620f7602aeec5
+               04_table1.csv c5d5fb4982708be59835baeaa0dca23f
+       05_official_check.csv edf7c551deb84206d06f4f03685e4cd1
+                             run2 same
+ 75ea45ca89d83f2ab060bc5ef123321c TRUE
+ 710f23ccd687ad4ac96620f7602aeec5 TRUE
+ c5d5fb4982708be59835baeaa0dca23f TRUE
+ edf7c551deb84206d06f4f03685e4cd1 TRUE

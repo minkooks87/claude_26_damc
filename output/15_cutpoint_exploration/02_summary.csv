@@ -1,0 +1,13 @@
+﻿sex,model,test,n_specs,n_p_below_05,n_p_below_05_stable,n_unstable,min_p,min_p_low,min_p_high,min_p_unstable,p_prespecified
+남자,Model 2,p_joint_4df,48,2,2,7,0.0104,7,10,FALSE,0.339
+남자,Model 3,p_joint_4df,48,8,6,7,0.0104,7,10,FALSE,0.188
+여자,Model 2,p_joint_4df,48,0,0,47,0.378,5,14,TRUE,0.401
+여자,Model 3,p_joint_4df,48,0,0,47,0.438,5,14,TRUE,0.476
+남자,Model 2,p_lost_vs_non,48,2,1,7,0.0384,1,28,TRUE,0.171
+남자,Model 3,p_lost_vs_non,48,10,6,7,0.0218,1,28,TRUE,0.0968
+여자,Model 2,p_lost_vs_non,48,0,0,47,0.488,1,14,TRUE,0.635
+여자,Model 3,p_lost_vs_non,48,0,0,47,0.253,1,21,TRUE,0.531
+남자,Model 2,p_persist_vs_non,48,0,0,7,0.0727,7,10,FALSE,0.546
+남자,Model 3,p_persist_vs_non,48,5,4,7,0.0334,7,10,FALSE,0.406
+여자,Model 2,p_persist_vs_non,48,0,0,47,0.161,5,14,TRUE,0.193
+여자,Model 3,p_persist_vs_non,48,0,0,47,0.287,5,14,TRUE,0.325

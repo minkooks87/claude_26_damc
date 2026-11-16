@@ -1,0 +1,17 @@
+script: .claude/skills/knhanes-analysis-workspace/iteration-1/obesity-prevalence-2018/with_skill/outputs/01_obesity_prevalence_2018.R
+time: 2026-10-18 17:28:07
+result: PASS
+                                       file                             run1
+                01_variable_definitions.csv 88c51c311488b430a9422820a490274e
+                    02_participant_flow.csv 1492c5f8086771d09a11d63963569bcf
+           03_obesity_prevalence_by_sex.csv e3a5e4f215122e3aed9b60501c7e1794
+ 03b_obesity_prevalence_by_sex_agegroup.csv 01c31d846aaee9fd04e8e21922fdaf40
+                              04_table1.csv 7e5ab03be4110c5e8dff93344d9243a5
+                      05_official_check.csv 8ca0759ace94c1e7e4ef7dcd4da065e6
+                             run2 same
+ 88c51c311488b430a9422820a490274e TRUE
+ 1492c5f8086771d09a11d63963569bcf TRUE
+ e3a5e4f215122e3aed9b60501c7e1794 TRUE
+ 01c31d846aaee9fd04e8e21922fdaf40 TRUE
+ 7e5ab03be4110c5e8dff93344d9243a5 TRUE
+ 8ca0759ace94c1e7e4ef7dcd4da065e6 TRUE

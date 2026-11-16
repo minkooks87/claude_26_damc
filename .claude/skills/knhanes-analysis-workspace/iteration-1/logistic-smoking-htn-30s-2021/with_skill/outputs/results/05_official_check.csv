@@ -1,0 +1,4 @@
+﻿indicator,n_unweighted,estimate,se,ci_low,ci_high,official,source,diff,match
+"wt_itvex 가중치 합(천명), 2021",6731,51531,,,,51531,"제8기 지침서 표 11, PDF p.40 / 인쇄 p.32 (2021 추계인구 만1세이상, 천명)",0,TRUE
+sm_presnt 지침서 프로그램 재현 일치율(%),5630,100,,,,100,"제8기 지침서 표 18, PDF p.48 / 인쇄 p.40",0,TRUE
+HE_HP 지침서 프로그램 재현 일치율(%),5592,100,,,,100,"제8기 지침서 표 21, PDF p.51 / 인쇄 p.43",0,TRUE

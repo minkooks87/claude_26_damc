@@ -1,0 +1,4 @@
+﻿variable,p25,p50,p75
+interval_h,2.5,4,5.5
+bed_m,24,24.5,25.5
+last_t,19,20.5,22
