@@ -1,0 +1,5 @@
+﻿sex,model,n_model,p_quadratic,p_quadratic_x_flush,p_linear_interaction
+남자,Model 2,5411,0.97,0.234,0.213
+남자,Model 3,5411,0.815,0.211,0.178
+여자,Model 2,5368,0.0221,0.502,0.486
+여자,Model 3,5368,0.000909,0.334,0.25

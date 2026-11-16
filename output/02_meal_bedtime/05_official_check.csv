@@ -1,0 +1,2 @@
+﻿indicator,n_unweighted,estimate,se,ci_low,ci_high,official,source,diff,within_ci
+"만19세 이상 현재흡연율(%), 2018, 조율(crude)",6183,21.1497702688868,0.730893692897628,19.7172449542799,22.5822955834936,,지표 정의: 7기 PDF p.46 / 인쇄 p.38. 공식값 출처 미확인(국민건강통계 2018 조율값 필요),,

@@ -1,0 +1,4 @@
+﻿scope,round_cut1,round_cut2,exact_cut1,exact_cut2,n_low,n_mid,n_high,identical_grouping
+남자,2.4,10,2.4231,10.3846,1699,1933,1779,TRUE
+여자,0.4,2.4,0.4038,2.4231,2025,1430,1913,TRUE
+남녀 전체(공통 기준),1,5.7,1.0385,5.7692,3869,3671,3239,TRUE

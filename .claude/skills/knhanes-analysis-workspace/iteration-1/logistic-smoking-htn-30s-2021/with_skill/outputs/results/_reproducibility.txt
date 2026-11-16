@@ -1,0 +1,23 @@
+script: .claude/skills/knhanes-analysis-workspace/iteration-1/logistic-smoking-htn-30s-2021/with_skill/outputs/smoking_htn_30s_2021.R
+time: 2026-10-18 17:29:11
+result: PASS
+                               file                             run1
+        01_variable_definitions.csv c4cb4c0cc00e1c392c9f6dd52e757a7e
+            02_participant_flow.csv d0d9f917e25d4ab2cef43259eda59f5e
+                      04_table1.csv c9ed3dc1b249759ea23934e7110e53f7
+              05_official_check.csv 61b20beb8ebaf0f04b997516786d755e
+ 05b_derived_variable_recompute.csv ac6d83293383db6110e87f38d3a1e331
+     05c_reference_crude_19plus.csv d1d727913545a9b4e76608c5b3f1f40e
+                 06_logistic_OR.csv 260389b1ec97349e0dd91897081f8410
+            07_interaction_test.csv ffa4fe5fc7a6860361799beaeedbbf37
+   08_htn_prevalence_by_smoking.csv 24fab9a6bcdf937adc25f6da067b64b9
+                             run2 same
+ c4cb4c0cc00e1c392c9f6dd52e757a7e TRUE
+ d0d9f917e25d4ab2cef43259eda59f5e TRUE
+ c9ed3dc1b249759ea23934e7110e53f7 TRUE
+ 61b20beb8ebaf0f04b997516786d755e TRUE
+ ac6d83293383db6110e87f38d3a1e331 TRUE
+ d1d727913545a9b4e76608c5b3f1f40e TRUE
+ 260389b1ec97349e0dd91897081f8410 TRUE
+ ffa4fe5fc7a6860361799beaeedbbf37 TRUE
+ 24fab9a6bcdf937adc25f6da067b64b9 TRUE

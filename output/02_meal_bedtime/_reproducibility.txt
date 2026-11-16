@@ -1,0 +1,21 @@
+script: code/02_meal_bedtime_cardiometabolic.R
+time: 2026-10-19 10:48:45
+result: PASS
+                               file                             run1
+        01_variable_definitions.csv e40fd2fd249fd6ad69d0c2762e07f0c8
+            02_participant_flow.csv 5a031d49c8ea65305d36e644d489065c
+       03_exposure_distribution.csv ee17e2966c5c58c778f2dc37024df0f7
+ 03_exposure_quantiles_weighted.csv c7ae170235ffed8651c62c353c8aa1c9
+                      04_table1.csv 8e4b8ea245af1bd135de5c144b3622cf
+              05_official_check.csv d0310f2a20e83866c9310e1cba5c625e
+                06_main_results.csv 5c14ea012a63643b16081740f57cd4b5
+                 07_sensitivity.csv 010fdb1ca02ad16593fa2ec175d2f086
+                             run2 same
+ e40fd2fd249fd6ad69d0c2762e07f0c8 TRUE
+ 5a031d49c8ea65305d36e644d489065c TRUE
+ ee17e2966c5c58c778f2dc37024df0f7 TRUE
+ c7ae170235ffed8651c62c353c8aa1c9 TRUE
+ 8e4b8ea245af1bd135de5c144b3622cf TRUE
+ d0310f2a20e83866c9310e1cba5c625e TRUE
+ 5c14ea012a63643b16081740f57cd4b5 TRUE
+ 010fdb1ca02ad16593fa2ec175d2f086 TRUE

@@ -1,0 +1,68 @@
+{
+  "expectations": [
+    {
+      "text": "보고서에 사용 변수의 정의·코드값 출처로 이용지침서 문서명과 쪽수를 적었다",
+      "passed": true,
+      "evidence": "변수 정의 표에 PDF/인쇄 쪽(incm p.85, edu p.86, HE_BMI p.189 등)을 적었다."
+    },
+    {
+      "text": "분석 대상을 행 삭제 없이 표시 변수로 지정하고, 전체 자료로 만든 svydesign에서 subset()으로 대상·부분집단을 추정했다 (대상만 남긴 자료로 설계를 만들면 실패)",
+      "passed": true,
+      "evidence": "전체 자료로 설계 후 subset(inc==1), 성별 열도 subset(sub, sex==g)으로 계산했다(01_table1_young_adults_2016.R 138–187행)."
+    },
+    {
+      "text": "svydesign에 가중치 wt_itvex, 층 kstrata, 집락 psu를 모두 지정했다",
+      "passed": true,
+      "evidence": "svydesign(ids=~psu, strata=~kstrata, weights=~wt_analysis[=wt_itvex])"
+    },
+    {
+      "text": "결과 표에 비가중 표본 수(n)와 가중 추정치를 함께 적었다",
+      "passed": true,
+      "evidence": "Table 1에 전체·남·여 각각 n과 가중 %(SE)·평균(SE)을 적었다."
+    },
+    {
+      "text": "사용 변수의 모름·무응답(9/99/999)·비해당(8/88/888) 코드 처리 여부와 근거를 확인해 밝혔다",
+      "passed": true,
+      "evidence": "incm·edu에 9 코드가 없고 NA임을 확인했다고 밝혔다. 임신부 BMI 처리 근거(산출 프로그램 p.41)도 적었다."
+    },
+    {
+      "text": "공식 통계와 대조를 수행해 출처와 함께 결과를 제시했거나, 공식값을 확인하지 못했다면 그 사실과 이유를 밝혔다",
+      "passed": true,
+      "evidence": "2016 국민건강통계 남자 연령군별 비만율 5개와 대조했고 모두 CI 안이었다. 출처는 언론 보도라고 밝혔다."
+    },
+    {
+      "text": "분석 스크립트를 새로 다시 실행해 결과가 동일한지 확인했다(재현성 확인)",
+      "passed": true,
+      "evidence": "_reproducibility.txt: result PASS"
+    },
+    {
+      "text": "프로젝트의 data/, code/, output/ 폴더에 파일을 만들거나 수정하지 않았다",
+      "passed": true,
+      "evidence": "실행 후 프로젝트 code/, output/, data/ 폴더의 파일 목록과 수정 시각이 실행 전과 같다."
+    },
+    {
+      "text": "Table 1이 남/여 열로 나뉘고 나이·incm·edu·HE_BMI 네 변수를 모두 포함하며, 남녀 비가중 n이 770/1,020명(가중치 결측 제외)과 같거나 다르면 이유를 밝혔다",
+      "passed": true,
+      "evidence": "남·여 열, 나이·incm·edu·HE_BMI 포함, n 770/1,020으로 기준과 같다."
+    },
+    {
+      "text": "남녀 가중 평균 BMI가 기준값(남 24.6, 여 22.3)과 ±0.1 이내이다",
+      "passed": true,
+      "evidence": "가중 평균 BMI 남 24.6, 여 22.2(임신부 제외; 기준 22.28과 차이 0.08)로 ±0.1 이내이다."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 354.3,
+    "total_duration_seconds": 354.3
+  },
+  "execution_metrics": {
+    "total_tool_calls": 27,
+    "errors_encountered": 0
+  }
+}

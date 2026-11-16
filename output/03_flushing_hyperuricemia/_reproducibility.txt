@@ -1,0 +1,25 @@
+script: code/03_flushing_hyperuricemia.R
+time: 2026-10-31 18:26:26
+result: PASS
+                                  file                             run1
+           01_variable_definitions.csv 75b1f0f802c6a873cc751b7f25216451
+               02_participant_flow.csv 9f0e598cdbd8433ae01c0d4c281b05e6
+                         04_table1.csv 0da96962af3de6758a8b419992555e04
+                 05_official_check.csv d4bda430214da06897474c02c14d4402
+ 05b_prevalence_by_sex_flush_drink.csv a73d3eae6437ea8c2858fb3629edfd2c
+            06a_drink_by_sex_flush.csv b6557f46b37fc83f89bacee0965ec4c9
+          06b_flush_pattern_by_sex.csv 1563721fac60499b14fec87de1b2093a
+             06c_interaction_tests.csv ce03cb2cc3a4e2598d7b8fb3ffa82f4d
+               06d_women_menopause.csv 9877417f655d5bf66a6a26654cd3b1df
+                    07_sensitivity.csv 7ff670dd506ef1ffd1f93e5dcb4bcdf1
+                             run2 same
+ 75b1f0f802c6a873cc751b7f25216451 TRUE
+ 9f0e598cdbd8433ae01c0d4c281b05e6 TRUE
+ 0da96962af3de6758a8b419992555e04 TRUE
+ d4bda430214da06897474c02c14d4402 TRUE
+ a73d3eae6437ea8c2858fb3629edfd2c TRUE
+ b6557f46b37fc83f89bacee0965ec4c9 TRUE
+ 1563721fac60499b14fec87de1b2093a TRUE
+ ce03cb2cc3a4e2598d7b8fb3ffa82f4d TRUE
+ 9877417f655d5bf66a6a26654cd3b1df TRUE
+ 7ff670dd506ef1ffd1f93e5dcb4bcdf1 TRUE

@@ -1,0 +1,4 @@
+﻿group,n_unweighted,n_obese_unweighted,prevalence_pct,se_pct,ci95_low,ci95_high,p_sex_diff
+전체,6170,2142,35.02,0.79,33.47,36.56,1.42e-18
+남자,2719,1123,41.93,1.17,39.63,44.22,
+여자,3451,1019,28.08,0.93,26.26,29.91,

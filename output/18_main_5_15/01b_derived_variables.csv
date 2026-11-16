@@ -1,0 +1,12 @@
+﻿variable,definition,source
+drinks_wk,주당 음주잔수 = 음주 빈도 대표값(회/주) × 1회 음주량 대표값(잔). 10잔 이상은 BD2_14 기입값. 환산표: output/13_v3_main_analysis/03c_conversion_table.csv,BD1_11·BD2_1·BD2_14: 8기 PDF p.161-162 / 인쇄 p.153-154. 대표값은 연구보고서 V3 환산표(가정)
+drink3,"저음주 = 주 5잔 미만, 중음주 = 5잔 이상 15잔 미만, 고음주 = 15잔 이상 (남녀 공통, 저음주 기준)",절단점은 지침서에 없음. 문헌 근거: output/15_cutpoint_exploration/04_절단점_근거_검토.md (1잔 ≈ 7 g 가정)
+drink_ord,음주 수준의 순서형 점수 0·1·2 (추세 검정용),(파생)
+flush_now,"현재 홍조: BD9_2 = 2·3·4(가끔·자주·늘) → 홍조, 1(아니오) → 비홍조",BD9_2: 8기 PDF p.163-164 / 인쇄 p.155-156
+flush_grp / flush_hist,"BD9_1(과거) × BD9_2(현재) 조합 4군: 비홍조, 홍조 소실, 지속 홍조, 신규 홍조. 이력 3군(flush_hist)은 신규 홍조 제외",BD9_1·BD9_2: 8기 PDF p.163-164 / 인쇄 p.155-156
+flush_ever,"2문항 분류: 과거(BD9_1 = 1) 또는 현재(BD9_2 = 2–4) 홍조 → 홍조 체질, 둘 다 없음 → 홍조 없음",문항: 8기 PDF p.163-164 / 인쇄 p.155-156. 분류 근거: Yokoyama 2003 Cancer Epidemiol Biomarkers Prev 12:1227-33; Brooks 2009 PLoS Med 6:e50
+past_flush,과거 홍조: BD9_1 = 1(예) / 2(아니오),BD9_1: 8기 PDF p.163-164 / 인쇄 p.155-156
+hua,"고요산혈증: 혈청 요산 남 7.0 mg/dL 이상, 여 6.0 mg/dL 이상",HE_Uacid: 8기 PDF p.200 / 인쇄 p.192. 기준값은 지침서에 없는 문헌 기준(조작적 정의)
+uacid,혈청 요산(mg/dL). '<1.0' 표기(4명)는 결측,HE_Uacid·HE_Uacid_etc: 8기 PDF p.200 / 인쇄 p.192
+meno,"폐경 상태: LW_ms 5·6 = 폐경 후, 2·3·4 = 폐경 전, 1·7은 결측",LW_ms: 8기 PDF p.190 / 인쇄 p.182
+보정변수,Model 1 = 연령 / Model 2 = + 교육·소득·조사연도·현재흡연·유산소 신체활동 / Model 3 = + BMI·고혈압(HE_HP = 3)·당뇨병(HE_DM_HbA1c = 3)·eGFR(CKD-EPI 2009),code/13_v3_main_analysis.R의 var_dict(01_variable_definitions.csv)와 같음. eGFR 식은 지침서에 없는 문헌식

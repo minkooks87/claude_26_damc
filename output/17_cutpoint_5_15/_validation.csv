@@ -1,0 +1,7 @@
+﻿item,n_compared,max_abs_diff,pass
+3.5·14 주질문 상호작용 p = code/13(12b),8,0,TRUE
+"3.5·14 부질문 1 검정 p = code/13(06b), Model 2·3",16,0,TRUE
+"3.5·14 부질문 2 성별 검정 p = code/13(07), Model 2·3",12,0,TRUE
+"3.5·14 폐경 검정 p = code/13(08b), Model 3",6,0,TRUE
+5·15 주질문 상호작용 p = code/18(유효숫자 3자리),8,0,TRUE
+"5·15 부질문 1 검정 p = code/18(유효숫자 3자리), Model 2·3",16,0,TRUE

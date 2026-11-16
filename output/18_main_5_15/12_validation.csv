@@ -1,0 +1,7 @@
+﻿item,n_compared,max_abs_diff,pass
+칸 표 추정치(결합·층화·RERI): cells_t = code/13 joint_table,14,0,TRUE
+주질문 상호작용 p = code/21 (유효숫자 3자리),16,0,TRUE
+부질문 1 공동 검정 p = code/21 (유효숫자 3자리),16,0,TRUE
+부질문 1 대비 검정 p = code/21 (유효숫자 3자리),48,0,TRUE
+부질문 2 3원 p(공변량 남녀 공통) = code/21 (유효숫자 3자리),8,0,TRUE
+3원 계수 = 여자 OR의 비 ÷ 남자 OR의 비(층화 모형),2,0,TRUE
