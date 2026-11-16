@@ -52,7 +52,10 @@ parse_covset <- function(txt) {
 }
 cov_txt  <- trimws(strsplit(.pt_opt("covars", "Model 2;Model 3"), ";", fixed = TRUE)[[1]]); cov_txt <- cov_txt[nzchar(cov_txt)]
 cov_sets <- setNames(lapply(cov_txt, parse_covset), cov_txt)
-drink    <- tolower(.pt_opt("drink", "cut")); if (!drink %in% c("cut", "linear", "log2")) stop("--drink는 cut, linear, log2 중 하나")
+drink    <- tolower(.pt_opt("drink", "cut")); if (!drink %in% c("cut", "linear", "log2", "rcs")) stop("--drink는 cut, linear, log2, rcs 중 하나")
+per      <- as.numeric(.pt_opt("per", "7"))              # linear의 단위(g/일). 1잔 ≈ 7 g이라 잔/주 = g/일. 기본 7 = 하루 1잔
+if (is.na(per) || per <= 0) stop("--per는 양수(g/일)여야 합니다.")
+trend    <- tolower(.pt_opt("trend", "none")) %in% c("median", "yes", "true")   # 범주 중앙값 점수 경향성 검정(범주형일 때)
 numv     <- function(x) if (is.null(x)) NULL else sort(as.numeric(strsplit(x, ",", fixed = TRUE)[[1]]))
 cut_m    <- numv(.pt_opt("male", .pt_opt("cuts"))); cut_f <- numv(.pt_opt("female", .pt_opt("cuts")))
 if (drink == "cut") {
@@ -61,8 +64,9 @@ if (drink == "cut") {
 }
 outcome  <- tolower(.pt_opt("outcome", "hua")); if (!outcome %in% c("hua", "uacid", "both")) stop("--outcome은 hua, uacid, both 중 하나")
 pop      <- tolower(.pt_opt("pop", "all"));     if (!pop %in% c("all", "premeno", "nopreg")) stop("--pop은 all, premeno, nopreg 중 하나")
-drink_desc <- switch(drink, cut = sprintf("범주: 남 %s / 여 %s 잔/주", paste(cut_m, collapse = ","), paste(cut_f, collapse = ",")),
-                     linear = "연속: 하루 1잔당(잔/주 ÷ 7)", log2 = "연속: log2(잔/주 + 1), 두 배당")
+drink_desc <- switch(drink, cut = sprintf("범주: 남 %s / 여 %s 잔/주(= g/일)%s", paste(cut_m, collapse = ","), paste(cut_f, collapse = ","), if (trend) " + 범주 중앙값 경향성" else ""),
+                     linear = sprintf("연속: %s g/일당(잔/주 = g/일, 1잔 ≈ 7 g)", format(per)), log2 = "연속: log2(잔/주 + 1), 두 배당",
+                     rcs = "연속: g/일 제한 삼차 스플라인(매듭 4개, 성별 5·35·65·95 백분위; 선형항 단위 10 g/일)")
 label <- .pt_opt("label", paste(drink_desc, if (pop != "all") paste0("[", pop, "]") else ""))
 
 # ---- 1. 본 분석(code/13)의 자료 준비 부분(0–3절)만 실행: 변수·대상·설계가 본 분석과 같다 ----
@@ -88,20 +92,39 @@ if (drink == "cut") {
   v$drk <- factor(NA_character_, lv)
   for (s in sexes) { i <- v$f_sex == s; br <- if (s == "남자") cut_m else cut_f
     v$drk[i] <- as.character(cut(v$drinks_wk[i], c(-Inf, br, Inf), right = FALSE, labels = lv)) }
-} else v$drk <- if (drink == "linear") v$drinks_wk / 7 else log2(v$drinks_wk + 1)
+  if (trend) {                                           # 경향성 점수: 성별·범주별 g/일 중앙값(비가중) ÷ 10 → 효과는 10 g/일당
+    v$drk_sc <- NA_real_
+    for (s in sexes) { i <- v$f_sex == s; md <- tapply(v$drinks_wk[i], v$drk[i], median); v$drk_sc[i] <- md[as.character(v$drk[i])] / 10 }
+    trend_tab <- unique(data.table(sex = v$f_sex, level = v$drk, median_g_day = v$drk_sc * 10))[order(sex, level)]
+  }
+} else if (drink == "rcs") {
+  # Harrell 제한 삼차 스플라인: 선형항(drk1 = g/일 ÷ 10) + 비선형항 2개(drk2, drk3). 매듭은 성별 5·35·65·95 백분위(비가중)
+  rcs_basis <- function(x, t) { k <- length(t); pp <- function(z) pmax(z, 0)^3
+    sapply(seq_len(k - 2), function(j) (pp(x - t[j]) - pp(x - t[k - 1]) * (t[k] - t[j]) / (t[k] - t[k - 1]) + pp(x - t[k]) * (t[k - 1] - t[j]) / (t[k] - t[k - 1])) / (t[k] - t[1])^2) }
+  v$drk1 <- v$drk2 <- v$drk3 <- NA_real_; knots_tab <- list()
+  for (s in sexes) { i <- v$f_sex == s; x <- v$drinks_wk[i] / 10; t <- unname(quantile(x, c(0.05, 0.35, 0.65, 0.95)))
+    if (any(diff(t) <= 0)) stop("스플라인 매듭이 겹칩니다(", s, ").")
+    B <- rcs_basis(x, t); v$drk1[i] <- x; v$drk2[i] <- B[, 1]; v$drk3[i] <- B[, 2]
+    knots_tab[[s]] <- data.table(sex = s, knots_g_day = paste(round(t * 10, 2), collapse = ", ")) }
+  knots_tab <- rbindlist(knots_tab)
+} else v$drk <- if (drink == "linear") v$drinks_wk / per else log2(v$drinks_wk + 1)
 keep <- switch(pop, all = rep(TRUE, nrow(v)), premeno = v$f_sex == "남자" | (!is.na(v$meno) & v$meno == "폐경 전"), nopreg = v$preg_lact == 0L)
 sd <- sdes; sd$variables <- v; sd <- dsub(sd, keep); d <- dat_of(sd)
 
 # ---- 2. 검정 도구 ----
 MIN_EV <- 10
-base_terms <- if (drink == "cut") paste0("drk", lv[-1]) else "drk"
+base_terms <- if (drink == "cut") paste0("drk", lv[-1]) else if (drink == "rcs") c("drk1", "drk2", "drk3") else "drk"
+drk_term   <- if (drink == "rcs") "(drk1 + drk2 + drk3)" else "drk"
+FH <- paste(drk_term, "* flush_hist"); FN <- paste(drk_term, "* flush_now"); FE <- paste(drk_term, "* flush_ever")
 lincomb <- function(fit, l, tr) {                         # 1 df 검정의 효과 크기(OR의 비 또는 β 차이)와 95% CI(t 분포)
   b <- coef(fit); V <- vcov(fit); w <- setNames(rep(0, length(b)), names(b)); w[names(l)] <- l
   e <- sum(w * b); se <- sqrt(as.numeric(t(w) %*% V %*% w)); q <- qt(0.975, fit$df.residual)
   sprintf("%.2f (%.2f, %.2f)", tr(e), tr(e - q * se), tr(e + q * se))
 }
 sep_flag <- function(fit, nm) {                          # 검정하는 계수가 추정되지 않았거나(분리) 비정상적으로 크면 표시
-  b <- coef(fit)[nm]; any(is.na(b)) || !all(nm %in% names(coef(fit))) || max(abs(b)) > 8 }
+  b <- coef(fit)[nm]; if (!all(nm %in% names(coef(fit))) || any(is.na(b))) return(TRUE)
+  # 계수 크기 기준(|b| > 8)은 범주형 칸이 비어 생기는 분리를 잡기 위한 것. 연속형(특히 스플라인 비선형항)은 계수 척도가 달라 쓰지 않는다
+  drink == "cut" && max(abs(b)) > 8 }
 min_ev <- function(dat, gvar, groups) {
   if (drink != "cut") return(Inf)
   g <- CJ(grp = groups, lev = lv); e <- dat[get(gvar) %in% groups, .(ev = sum(hua)), keyby = .(grp = get(gvar), lev = drk)]
@@ -126,31 +149,47 @@ for (y in ys) { fam <- if (y == "hua") quasibinomial() else gaussian()
       # 폐경 상태는 여자 모형에만 넣는다(폐경 전 여자만 볼 때는 값이 하나라 뺀다)
       covs_s <- if (s == "남자" || pop == "premeno") setdiff(covs, "meno_cov") else covs
       # 홍조 이력 3군(비홍조 기준·홍조 소실·지속 홍조) 한 모형에서 주질문과 부질문 1을 함께 본다
-      rh <- fit_svy(D, mk_form(y, "drk * flush_hist", covs_s), fam)
+      rh <- fit_svy(D, mk_form(y, FH, covs_s), fam)
       nh <- function(g) paste0(base_terms, ":flush_hist", g)
       test("주질문", sprintf("지속 홍조 vs 비홍조 (%d df)", dfl), s, cn, rh, one(nh("지속 홍조")), y, c("비홍조", "지속 홍조"), "flush_hist")
       test("부질문 1", sprintf("홍조 소실 vs 비홍조 (%d df)", dfl), s, cn, rh, one(nh("홍조 소실")), y, c("비홍조", "홍조 소실"), "flush_hist")
       test("부질문 1(탐색)", sprintf("홍조 소실 vs 지속 홍조 (%d df)", dfl), s, cn, rh,
            Map(function(a, b) setNames(c(1, -1), c(a, b)), nh("홍조 소실"), nh("지속 홍조")), y, c("홍조 소실", "지속 홍조"), "flush_hist")
       test("참고", sprintf("홍조 이력 세 군 공동 (%d df)", 2 * dfl), s, cn, rh, one(c(nh("홍조 소실"), nh("지속 홍조"))), y, levels(d$flush_hist), "flush_hist")
-      r <- fit_svy(D, mk_form(y, "drk * flush_now", covs_s), fam)
+      r <- fit_svy(D, mk_form(y, FN, covs_s), fam)
       test("참고", sprintf("현재 홍조 vs 현재 비홍조 (%d df, 계획 발표의 주질문)", dfl), s, cn, r, one(paste0(base_terms, ":flush_now홍조")), y, levels(d$flush_now), "flush_now")
-      re <- fit_svy(D, mk_form(y, "drk * flush_ever", covs_s), fam)
+      re <- fit_svy(D, mk_form(y, FE, covs_s), fam)
       test("탐색적 분석", sprintf("홍조 체질(과거 또는 현재) vs 홍조 없음 (%d df)", dfl), s, cn, re, one(paste0(base_terms, ":flush_ever과거 또는 현재 홍조")), y, levels(d$flush_ever), "flush_ever")
+      if (drink == "rcs") {                              # 용량-반응이 직선인가: 홍조 이력을 넣은 주효과 모형에서 비선형항 2개 공동 검정
+        rl <- fit_svy(D, mk_form(y, c(drk_term, "flush_hist"), covs_s), fam)
+        test("용량-반응", "음주–결과 관계의 비선형성 (스플라인 비선형항, 2 df)", s, cn, rl, one(c("drk2", "drk3")), y)
+      }
+      if (drink == "cut" && trend) {                     # 범주 중앙값 점수로 1 df 경향성 검정
+        rt <- fit_svy(D, mk_form(y, "drk_sc * flush_hist", covs_s), fam)
+        test("주질문", "지속 홍조 vs 비홍조, 경향성 (1 df, 범주 중앙값 10 g/일당)", s, cn, rt, one("drk_sc:flush_hist지속 홍조"), y)
+        test("부질문 1", "홍조 소실 vs 비홍조, 경향성 (1 df, 범주 중앙값 10 g/일당)", s, cn, rt, one("drk_sc:flush_hist홍조 소실"), y)
+        test("용량-반응", "비홍조군 음주 경향성 (10 g/일당)", s, cn, rt, list(c(drk_sc = 1)), y)
+        test("용량-반응", "지속 홍조군 음주 경향성 (10 g/일당)", s, cn, rt, list(c(drk_sc = 1, "drk_sc:flush_hist지속 홍조" = 1)), y)
+        test("용량-반응", "홍조 소실군 음주 경향성 (10 g/일당)", s, cn, rt, list(c(drk_sc = 1, "drk_sc:flush_hist홍조 소실" = 1)), y)
+      }
     }
     # 부질문 2: '지속 홍조 vs 비홍조' 차이가 남녀에서 다른가 — 보정변수 효과도 성별마다 다르게 둔 통합 모형의 3원 상호작용
     # 통합 모형: 폐경은 f_sex 상호작용 밖에 여자 전용 지시변수로 넣는다(남자는 0이라 여자에게만 작용)
     covs_p <- setdiff(covs, "meno_cov")
     meno_x <- if ("meno_cov" %in% covs && pop != "premeno") " + meno_post + meno_other" else ""
-    r3 <- fit_svy(sd, as.formula(paste0(y, " ~ f_sex * (", paste(c("drk * flush_hist", covs_p), collapse = " + "), ")", meno_x)), fam)
+    r3 <- fit_svy(sd, as.formula(paste0(y, " ~ f_sex * (", paste(c(FH, covs_p), collapse = " + "), ")", meno_x)), fam)
     n3 <- grep("f_sex", grep("^(f_sex.*:)?drk.*:flush_hist지속 홍조", names(coef(r3$fit)), value = TRUE), value = TRUE)
     test("부질문 2", sprintf("지속 홍조 vs 비홍조 차이 × 성별 (3원, %d df)", length(n3)), "남녀 전체", cn, r3, one(n3), y)
-    r3n <- fit_svy(sd, as.formula(paste0(y, " ~ f_sex * (", paste(c("drk * flush_now", covs_p), collapse = " + "), ")", meno_x)), fam)
+    if (drink == "cut" && trend) {
+      rt3 <- fit_svy(sd, as.formula(paste0(y, " ~ f_sex * (", paste(c("drk_sc * flush_hist", covs_p), collapse = " + "), ")", meno_x)), fam)
+      test("부질문 2", "지속 홍조 vs 비홍조 차이 × 성별, 경향성 (1 df)", "남녀 전체", cn, rt3, one(grep("f_sex.*drk_sc:flush_hist지속 홍조", names(coef(rt3$fit)), value = TRUE)), y)
+    }
+    r3n <- fit_svy(sd, as.formula(paste0(y, " ~ f_sex * (", paste(c(FN, covs_p), collapse = " + "), ")", meno_x)), fam)
     n3n <- grep("f_sex", grep("drk.*flush_now|flush_now.*drk", names(coef(r3n$fit)), value = TRUE), value = TRUE)
     test("참고", sprintf("현재 홍조 차이 × 성별 (3원, %d df)", length(n3n)), "남녀 전체", cn, r3n, one(n3n), y)
     if (pop != "premeno") {
       Dw <- dsub(sd, d$f_sex == "여자" & !is.na(d$meno))
-      rm3 <- fit_svy(Dw, as.formula(paste(y, "~ meno * (", paste(c("drk * flush_hist", setdiff(covs, "meno_cov")), collapse = " + "), ")")), fam)   # 폐경이 효과수정변수이므로 보정변수에서는 뺀다
+      rm3 <- fit_svy(Dw, as.formula(paste(y, "~ meno * (", paste(c(FH, setdiff(covs, "meno_cov")), collapse = " + "), ")")), fam)   # 폐경이 효과수정변수이므로 보정변수에서는 뺀다
       nm3 <- grep("meno", grep("drk.*:flush_hist지속 홍조", names(coef(rm3$fit)), value = TRUE), value = TRUE)
       test("부질문 2(탐색)", sprintf("지속 홍조 vs 비홍조 차이 × 폐경 (3원, %d df)", length(nm3)), "여자", cn, rm3, one(nm3), y)
     }
@@ -171,9 +210,11 @@ if (drink == "cut") {
   cells <- d[, .(v = sprintf("%d (%d)", .N, sum(hua))), keyby = .(성별 = f_sex, 현재홍조 = flush_now, drk)]
   print(dcast(cells, 성별 + 현재홍조 ~ drk, value.var = "v"))
   cat("칸 안의 값: 비가중 n (고요산혈증 사례)\n")
+  if (trend) { cat("\n[경향성 점수: 범주별 g/일 중앙값(비가중)]\n"); print(trend_tab) }
 } else {
   print(d[, .(n = .N, 고요산혈증 = sum(hua), `잔/주 중앙값` = median(drinks_wk), `잔/주 평균` = round(mean(drinks_wk), 1), `잔/주 최댓값` = max(drinks_wk)), keyby = .(성별 = f_sex, 현재홍조 = flush_now)])
   cat("(비가중 요약)\n")
+  if (drink == "rcs") { cat("\n[스플라인 매듭(g/일)]\n"); print(knots_tab) }
 }
 for (y in unique(res$결과)) {
   cat(sprintf("\n[%s: 상호작용 검정 p]\n", y))
@@ -181,7 +222,7 @@ for (y in unique(res$결과)) {
   for (cn in names(cov_sets)) w[[cn]] <- fp(w[[cn]])
   nts <- res[결과 == y & nzchar(비고), .(비고 = paste(unique(비고), collapse = "; ")), by = .(구분, 검정, 대상)]
   w <- merge(w, nts, by = c("구분", "검정", "대상"), all.x = TRUE); w[is.na(비고), 비고 := ""]
-  qorder <- c("주질문", "부질문 1", "부질문 1(탐색)", "부질문 2", "부질문 2(탐색)", "탐색적 분석", "참고")
+  qorder <- c("주질문", "부질문 1", "부질문 1(탐색)", "부질문 2", "부질문 2(탐색)", "탐색적 분석", "용량-반응", "참고")
   ord <- unique(res[결과 == y, .(구분, 검정, 대상)])[, o := .I]
   ord[, `:=`(qo = match(구분, qorder), so = match(대상, c("남자", "여자", "남녀 전체")))]
   w <- merge(ord, w, by = c("구분", "검정", "대상"))[order(qo, so, o)][, c("o", "qo", "so") := NULL]
