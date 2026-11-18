@@ -1,0 +1,32 @@
+# Huang 등 (2024). The relationship between education attainment and gout, and the mediating role of modifiable risk factors: a Mendelian randomization study
+
+- 서지: Huang X, Chen X, Liu Q, Zhang Z, Miao J, Lai Y, Wu J. The relationship between education attainment and gout, and the mediating role of modifiable risk factors: a Mendelian randomization study. Front Public Health. 2024;11:1269426.
+- DOI: https://doi.org/10.3389/fpubh.2023.1269426
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/38259784/
+- 원문 파일: 2024, Huang, [보정변수-교육] 교육수준과 통풍(멘델 무작위 분석).pdf (PMC 공개본, CC BY)
+- 요약 근거: 초록
+- 쓰임: 보정변수 근거 (교육수준)
+
+## 연구 목적
+
+교육수준과 통풍의 인과 관계를 보고, 체질량지수·수축기혈압 같은 신체 상태와 음주 빈도·흡연·TV 시청 같은 생활습관이 그 관계를 얼마나 매개하는지 알아보고자 했다.
+
+## 대상과 자료
+
+공개된 대규모 유전체 연관분석(GWAS) 요약 자료를 썼다(초록에 표본 수는 명시되지 않음).
+
+## 방법
+
+두 표본 멘델 무작위 분석(MR)으로 교육수준 → 통풍, 그리고 각 매개 요인 → 통풍의 인과 효과를 추정했다. 다변량 MR로 매개 효과의 크기를 계산했다.
+
+## 주요 결과
+
+교육 기간이 1표준편차(4.2년) 길어지면 통풍 위험이 낮아졌다(OR 0.724, 95% CI 0.552–0.950, p = 0.020). 체질량지수, 수축기혈압, 음주 빈도, TV 시청 시간은 통풍의 인과적 위험요인이었고, 흡연은 아니었다. 교육수준과 통풍의 관계를 매개한 비율은 **음주 빈도 51.33%**, 체질량지수 27.17%, 수축기혈압 14.83%, TV 시청 1.10%였다.
+
+## 저자가 밝힌 한계
+
+초록에 명시되지 않음.
+
+## 보정변수 근거로서의 쓰임
+
+교육수준이 **통풍(요산 관련 질환)과도 관련되고, 그 관계의 절반가량이 음주를 거친다**는 근거이다. 즉 교육수준은 우리 연구의 노출(음주량)과 결과(고요산혈증) 양쪽과 연결되는 변수라서 보정할 이유가 있다. 다만 결과가 고요산혈증이 아니라 통풍이고, 유럽인 중심의 유전 자료일 가능성이 있어(원문 확인 필요) 한국 자료에 그대로 옮기기에는 한계가 있다.
