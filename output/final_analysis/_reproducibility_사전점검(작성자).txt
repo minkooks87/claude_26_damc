@@ -1,0 +1,19 @@
+script: code/final_analysis.R
+time: 2026-11-18 10:58:29
+result: PASS
+                        file                             run1
+ 01_variable_definitions.csv f4b40ac664bd20417df61fe35d49c674
+    02a_participant_flow.csv 64b60438d09715d8c5ba2f2b5923ae61
+      02b_flow_vs_README.csv 64b9864ad8c339e3fd3de98beb5f5fe4
+               03_table1.csv aa2f11431f2451e4f21aec6358a3148d
+       04_outcome_by_sex.csv ae2c03bc6d029fdb899eef10faf38385
+ 05_included_vs_excluded.csv 3bbfca875cb12901d442b9dc21629c4c
+       06_official_check.csv 44a4a9a54992859700f8a9a3f761067e
+                             run2 same
+ f4b40ac664bd20417df61fe35d49c674 TRUE
+ 64b60438d09715d8c5ba2f2b5923ae61 TRUE
+ 64b9864ad8c339e3fd3de98beb5f5fe4 TRUE
+ aa2f11431f2451e4f21aec6358a3148d TRUE
+ ae2c03bc6d029fdb899eef10faf38385 TRUE
+ 3bbfca875cb12901d442b9dc21629c4c TRUE
+ 44a4a9a54992859700f8a9a3f761067e TRUE

@@ -45,14 +45,18 @@ COVSETS <- list(
 MAIN_COVSET <- "Model 2"      # ✅ 주 모형
 
 # ---- 공식 통계값 [계획서 8.1] ----
-# ⏳ 국민건강통계 2019에서 조율(crude) 값을 찾아 official에 넣고, source에 표 번호·쪽을 적는다. 비어 있으면 대조 칸이 NA로 나온다.
+# 2019년 만 19세 이상 조율(crude) 값과 응답자 수. 연령표준화 값이 아니다.
+# 출처: KOSIS 국민건강영양조사(질병관리청) 월간 음주율 추이 DT_11702_N012, 고위험음주율 추이 DT_11702_N018, '19세이상' 행, 2026-11-18 조회.
+#       자세한 내용: Result/2026-11-18_2019음주_공식통계값_KOSIS.md
 OFFICIAL <- data.table(
-  indicator = c("월간음주율", "월간음주율", "월간음주율", "고위험음주율", "고위험음주율", "고위험음주율"),
-  sex       = c("전체", "남자", "여자", "전체", "남자", "여자"),
-  official  = NA_real_,
-  source    = "⏳ 국민건강통계 2019 표 번호·쪽 미확인"
+  indicator  = c("월간음주율", "월간음주율", "월간음주율", "고위험음주율", "고위험음주율", "고위험음주율"),
+  sex        = c("전체", "남자", "여자", "전체", "남자", "여자"),
+  official   = c(57.7, 72.4, 43.2, 12.1, 18.7, 5.6),
+  official_n = c(6195L, 2746L, 3449L, 6195L, 2746L, 3449L),
+  source     = c(rep("KOSIS DT_11702_N012(월간 음주율 추이), 2019, 19세이상", 3), rep("KOSIS DT_11702_N018(고위험음주율 추이), 2019, 19세이상", 3))
 )
-OFFICIAL_TOL <- 0.1           # ⏳ 허용 오차(%p). 계획서 8.1에서 확정한다.
+# 판정: 공식값이 소수 첫째 자리까지 발표되므로, 재현값을 소수 첫째 자리로 반올림한 값과 응답자 수가 모두 같으면 '일치'
+OFFICIAL_DIGITS <- 1
 
 # ---- 경로 ----
 years   <- c(2019, 2020, 2021)
@@ -342,11 +346,12 @@ official_check <- rbindlist(lapply(seq_len(nrow(OFFICIAL)), function(i) {
   o <- OFFICIAL[i]; v <- if (o$indicator == "월간음주율") "dr_month" else "dr_high"
   k <- d19$age >= 19 & !is.na(d19$wt_itvex) & (o$sex == "전체" | d19$sex == match(o$sex, sexes)) & !is.na(d19[[v]])
   est <- svymean(as.formula(paste0("~", v)), dsub(des19, k)); ci <- confint(est)
-  data.table(지표 = paste0("만19세 이상 ", o$indicator, "(%, 2019, 조율)"), 성별 = o$sex, n = sum(k),
+  data.table(지표 = paste0("만19세 이상 ", o$indicator, "(%, 2019, 조율)"), 성별 = o$sex, n = sum(k), 공식n = o$official_n,
              재현값 = 100 * unname(coef(est)), SE = 100 * as.numeric(SE(est)), CI하한 = 100 * ci[1], CI상한 = 100 * ci[2],
              공식값 = o$official, 차이 = 100 * unname(coef(est)) - o$official, 출처 = o$source)
 }))
-official_check[, 판정 := fifelse(is.na(공식값), "공식값 미입력", fifelse(abs(차이) <= OFFICIAL_TOL, "일치", "불일치"))]
+official_check[, 판정 := fifelse(is.na(공식값), "공식값 미입력",
+                          fifelse(round(재현값, OFFICIAL_DIGITS) == 공식값 & n == 공식n, "일치", "불일치"))]
 fwrite(round_dt(official_check), file.path(out_dir, "06_official_check.csv"), bom = TRUE)
 if (any(is.na(official_check$공식값))) message("※ 공식 통계값이 비어 있습니다. 0절 OFFICIAL에 국민건강통계 2019 값을 채우세요.")
 
