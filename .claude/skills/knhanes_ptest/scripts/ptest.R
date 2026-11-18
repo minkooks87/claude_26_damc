@@ -118,9 +118,9 @@ sexes <- c("남자", "여자")
 v0 <- sdes$variables
 v0$flush_ever <- factor(ifelse(is.na(v0$flush_grp), NA, ifelse(v0$flush_grp == "비홍조", "홍조 없음", "과거 또는 현재 홍조")), c("홍조 없음", "과거 또는 현재 홍조"))
 v0$age10 <- cut(v0$age, c(-Inf, 30, 40, 50, 60, 70, Inf), right = FALSE, labels = c("19-29", "30-39", "40-49", "50-59", "60-69", "70+"))
-# 폐경 상태 보정변수(여자만). LW_ms(8기 PDF p.190 / 인쇄 p.182): 2·3·4 폐경 전, 5·6 폐경 후, 7 기타(실제 응답이므로 별도 범주),
+# 폐경 상태 보정변수(여자만). LW_ms(8기 PDF p.190 / 인쇄 p.182): 2·3·4 폐경 전, 5·6 폐경 후, 1·7 기타(실제 응답이므로 별도 범주. 분석계획서 4.4와 같음),
 # 9 모름·무응답은 code/13에서 이미 결측. 남녀 통합 모형에서는 여자에게만 작용하도록 지시변수(meno_post, meno_other)로 넣는다.
-v0$meno_cov <- factor(ifelse(v0$f_sex != "여자", NA, ifelse(v0$lw_ms %in% 2:4, "폐경 전", ifelse(v0$lw_ms %in% 5:6, "폐경 후", ifelse(v0$lw_ms %in% 7, "기타", NA)))),
+v0$meno_cov <- factor(ifelse(v0$f_sex != "여자", NA, ifelse(v0$lw_ms %in% 2:4, "폐경 전", ifelse(v0$lw_ms %in% 5:6, "폐경 후", ifelse(v0$lw_ms %in% c(1, 7), "기타", NA)))),
                       c("폐경 전", "폐경 후", "기타"))
 v0$meno_post  <- ifelse(v0$f_sex == "남자", 0, ifelse(is.na(v0$meno_cov), NA, as.numeric(v0$meno_cov == "폐경 후")))
 v0$meno_other <- ifelse(v0$f_sex == "남자", 0, ifelse(is.na(v0$meno_cov), NA, as.numeric(v0$meno_cov == "기타")))

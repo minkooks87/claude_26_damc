@@ -3,7 +3,8 @@
 # 근거 문서: 분석계획서.md(저장소 맨 위 폴더). 이 코드는 계획서의 규칙을 그대로 옮긴 것이며,
 #            규칙을 바꾸려면 계획서를 먼저 고치고 이 코드의 해당 줄을 고친다. 줄 옆의 [계획서 n장]이 대응 위치다.
 # 임시본: 계획서의 ✅ 확정 규칙과, 🔍 항목은 현재 규칙(code/13_v3_main_analysis.R, README 4장)으로 짰다.
-#         ⏳ 항목(주분석 음주 기준, 1잔의 g, 공식값)은 아래 0절의 설정값을 채우면 된다.
+#         ⏳ 항목(주분석 음주 기준, 1잔의 g, 주 검정 형태 A·B안)은 아래 0절의 설정값을 채우면 된다. 공식값 대조(8.1)는 ✅.
+# 2026-11-18 수정(문서 점검 3·4·18·27번): 경향성·부질문 2 검정에도 '사례 10명 미만' 표시, 효과표 비고 열, 칸 표 가중 유병률.
 # 실행: 프로젝트 폴더에서  Rscript --vanilla code/final_analysis.R
 # 재현성 확인(코드를 짜지 않은 조원):
 #   Rscript --vanilla .claude/skills/knhanes-analysis/scripts/check_reproducibility.R code/final_analysis.R output/final_analysis
@@ -94,7 +95,7 @@ var_dict <- rbindlist(list(
   list(var = "bd1",      miss = "9", na8 = "8=결측", label = "평생음주경험(1 없음, 2 있음)", source = src_drk),
   list(var = "bd1_11",   miss = "9", na8 = "8=범주유지", label = "1년간 음주빈도(1 안 마심 ~ 6 주 4회 이상)", source = src_drk),
   list(var = "bd2_1",    miss = "9", na8 = "8=범주유지", label = "한 번에 마시는 음주량(1 1-2잔 ~ 5 10잔 이상)", source = src_drk),
-  list(var = "bd2_14",   miss = "999", na8 = "888=결측", label = "한 번에 마시는 음주량(잔, 10잔 이상만). 888은 10잔 미만이라 비해당", source = src_drk),
+  list(var = "bd2_14",   miss = "999", na8 = "888=결측(변수 값만 비움. 10잔 미만이라 비해당이며 그 사람은 BD2_1 대푯값을 쓰므로 대상에서 빠지지 않음)", label = "한 번에 마시는 음주량(잔, 10잔 이상만)", source = src_drk),
   list(var = "bd2_31",   miss = "9", na8 = "8=범주유지", label = "폭음 빈도(남 7잔 이상)", source = src_drk),
   list(var = "bd2_32",   miss = "9", na8 = "8=범주유지", label = "폭음 빈도(여 5잔 이상)", source = src_drk),
   list(var = "bd9_1",    miss = "9", na8 = "8=결측", label = "과거 알코올 홍조(1 예, 2 아니오)", source = src_fl),
@@ -393,14 +394,16 @@ if (!RUN_MAIN) {
     dd <- dat_of(sd)
     fam <- if (spec$y == "hua") quasibinomial() else gaussian(); tr <- if (spec$y == "hua") exp else identity
     eff <- list(); tst <- list(); cel <- list()
-    add_test <- function(q, who, r, L, groups = NULL, gvar = "flush_hist") {
+    add_test <- function(q, who, r, L, groups = NULL, gvar = "flush_hist", bysex = FALSE) {
       p <- tryCatch(contrast_test(r$fit, L), error = function(e) NA_real_)
       b <- coef(r$fit)[unique(unlist(lapply(L, names)))]
       sep <- any(is.na(b)) || (is_cut && max(abs(b), na.rm = TRUE) > 8)
       few <- FALSE
+      # 사례 10명 미만 칸 확인 [계획서 7장]: 경향성 검정도 같은 범주 칸 기준, 부질문 2는 성별 × 홍조군 × 음주 칸 기준
       if (is_cut && spec$y == "hua" && !is.null(groups)) {
-        cc <- r$data[get(gvar) %in% groups, .(ev = sum(hua)), keyby = .(g = get(gvar), drk)]
-        few <- nrow(cc) < length(groups) * length(lv) || min(cc$ev) < MIN_EV
+        cc <- if (bysex) r$data[get(gvar) %in% groups, .(ev = sum(hua)), keyby = .(s = f_sex, g = get(gvar), drk)]
+              else r$data[get(gvar) %in% groups, .(ev = sum(hua)), keyby = .(g = get(gvar), drk)]
+        few <- nrow(cc) < length(groups) * length(lv) * (if (bysex) length(sexes) else 1) || min(cc$ev) < MIN_EV
       }
       tst[[length(tst) + 1L]] <<- data.table(질문 = q, 대상 = who, df = length(L), p = p, 모형n = r$n,
                                              비고 = paste(c(if (few) "사례 10명 미만 칸 있음", if (sep) "분리(추정 불가)"), collapse = ", "))
@@ -418,15 +421,28 @@ if (!RUN_MAIN) {
       for (g in levels(dd$flush_hist)) for (t in base_terms) {
         l <- if (g == "비홍조") setNames(1, t) else setNames(c(1, 1), c(t, paste0(t, ":flush_hist", g)))
         e <- lincomb(r$fit, l, tr)
+        # 이 OR을 만드는 두 칸(같은 홍조군의 저음주 칸과 해당 음주 칸) 중 사례 10명 미만이 있으면 해석하지 않는다 [계획서 7장]
+        few_e <- if (is_cut && spec$y == "hua") {
+          ev <- r$data[flush_hist == g & drk %in% c(lv[1], sub("^drk", "", t)), .(ev = sum(hua)), by = drk]
+          nrow(ev) < 2 || min(ev$ev) < MIN_EV
+        } else FALSE
         eff[[length(eff) + 1L]] <- data.table(성별 = s, 홍조이력 = g, 음주 = if (is_cut) sub("^drk", "", t) else paste0(crit$per, " g/일당"),
-                                              추정치 = e[["est"]], CI하한 = e[["lo"]], CI상한 = e[["hi"]], 모형n = r$n)
+                                              추정치 = e[["est"]], CI하한 = e[["lo"]], CI상한 = e[["hi"]], 모형n = r$n,
+                                              비고 = if (few_e) "사례 10명 미만 칸 있음(해석하지 않음)" else "")
       }
-      if (is_cut) cel[[s]] <- r$data[, .(n = .N, 고요산혈증_n = sum(hua)), keyby = .(성별 = f_sex, 홍조이력 = flush_hist, 음주 = drk)]
+      if (is_cut) {                                     # 칸 표: 비가중 n·사례 수와 가중 유병률(%) [계획서 6.1, 7장]
+        cn <- r$data[, .(n = .N, 고요산혈증_n = sum(hua)), keyby = .(성별 = f_sex, 홍조이력 = flush_hist, 음주 = drk)]
+        wp <- as.data.table(svyby(~hua, ~flush_hist + drk, r$design, svymean, na.rm = TRUE, keep.var = FALSE))
+        setnames(wp, c("flush_hist", "drk", "statistic"), c("홍조이력", "음주", "가중유병률"), skip_absent = TRUE)
+        wp[, 가중유병률 := 100 * 가중유병률]
+        cel[[s]] <- merge(cn, wp[, .(홍조이력 = as.character(홍조이력), 음주 = as.character(음주), 가중유병률)],
+                          by.x = c("홍조이력", "음주"), by.y = c("홍조이력", "음주"), all.x = TRUE)
+      }
       # 범주 중앙값 점수로 1 df 경향성 교호작용 [6.2]
       if (is_cut && length(lv) > 2) {
         rt <- fit_svy(D, mk_form(spec$y, "drk_sc * flush_hist", covs_s), fam)
-        add_test("주질문(경향성, 10 g/일당): 지속 홍조 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist지속 홍조")))
-        add_test("부질문 1(경향성, 10 g/일당): 홍조 소실 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist홍조 소실")))
+        add_test("주질문(경향성, 10 g/일당): 지속 홍조 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist지속 홍조")), c("비홍조", "지속 홍조"))
+        add_test("부질문 1(경향성, 10 g/일당): 홍조 소실 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist홍조 소실")), c("비홍조", "홍조 소실"))
       }
       # 참고: 현재 홍조 2군(계획 발표 때의 주분석) [6.4]
       if (isTRUE(spec$extra)) {
@@ -438,7 +454,7 @@ if (!RUN_MAIN) {
     covs_p <- setdiff(covs, "meno_cov"); meno_x <- if ("meno_cov" %in% covs) " + meno_post + meno_other" else ""
     r3 <- fit_svy(sd, as.formula(paste0(spec$y, " ~ f_sex * (", paste(c("drk * flush_hist", covs_p), collapse = " + "), ")", meno_x)), fam)
     n3 <- grep("f_sex", grep("drk.*:flush_hist지속 홍조", names(coef(r3$fit)), value = TRUE), value = TRUE)
-    add_test("부질문 2: (지속 홍조 vs 비홍조) × 성별", "남녀 전체", r3, lapply(n3, function(x) setNames(1, x)))
+    add_test("부질문 2: (지속 홍조 vs 비홍조) × 성별", "남녀 전체", r3, lapply(n3, function(x) setNames(1, x)), c("비홍조", "지속 홍조"), bysex = TRUE)
     lab <- c(기준 = crit$label, `1잔g` = spec$gram, 빈도대푯값 = spec$wk_var, 대상군 = spec$pop, 보정 = spec$covset,
              결과 = if (spec$y == "hua") "고요산혈증(OR)" else "혈청 요산(β, mg/dL)", 분석 = spec$role)
     wrap <- function(x) if (length(x)) cbind(as.data.table(as.list(lab)), rbindlist(x)) else NULL
