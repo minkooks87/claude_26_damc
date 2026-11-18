@@ -1,17 +1,17 @@
 script: code/24_tertile_cutpoints.R
-time: 2026-11-16 10:37:19
+time: 2026-11-16 10:59:09
 result: PASS
                                file                             run1
           01_value_distribution.csv f57b75561607796046a2c0dda50c43eb
-           02_tertile_cutpoints.csv 055fe4634f7a12c15aa7a912a014c1a1
-     02b_candidates_near_target.csv d5287954cefd5a31c3d6da40c32f26b4
-                 03_group_sizes.csv 99798d78594f11c90b4585b98c8e98b4
-        04_cell_counts_by_flush.csv 22dd1b6cb84ce94d9f19f0abb949c002
- 05_recommended_round_cutpoints.csv 48a9fb528ac9ee3cca1fa6d3dabe366e
+           02_tertile_cutpoints.csv 5a65728068cab7885e2f557efd3497ee
+        02b_top5_cutpoint_pairs.csv 0fdd860fab6b1b6f5e96407b02d38dcc
+                 03_group_sizes.csv 48f9b1e1d5e77c80f091ea8057607d71
+        04_cell_counts_by_flush.csv 26b03225a9dbb8c75f4da4203102a9f3
+ 05_recommended_round_cutpoints.csv 1850614cb7a80b967f5a3ff7eeeaf413
                              run2 same
  f57b75561607796046a2c0dda50c43eb TRUE
- 055fe4634f7a12c15aa7a912a014c1a1 TRUE
- d5287954cefd5a31c3d6da40c32f26b4 TRUE
- 99798d78594f11c90b4585b98c8e98b4 TRUE
- 22dd1b6cb84ce94d9f19f0abb949c002 TRUE
- 48a9fb528ac9ee3cca1fa6d3dabe366e TRUE
+ 5a65728068cab7885e2f557efd3497ee TRUE
+ 0fdd860fab6b1b6f5e96407b02d38dcc TRUE
+ 48f9b1e1d5e77c80f091ea8057607d71 TRUE
+ 26b03225a9dbb8c75f4da4203102a9f3 TRUE
+ 1850614cb7a80b967f5a3ff7eeeaf413 TRUE
