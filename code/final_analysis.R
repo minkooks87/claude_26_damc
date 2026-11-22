@@ -4,7 +4,8 @@
 #            규칙을 바꾸려면 계획서를 먼저 고치고 이 코드의 해당 줄을 고친다. 줄 옆의 [계획서 n장]이 대응 위치다.
 # 임시본: 계획서의 ✅ 확정 규칙과, 🔍 항목은 현재 규칙(code/13_v3_main_analysis.R, README 4장)으로 짰다.
 #         ⏳ 항목(주분석 음주 기준, 1잔의 g, 주 검정 형태 A·B안)은 아래 0절의 설정값을 채우면 된다. 공식값 대조(8.1)는 ✅.
-# 2026-11-18 수정(문서 점검 3·4·18·27번): 경향성·부질문 2 검정에도 '사례 10명 미만' 표시, 효과표 비고 열, 칸 표 가중 유병률.
+# 2026-11-18 수정(문서 점검 3·4·18·27번): 경향성 검정에도 '사례 10명 미만' 표시, 효과표 비고 열, 칸 표 가중 유병률.
+# 2026-11-22 수정(계획서 1장 개정): 경향성 검정을 부질문 2·3으로 이름 바꾸고 기울기의 비를 효과표에 추가, 성별 3원 검정 삭제.
 # 실행: 프로젝트 폴더에서  Rscript --vanilla code/final_analysis.R
 # 재현성 확인(코드를 짜지 않은 조원):
 #   Rscript --vanilla .claude/skills/knhanes-analysis/scripts/check_reproducibility.R code/final_analysis.R output/final_analysis
@@ -438,11 +439,20 @@ if (!RUN_MAIN) {
         cel[[s]] <- merge(cn, wp[, .(홍조이력 = as.character(홍조이력), 음주 = as.character(음주), 가중유병률)],
                           by.x = c("홍조이력", "음주"), by.y = c("홍조이력", "음주"), all.x = TRUE)
       }
-      # 범주 중앙값 점수로 1 df 경향성 교호작용 [6.2]
+      # 부질문 2·3: 범주 중앙값 점수로 1 df 경향성 교호작용 [계획서 1장, 6.2]
+      # 2군 기준이면 공동 검정과 같고, 연속형이면 주질문·부질문 1이 이미 1 df라 따로 내지 않는다.
       if (is_cut && length(lv) > 2) {
         rt <- fit_svy(D, mk_form(spec$y, "drk_sc * flush_hist", covs_s), fam)
-        add_test("주질문(경향성, 10 g/일당): 지속 홍조 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist지속 홍조")), c("비홍조", "지속 홍조"))
-        add_test("부질문 1(경향성, 10 g/일당): 홍조 소실 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist홍조 소실")), c("비홍조", "홍조 소실"))
+        add_test("부질문 2(주질문의 경향성, 10 g/일당): 지속 홍조 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist지속 홍조")), c("비홍조", "지속 홍조"))
+        add_test("부질문 3(부질문 1의 경향성, 10 g/일당): 홍조 소실 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist홍조 소실")), c("비홍조", "홍조 소실"))
+        # 효과 크기: 기울기의 비(해당 홍조군의 10 g/일당 OR ÷ 비홍조군의 10 g/일당 OR) [6.2]
+        for (g in c("지속 홍조", "홍조 소실")) {
+          e <- lincomb(rt$fit, setNames(1, paste0("drk_sc:flush_hist", g)), tr)
+          eff[[length(eff) + 1L]] <- data.table(성별 = s, 홍조이력 = paste(g, "÷ 비홍조"),
+                                                음주 = if (spec$y == "hua") "기울기의 비(10 g/일당)" else "기울기 차이(10 g/일당, mg/dL)",
+                                                추정치 = e[["est"]], CI하한 = e[["lo"]], CI상한 = e[["hi"]], 모형n = rt$n,
+                                                비고 = tst[[length(tst) - (g == "지속 홍조")]]$비고)
+        }
       }
       # 참고: 현재 홍조 2군(계획 발표 때의 주분석) [6.4]
       if (isTRUE(spec$extra)) {
@@ -450,11 +460,7 @@ if (!RUN_MAIN) {
         add_test("참고: 현재 홍조 vs 현재 비홍조", s, rn, lapply(paste0(base_terms, ":flush_now홍조"), function(x) setNames(1, x)), c("비홍조", "홍조"), "flush_now")
       }
     }
-    # 부질문 2: 지속 홍조 vs 비홍조 차이가 남녀에서 다른가(3원 교호작용). 보정변수 효과도 성별마다 다르게 둔다 [6.3]
-    covs_p <- setdiff(covs, "meno_cov"); meno_x <- if ("meno_cov" %in% covs) " + meno_post + meno_other" else ""
-    r3 <- fit_svy(sd, as.formula(paste0(spec$y, " ~ f_sex * (", paste(c("drk * flush_hist", covs_p), collapse = " + "), ")", meno_x)), fam)
-    n3 <- grep("f_sex", grep("drk.*:flush_hist지속 홍조", names(coef(r3$fit)), value = TRUE), value = TRUE)
-    add_test("부질문 2: (지속 홍조 vs 비홍조) × 성별", "남녀 전체", r3, lapply(n3, function(x) setNames(1, x)), c("비홍조", "지속 홍조"), bysex = TRUE)
+    # 이전 부질문 2(성별 3원 교호작용)는 2026-11-22 계획서 개정으로 삭제했다 [계획서 6.3]
     lab <- c(기준 = crit$label, `1잔g` = spec$gram, 빈도대푯값 = spec$wk_var, 대상군 = spec$pop, 보정 = spec$covset,
              결과 = if (spec$y == "hua") "고요산혈증(OR)" else "혈청 요산(β, mg/dL)", 분석 = spec$role)
     wrap <- function(x) if (length(x)) cbind(as.data.table(as.list(lab)), rbindlist(x)) else NULL

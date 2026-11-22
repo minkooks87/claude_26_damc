@@ -66,6 +66,8 @@
 | `28_ptest_run_catalog.R` | 도구 | 실행 46회의 조건 목록 | `Result/2026-11-18_ptest_실행목록.*` |
 | `29_ptest_full_table.R` | 도구 | 실행 × 결과 × 보정 묶음 248줄 표 | `Result/2026-11-18_ptest_전체표_조건과p.*` |
 | `32_ptest_table_xlsx.py` | 도구 | 위 표의 엑셀본(시트 7개) | `Result/2026-11-18_ptest_전체표_조건과p.xlsx` |
+| `34_trend_vs_categorical.py` | 도구 | 주질문·부질문 1의 범주별 검정 vs 경향성 검정 p 비교(기준 11개) | `output/21_ptest/경향성비교_주질문_부질문1.*` |
+| `35_subq23_all_criteria.py` | 도구 | 부질문 2·3(경향성)의 p를 기준 16개 × 보정 묶음 6개 × 결과 2개로 정리 | `output/21_ptest/부질문2_3_전체기준.*` |
 
 ### 7. 결정을 돕는 점검
 
@@ -84,6 +86,8 @@
 | `25_adjusted_or_table_pdf.ps1` | V3 보정 결과표 PDF | `Result/2026-11-16_보정변수_보정결과표(V3_이전기준).pdf` |
 | `28_shell_tables.ps1` | 결과표 빈 틀(표 0·1·2·3) PDF·엑셀 | `Result/2026-11-18_결과표_빈틀.*` |
 | `31_reference_overview.R` | 논문 요약 100편 한눈 표 | `Result/2026-11-18_논문별_요약_한눈표.md` |
+| `33_repo_overview_pdf.py` | 저장소 전체 정리 PDF(11/18) | `Result/2026-11-18_저장소_전체_정리.pdf` |
+| `36_activity_report_pdf.py` | 활동 전체 정리 PDF(11/22, Git 기록과 결과 CSV를 읽어 만듦) | `Result/2026-11-22_6조_활동_전체정리.pdf` |
 
 ## 알아 둘 점
 

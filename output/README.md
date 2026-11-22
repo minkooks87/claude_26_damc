@@ -14,7 +14,7 @@
 | 폴더 | 만든 코드 | 상태 | 무엇이 있나 | 먼저 볼 파일 |
 |---|---|---|---|---|
 | `final_analysis/` | `code/final_analysis.R` | **최종** | 대상자 흐름, 공식 통계 대조(2019 월간·고위험음주율 6개 모두 일치), 기술 통계. 주분석은 아직 꺼져 있음 | `06_official_check.csv`, `02b_flow_vs_README.csv` |
-| `21_ptest/` | `/knhanes_ptest`, `code/26·28·29·32` | 현재 참고 | ptest 실행 기록(`ptest_log.csv`), 실행 목록, 248줄 전체 표와 엑셀본 | `ptest_전체표_조건과p.xlsx` |
+| `21_ptest/` | `/knhanes_ptest`, `code/26·28·29·32` | 현재 참고 | ptest 실행 기록(`ptest_log.csv`), 실행 목록, 248줄 전체 표와 엑셀본, 경향성 비교와 부질문 2·3 전체 기준 표(11/22) | `ptest_전체표_조건과p.xlsx`, `부질문2_3_전체기준.md` |
 | `22_repr_sensitivity/` | `code/30` | 현재 참고 | 음주 대표값 하한·상한 시나리오의 분포·재분류, 민감도 분석 계획 | `00_대표값_민감도분석_계획.md` |
 | `C08_cutpoint_boundaries/` | `code/C08` | 현재 참고 | 주당 잔 수가 가질 수 있는 값, 후보별 칸 인원, 폭음 문항 교차표 | `SUMMARY_절단점_경계_정리.md` |
 | `C09_women_cell_check/` | `code/C09` | 현재 참고 | 후보 기준별 여자 × 홍조 3군 × 음주 수준 칸 인원 | `Result/2026-11-18_여성_칸_인원_점검.md`에 정리 |
