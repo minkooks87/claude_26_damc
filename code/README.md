@@ -87,7 +87,8 @@
 | `28_shell_tables.ps1` | 결과표 빈 틀(표 0·1·2·3) PDF·엑셀 | `Result/2026-11-18_결과표_빈틀.*` |
 | `31_reference_overview.R` | 논문 요약 100편 한눈 표 | `Result/2026-11-18_논문별_요약_한눈표.md` |
 | `33_repo_overview_pdf.py` | 저장소 전체 정리 PDF(11/18) | `Result/2026-11-18_저장소_전체_정리.pdf` |
-| `36_activity_report_pdf.py` | 활동 전체 정리 PDF(11/22, Git 기록과 결과 CSV를 읽어 만듦) | `Result/2026-11-22_6조_활동_전체정리.pdf` |
+| `36_activity_report_pdf.py` | 활동 전체 정리 통합 PDF(11/22, Git 기록·결과 CSV·README·분석계획서·점검 결과를 읽어 만듦) | `Result/2026-11-22_6조_활동_전체정리.pdf` |
+| `37_meeting_agenda_pdf.py` | 다음 회의 자료 PDF(결정 사항·할 일·기록지) | `Result/2026-11-22_다음회의_결정사항과_할일.pdf` |
 
 ## 알아 둘 점
 

@@ -14,6 +14,8 @@ import tempfile
 import time
 from pathlib import Path
 
+import markdown   # 부록(README·분석계획서·점검 결과)을 Markdown에서 HTML로 바꾼다
+
 sys.stdout.reconfigure(encoding="utf-8")
 OUT = Path("Result/2026-11-22_6조_활동_전체정리.pdf").resolve()
 GIT = r"C:\Program Files\Git\cmd\git.exe"
@@ -135,8 +137,12 @@ body { font-family: 'Malgun Gothic', sans-serif; font-size: 10pt; line-height: 1
 .cover .meta { font-size: 9pt; color: #4b5563; line-height: 1.7; border-top: 1px solid #d1d5db; padding-top: 10px; }
 .toc { break-before: page; }
 .toc > ol { list-style: none; padding: 0; margin: 10px 0 0; counter-reset: s; }
-.toc > ol > li { counter-increment: s; padding: 9px 0; border-bottom: 1px dotted #c7d2e5; font-size: 11pt; }
+.toc > ol > li { counter-increment: s; padding: 6px 0; border-bottom: 1px dotted #c7d2e5; font-size: 11pt; }
 .toc > ol > li::before { content: counter(s) ". "; color: #2f5597; font-weight: 700; }
+.toc > ol.toc-app > li { counter-increment: none; }
+.toc > ol.toc-app > li::before { content: none; }
+.toc em.pg { float: right; font-style: normal; font-weight: 700; color: #2f5597; font-size: 10.5pt; }
+.read em.pg2 { font-style: normal; color: #2f5597; font-size: 8.8pt; margin-right: 4px; }
 .toc > ol > li span { display: block; font-size: 9pt; color: #6b7280; margin-left: 20px; }
 h2 { font-size: 15pt; color: #1F3864; margin: 0 0 10px; padding: 0 0 5px; border-bottom: 1.5px solid #c7d2e5; break-after: avoid; }
 section { break-before: page; }
@@ -190,6 +196,33 @@ tbody tr:nth-child(even) td { background: #f8fafc; }
 th .who { color: #c7d2e5; }
 section.flow-on { break-before: auto; margin-top: 22px; }
 .chart { break-inside: avoid; margin: 6px 0 4px; }
+/* 부록: 저장소 문서를 그대로 옮긴 부분 */
+.app-head { background: #1F3864; color: #fff; border-radius: 6px; padding: 14px 16px; margin: 0 0 14px; break-after: avoid; }
+.app-head .lab { font-size: 9.5pt; letter-spacing: 0.03em; color: #c7d2e5; font-weight: 700; }
+.app-head h2 { color: #fff; border: 0; margin: 2px 0 4px; padding: 0; font-size: 16pt; }
+.app-head p { margin: 0; font-size: 9pt; color: #dbe4f3; }
+.app h3 { font-size: 12.5pt; color: #1F3864; margin: 20px 0 7px; padding-bottom: 3px; border-bottom: 1px solid #dbe4f3; break-after: avoid; }
+.app h3::before { display: none; }
+.app h4 { font-size: 10.6pt; color: #111827; margin: 14px 0 5px; break-after: avoid; }
+.app h4::before { content: ""; display: inline-block; width: 4px; height: 10.5pt; background: #2f5597; margin-right: 7px; vertical-align: -1px; border-radius: 1px; }
+.app h5 { font-size: 10pt; margin: 12px 0 4px; break-after: avoid; }
+.app table { break-inside: auto; font-size: 8.6pt; }
+.app blockquote { margin: 8px 0 10px; padding: 7px 12px; background: #f5f7fb; border-left: 4px solid #9fb3d6; color: #374151; break-inside: avoid; }
+.app blockquote p { margin: 2px 0; }
+.app pre { background: #f5f7fb; border: 1px solid #dbe4f3; border-radius: 4px; padding: 8px 10px; font-size: 8.4pt; line-height: 1.5; white-space: pre-wrap; break-inside: avoid; }
+.app pre code { background: none; padding: 0; }
+.app hr { border: 0; border-top: 1px dashed #c7d2e5; margin: 14px 0; }
+.app a { color: #1F3864; text-decoration: none; }
+.flowfig { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; margin: 10px 0 12px; break-inside: avoid; font-size: 9pt; }
+.flowfig .n { border: 1.5px solid #2f5597; border-radius: 6px; padding: 8px 12px; text-align: center; background: #fff; }
+.flowfig .n.hot { border-color: #c0504d; background: #f8e3e0; color: #9b2c2c; font-weight: 700; }
+.flowfig .n.final { background: #1F3864; border-color: #1F3864; color: #fff; font-weight: 700; }
+.flowfig .e { text-align: center; color: #4b5563; font-size: 8pt; line-height: 1.3; }
+.flowfig .e::after { content: "→"; display: block; font-size: 16pt; color: #2f5597; line-height: 1; }
+.read { counter-reset: r; list-style: none; padding: 0; }
+.read li { counter-increment: r; display: flex; gap: 10px; align-items: baseline; padding: 6px 0; border-bottom: 1px dotted #c7d2e5; }
+.read li::before { content: counter(r); flex: 0 0 22px; height: 22px; border-radius: 11px; background: #1F3864; color: #fff; font-weight: 700; text-align: center; line-height: 22px; font-size: 9pt; }
+.read li b { min-width: 0; }
 """
 
 # ---------------- 본문 ----------------
@@ -207,26 +240,32 @@ A(f"""<div class="cover"><div class="top">
 <div class="fact"><b>16개</b><span>시도한 음주 기준<br>(보정 묶음 6개)</span></div>
 <div class="fact"><b>101편</b><span>요약한 논문<br>(음주·홍조·보정변수)</span></div>
 </div></div>
-<div class="meta">작성일 2026년 11월 22일 · 저장소 minkooks87/claude_26_damc (기준 커밋 {head}, 이후 로컬 작업 포함)<br>
+<div class="meta">작성일 2026년 11월 22일 · 저장소 minkooks87/claude_26_damc (기준 커밋 {head})<br>
 조원: 김민상 · 조용찬 · 이예은 · 박채완 · 김정윤 · 김준현 · 지도교수: 손민국<br>
 저장소의 커밋 기록, 문서, 코드, 결과를 생성형 AI(Claude)로 읽고 정리했습니다. 조원 검토가 필요합니다.<br>
 분석 규칙의 기준 문서는 <code>분석계획서.md</code>이며, 이 문서와 다르면 계획서를 따릅니다.</div></div>""")
 
 A("""<div class="toc"><h2>목차</h2><ol>
-<li>한눈에 보기<span>지금 어디까지 왔고, 무엇이 남았나</span></li>
-<li>연구 질문<span>11/22 개정: 주질문·부질문 1(범주별)과 부질문 2·3(경향성)</span></li>
-<li>자료와 분석 방법<span>대상자 선정, 홍조 이력, 음주량 계산, 음주 기준 후보, 보정변수</span></li>
-<li>활동 기록<span>날짜별로 본 GitHub 활동과 계정별 기여</span></li>
-<li>분야별 산출물<span>문헌, 보정변수, 음주 기준, 분석 도구, 점검, 최종 코드</span></li>
-<li>지금까지의 결과<span>음주 기준 16개의 질문별 p값(탐색 단계)</span></li>
-<li>남은 일과 일정<span>회의에서 정할 것, 조원이 처리할 것</span></li>
-<li>저장소 지도와 용어<span>어디에 무엇이 있나, 처음 보는 사람이 읽을 순서</span></li>
+<li>한눈에 보기<em class="pg">{{P:1}}</em><span>지금 어디까지 왔고, 무엇이 남았나</span></li>
+<li>연구 질문<em class="pg">{{P:2}}</em><span>11/22 개정: 주질문·부질문 1(범주별)과 부질문 2·3(경향성)</span></li>
+<li>자료와 분석 방법<em class="pg">{{P:3}}</em><span>대상자 선정, 홍조 이력, 음주량 계산, 음주 기준 후보, 보정변수</span></li>
+<li>활동 기록<em class="pg">{{P:4}}</em><span>날짜별로 본 GitHub 활동과 계정별 기여</span></li>
+<li>분야별 산출물<em class="pg">{{P:5}}</em><span>문헌, 보정변수, 음주 기준, 분석 도구, 점검, 최종 코드</span></li>
+<li>지금까지의 결과<em class="pg">{{P:6}}</em><span>음주 기준 16개의 질문별 p값(탐색 단계)</span></li>
+<li>남은 일과 일정<em class="pg">{{P:7}}</em><span>회의에서 정할 것, 조원이 처리할 것</span></li>
+<li>저장소 지도와 용어<em class="pg">{{P:8}}</em><span>어디에 무엇이 있나, 처음 보는 사람이 읽을 순서</span></li>
 </ol>
-<div class="key" style="margin-top:14mm"><p><b>이 문서를 읽는 법</b></p><ul>
-<li>처음 보는 사람은 1장과 2장만 읽어도 연구의 현재 상태를 알 수 있습니다.</li>
+<ol class="toc-app" style="list-style:none;padding:0;margin:6px 0 0">
+<li style="padding:6px 0;border-bottom:1px dotted #c7d2e5;font-size:11pt"><b style="color:#2f5597">부록 A.</b> README 1–4장<em class="pg">{{P:A}}</em><span style="display:block;font-size:9pt;color:#6b7280;margin-left:20px">연구 배경, 선행연구, 연구 질문과 가설, 연구 방법</span></li>
+<li style="padding:6px 0;border-bottom:1px dotted #c7d2e5;font-size:11pt"><b style="color:#2f5597">부록 B.</b> 분석계획서 전문<em class="pg">{{P:B}}</em><span style="display:block;font-size:9pt;color:#6b7280;margin-left:20px">분석 규칙의 기준 문서(변수 정의, 지침서 쪽수, 모형, 민감도, 검증, 변경 기록)</span></li>
+<li style="padding:6px 0;border-bottom:1px dotted #c7d2e5;font-size:11pt"><b style="color:#2f5597">부록 C.</b> 저장소 문서 점검 결과<em class="pg">{{P:C}}</em><span style="display:block;font-size:9pt;color:#6b7280;margin-left:20px">점검 29개 항목과 처리 상태</span></li>
+</ol>
+<div class="key" style="margin-top:6mm"><p><b>이 문서를 읽는 법</b></p><ul>
+<li>처음 보는 사람이 읽어야 할 문서를 <b>모두 이 한 권에 넣었습니다</b>(부록 A–C). 읽는 순서는 8장에 있습니다.</li>
+<li>바쁘면 1장과 2장만 읽어도 연구의 현재 상태를 알 수 있습니다.</li>
 <li>6장의 p값은 <b>주분석 기준을 정하기 전의 탐색 결과</b>입니다. 확정 결과로 인용하지 마세요.</li>
 <li>초록 칸은 p &lt; 0.05, 노란 칸은 0.05–0.10, 회색 칸(†)은 사례가 적어 해석하지 않는 값입니다.</li>
-<li>초록 상자는 2026-11-22에 새로 한 작업이며, 아직 GitHub에 올리기 전입니다.</li>
+<li>초록 상자는 2026-11-22에 새로 한 작업입니다.</li>
 </ul></div></div>""")
 
 # 1. 한눈에 보기
@@ -248,7 +287,7 @@ A(f"""<section><h2>1. 한눈에 보기</h2>
 </ul>
 <h3>다음에 정할 것</h3>
 <ol><li><b>주분석 음주 기준</b>(후보 S1–S5)</li><li><b>11/22 질문 개정</b>을 조원·교수님과 공유하고 확정</li><li>1잔의 알코올 g과 절단점 단위</li><li>흡연 범주(2범주 또는 3범주)</li><li>민감도 분석 최종 목록</li></ol>
-<div class="new"><b>11/22 새 작업(업로드 전):</b> 연구 질문을 개정했습니다. 성별 차이를 묻던 부질문 2를 삭제하고, 주질문·부질문 1의 경향성 검정을 부질문 2·3으로 추가했습니다. 그리고 부질문 2·3의 p를 16개 기준 모두로 구했습니다. 이 작업들(분석계획서·README·최종 코드 수정과 결과 파일)은 아직 GitHub에 올리지 않았습니다.</div>
+<div class="new"><b>11/22 새 작업:</b> 연구 질문을 개정했습니다. 성별 차이를 묻던 부질문 2를 삭제하고, 주질문·부질문 1의 경향성 검정을 부질문 2·3으로 추가했습니다. 그리고 부질문 2·3의 p를 16개 기준 모두로 구했습니다. 이 작업은 같은 날 GitHub에 올렸습니다(분석계획서·README·최종 코드·결과 파일).</div>
 </section>""")
 
 # 2. 연구 질문
@@ -308,7 +347,7 @@ A("""<ul>
 
 # 4. 활동 기록
 A(f"""<section class="flow-on"><h2>4. 활동 기록</h2>
-<p>공유 저장소는 2026년 11월 16일에 만들어졌습니다. 그 전에 한 분석(11/2 계획 발표 전후의 코드와 결과)은 첫 업로드에 함께 들어 있습니다. 지금까지 커밋은 <b>{n_commit}회</b>입니다(11/16에 {by_day.get('11/16', 0)}회, 11/18에 {by_day.get('11/18', 0)}회). 그중 {n_merge}회는 Pull Request 병합입니다.</p>
+<p>공유 저장소는 2026년 11월 16일에 만들어졌습니다. 그 전에 한 분석(11/2 계획 발표 전후의 코드와 결과)은 첫 업로드에 함께 들어 있습니다. 지금까지 커밋은 <b>{n_commit}회</b>입니다(11/16에 {by_day.get('11/16', 0)}회, 11/18에 {by_day.get('11/18', 0)}회, 11/22에 {by_day.get('11/22', 0)}회). 그중 {n_merge}회는 Pull Request 병합입니다.</p>
 """)
 A("<h3>계정별 커밋 수 (병합 제외)</h3>")
 A(f'<div class="chart">{bar_svg(by_author, unit="회")}</div>')
@@ -329,7 +368,7 @@ A(table(["날짜", "분야", "한 일 <span class='who'>(GitHub 계정)</span>"]
     ["11/18 오전", "계획서·최종 코드", "<b>분석계획서</b>로 규칙 통합, 최종 분석 코드 임시본, 공식 통계 대조 6개 모두 일치, 재현성 확인 절차 <span class='who'>(team06donga)</span>"],
     ["11/18 오전", "정리", "ptest 실행 목록·전체 표·엑셀본, 논문 요약 11편과 100편 한눈 표 <span class='who'>(team06donga)</span>"],
     ["11/18 낮", "점검", "저장소 문서 점검 29개 항목 중 27개 수정, 폴더 안내, 전체 요약, 정리 PDF <span class='who'>(team06donga)</span>"],
-    ["<b>11/22</b>", "<b>질문 개정</b>", "<b>부질문 2(남녀 차이) 삭제, 부질문 2·3 = 경향성 검정 추가.</b> 경향성 비교와 부질문 2·3의 16개 기준 p값 <span class='who'>(로컬, 업로드 전)</span>"],
+    ["<b>11/22</b>", "<b>질문 개정</b>", "<b>부질문 2(남녀 차이) 삭제, 부질문 2·3 = 경향성 검정 추가.</b> 경향성 비교와 부질문 2·3의 16개 기준 p값 <span class='who'>(team06donga)</span>"],
 ], widths=[13, 17, 70], cls="tl"))
 A("</section>")
 
@@ -387,7 +426,6 @@ A(table(["순서", "항목", "지금 상황"], [
     ["6", "세부 정의", "혈청 요산 '&lt;1.0' 표기, eGFR 식(2009 또는 2021), 임신·수유 여성(4명), 폐경 전후 탐색 분석을 남길지"],
 ], widths=[8, 30, 62]))
 A("""<h3>조원이 처리할 것</h3><ul>
-<li>11/22 로컬 변경(분석계획서, README, 최종 코드, 부질문 2·3 결과)을 GitHub에 올립니다.</li>
 <li>계획서가 근거로 든 <code>연구정의_확정.md</code>, <code>음주량 알코올 g 기준 설정 과정.md</code>를 원본을 가진 조원이 올립니다.</li>
 <li>결과표 빈 틀에 남녀 비교표가 있다면 질문 개정에 맞게 고칩니다.</li>
 <li>재현성 점검(코드를 짜지 않은 조원이 최종 코드를 두 번 실행)을 맡을 사람을 정합니다.</li>
@@ -411,9 +449,14 @@ A(table(["위치", "파일 수", "내용", "먼저 볼 것"], [
     ["<code>.claude/</code>", cnt[".claude"], "AI 스킬: 국건영 분석 절차, 기준별 p값 도구", "<code>knhanes_ptest/SKILL.md</code>"],
 ], widths=[17, 8, 45, 30]))
 A(f'<p class="src">파일 수는 GitHub에 올라간 기준(커밋 {head}, 총 {n_files}개)입니다. 원시자료(data/)는 올리지 않습니다.</p>')
-A("""<h3>처음 보는 사람이 읽을 순서</h3><ol>
-<li>이 문서</li><li><code>README.md</code> 1–4장: 연구 배경과 방법</li><li><code>분석계획서.md</code>: 분석 규칙의 기준</li>
-<li><code>Result/2026-11-18_ptest_전체표_조건과p.xlsx</code>의 "M2 한눈에" 시트</li><li><code>Result/2026-11-18_문서점검_결과.md</code>: 고친 것과 남은 것</li></ol>
+A("""<h3>처음 보는 사람이 읽을 순서 (모두 이 문서 안에 있습니다)</h3><ol class="read">
+<li><span><b>1–2장</b> <em class="pg2">{{P:1}}쪽</em> 한눈에 보기와 연구 질문: 지금 어디까지 왔고 무엇을 묻는가</span></li>
+<li><span><b>부록 A</b> <em class="pg2">{{P:A}}쪽</em> README 1–4장: 연구 배경, 선행연구, 가설, 연구 방법</span></li>
+<li><span><b>부록 B</b> <em class="pg2">{{P:B}}쪽</em> 분석계획서 전문: 변수 정의와 지침서 쪽수, 모형, 민감도, 검증까지 분석 규칙 전체</span></li>
+<li><span><b>6장</b> <em class="pg2">{{P:6}}쪽</em> 지금까지의 결과: 음주 기준 16개의 질문별 p값(주 모형 M2)</span></li>
+<li><span><b>부록 C</b> <em class="pg2">{{P:C}}쪽</em> 문서 점검 결과: 저장소에서 고친 것과 남은 것</span></li>
+<li><span><b>7장</b> <em class="pg2">{{P:7}}쪽</em> 남은 일과 일정</span></li></ol>
+<p class="src">원본 파일: <code>README.md</code>, <code>분석계획서.md</code>, <code>Result/2026-11-18_문서점검_결과.md</code>. 보정 묶음 6개 전체의 p값은 <code>Result/2026-11-18_ptest_전체표_조건과p.xlsx</code>와 <code>output/21_ptest/부질문2_3_전체기준.md</code>에 있습니다.</p>
 <h3>용어 풀이</h3>""")
 A(table(["용어", "뜻"], [
     ["고요산혈증", "혈액 속 요산이 높은 상태로 통풍의 원인. 이 연구는 남 7.0, 여 6.0 mg/dL 이상"],
@@ -427,6 +470,69 @@ A(table(["용어", "뜻"], [
 ], widths=[22, 78]))
 A("</section>")
 
+# ---------------- 부록: 저장소 문서를 그대로 옮긴다 ----------------
+def mermaid_flow(block):
+    """GitHub 전용 mermaid 'flowchart LR'(노드 → 노드 사슬)을 같은 내용의 HTML 흐름 상자로 바꾼다."""
+    labels, order, edges, style = {}, [], [], {}
+    node = r'(\w+)(?:\[\s*"?(.*?)"?\s*\])?'
+    for line in block.splitlines():
+        line = line.strip()
+        m = re.match(node + r'\s*--\s*"(.*?)"\s*-->\s*' + node + r'\s*$', line)
+        if m:
+            a, la, e, b, lb = m.groups()
+            for k, lab in ((a, la), (b, lb)):
+                if lab:
+                    labels[k] = lab
+                if k not in order:
+                    order.append(k)
+            edges.append(e)
+            continue
+        s = re.match(r"style\s+(\w+)\s+(.*)", line)
+        if s:
+            style[s.group(1)] = "hot" if "c0504d" in s.group(2) else "final"
+    out = ['<div class="flowfig">']
+    for i, k in enumerate(order):
+        out.append(f'<div class="n {style.get(k, "")}">{labels.get(k, k)}</div>')
+        if i < len(edges):
+            out.append(f'<div class="e">{edges[i]}</div>')
+    out.append("</div>")
+    return "".join(out).replace("<br/>", "<br>")
+
+
+def md_html(text):
+    """Markdown → HTML. GitHub 전용 mermaid 도식은 같은 내용의 흐름 상자로 바꾸고, 제목 단계를 부록에 맞게 한 단계씩 내린다."""
+    figs = []
+
+    def keep(m):
+        figs.append(mermaid_flow(m.group(0)))
+        return f"MERMAIDFIG{len(figs) - 1}"
+    text = re.sub(r"```mermaid.*?```", keep, text, flags=re.S)
+    text = "\n".join(l for l in text.splitlines() if not l.lstrip().startswith("!["))   # 배지 그림 줄
+    # 저장소 문서는 하위 목록을 2칸으로 들여쓴다. python-markdown은 4칸을 요구하므로 목록 줄의 들여쓰기를 두 배로 늘린다
+    text = re.sub(r"(?m)^( +)(?=[-*] |\d+\. )", lambda m: m.group(1) * 2, text)
+    h = markdown.markdown(text, extensions=["tables", "fenced_code", "sane_lists", "nl2br"])
+    for i, f in enumerate(figs):
+        h = h.replace(f"<p>MERMAIDFIG{i}</p>", f)
+    for a, b in (("h4", "h5"), ("h3", "h4"), ("h2", "h3"), ("h1", "h3")):
+        h = re.sub(rf"<(/?){a}>", rf"<\1{b}>", h)
+    h = re.sub(r"<table>", '<table class="mdt">', h)
+    return h
+
+
+def appendix(label, title, note, html):
+    A(f'<section class="app"><div class="app-head"><div class="lab">{label}</div><h2>{title}</h2><p>{note}</p></div>{html}</section>')
+
+
+readme = Path("README.md").read_text(encoding="utf-8")
+r1 = readme.index("## 1. 연구 배경"); r5 = readme.index("## 5. 예비 분석")
+appendix("부록 A", "README 1–4장: 연구 배경과 방법", "원본: README.md 1–4장(조 공용 소개 문서). 5장 이후(예비 분석, 예상 결과, 일정, 작업 방법, 참고문헌)는 저장소에서 볼 수 있습니다.",
+         md_html(readme[r1:r5].rstrip().rstrip("-").rstrip()))
+plan = Path("분석계획서.md").read_text(encoding="utf-8")
+plan = plan.split("\n", 1)[1]                                   # 맨 위 제목 줄은 부록 제목으로 대신한다
+appendix("부록 B", "분석계획서 전문", "원본: 분석계획서.md(분석 규칙의 기준 문서). 상태 표시: ✅ 확정 · ⏳ 미확정 · 🔍 확인 필요.", md_html(plan))
+rev = Path("Result/2026-11-18_문서점검_결과.md").read_text(encoding="utf-8").split("\n", 1)[1]
+appendix("부록 C", "저장소 문서 점검 결과", "원본: Result/2026-11-18_문서점검_결과.md. 2026-11-18 점검, 같은 날 처리 상태 갱신.", md_html(rev))
+
 doc = f'<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>6조 활동 전체 정리</title><style>{CSS}</style></head><body>{"".join(H)}</body></html>'
 browsers = [r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe", r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
             r"C:\Program Files\Google\Chrome\Application\chrome.exe"]
@@ -434,18 +540,39 @@ exe = next((b for b in browsers if Path(b).exists()), None)
 if not exe:
     sys.exit("Edge 또는 Chrome을 찾지 못했습니다.")
 tmp = Path(tempfile.gettempdir())
-h = tmp / "knhanes_activity_report.html"
-h.write_text(doc, encoding="utf-8")
-before = OUT.stat().st_mtime if OUT.exists() else 0
-subprocess.run([exe, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
-                f"--user-data-dir={tmp / 'edge_pdf_profile'}", "--no-pdf-header-footer", f"--print-to-pdf={OUT}", h.as_uri()],
-               check=False, timeout=180, capture_output=True)
-for _ in range(60):
-    if OUT.exists() and OUT.stat().st_mtime > before and OUT.stat().st_size > 0:
-        break
-    time.sleep(1)
-else:
+
+
+def render(html_doc):
+    h = tmp / "knhanes_activity_report.html"
+    h.write_text(html_doc, encoding="utf-8")
+    before = OUT.stat().st_mtime if OUT.exists() else 0
+    subprocess.run([exe, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
+                    f"--user-data-dir={tmp / 'edge_pdf_profile'}", "--no-pdf-header-footer", f"--print-to-pdf={OUT}", h.as_uri()],
+                   check=False, timeout=180, capture_output=True)
+    for _ in range(60):
+        if OUT.exists() and OUT.stat().st_mtime > before and OUT.stat().st_size > 0:
+            return
+        time.sleep(1)
     sys.exit("PDF가 만들어지지 않았습니다.")
+
+
+# 목차·읽는 순서의 쪽 번호: 한 번 만든 PDF에서 각 장의 시작 쪽을 찾아 넣고 다시 만든다
+MARK = {"1": "1. 한눈에 보기", "2": "2. 연구 질문", "3": "3. 자료와 분석 방법", "4": "4. 활동 기록", "5": "5. 분야별 산출물",
+        "6": "6. 지금까지의 결과", "7": "7. 남은 일과 일정", "8": "8. 저장소 지도와 용어",
+        "A": "부록 A\r\nREADME", "B": "부록 B\r\n분석계획서", "C": "부록 C\r\n저장소"}   # 부록 머리 상자의 글자
+render(re.sub(r"\{\{P:\w\}\}", "00", doc))
+import pypdfium2
+pdf = pypdfium2.PdfDocument(str(OUT))
+texts = [pdf[i].get_textpage().get_text_range() for i in range(len(pdf))]
+pdf.close()
+pg = {}
+for k, m in MARK.items():
+    for i, tx in enumerate(texts[2:], start=3):                  # 1–2쪽(표지·목차)은 건너뛴다
+        if m in tx:
+            pg[k] = i
+            break
+render(re.sub(r"\{\{P:(\w)\}\}", lambda m: str(pg.get(m.group(1), "")), doc))
+print("쪽 번호:", pg)
 print("저장:", OUT, f"({OUT.stat().st_size / 1024:.0f} KB) | 커밋 {n_commit}, 병합 {n_merge}, 로컬 변경 {len(local)}")
 print("M2 고요산혈증:", hs)
 print("M2 혈청 요산:", us)
