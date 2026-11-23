@@ -6,6 +6,10 @@
 #         ⏳ 항목(주분석 음주 기준, 1잔의 g, 주 검정 형태 A·B안)은 아래 0절의 설정값을 채우면 된다. 공식값 대조(8.1)는 ✅.
 # 2026-11-18 수정(문서 점검 3·4·18·27번): 경향성 검정에도 '사례 10명 미만' 표시, 효과표 비고 열, 칸 표 가중 유병률.
 # 2026-11-22 수정(계획서 1장 개정): 경향성 검정을 부질문 2·3으로 이름 바꾸고 기울기의 비를 효과표에 추가, 성별 3원 검정 삭제.
+# 2026-11-23 주분석 확정(김준현 요청): 질문 구조 확정, 음주 기준 S2(남 16 / 여 8 g/일, 2군), 1잔 7 g → RUN_MAIN = TRUE.
+#            흡연 보정은 3범주(비·과거·현재)로 확정.
+#            경향성 분석(부질문 2·3)은 하지 않기로 결정: 고요산혈증(절단점)을 주결과로, 혈청 요산(연속형)은 보조 다중회귀.
+#            민감도는 1잔 8·10 g과 대푯값 전체 하한·상한(L·U)만 한다. Model 3·통풍·다른 음주 기준 등은 실행 목록에서 뺐다.
 # 실행: 프로젝트 폴더에서  Rscript --vanilla code/final_analysis.R
 # 재현성 확인(코드를 짜지 않은 조원):
 #   Rscript --vanilla .claude/skills/knhanes-analysis/scripts/check_reproducibility.R code/final_analysis.R output/final_analysis
@@ -22,27 +26,26 @@ suppressPackageStartupMessages({
 # ==== 0. 설정 ===============================================================
 # ---- 주분석 스위치 [계획서 9장] ----
 # 주분석 음주 기준(계획서 4.1)이 ✅ 확정되기 전에는 FALSE로 둔다. FALSE이면 8절(주분석·부질문·민감도)을 실행하지 않는다.
-RUN_MAIN <- FALSE
+RUN_MAIN <- TRUE              # ✅ 2026-11-23 주분석 기준 확정
 
 # ---- 음주 기준 후보 [계획서 4.1] ----
 # 단위는 g/일. 1잔 = 7 g이면 g/일 = 주당 잔 수다. 절단점 a, b는 a 미만 / a 이상 b 미만 / b 이상.
+# 다른 후보(S1 성별 삼분위, S3 5·15, S4 3.5·14, S5 연속형)는 2026-11-23 결정으로 실행하지 않는다.
+# 그 결과는 ptest 기록(output/21_ptest/ptest_log.csv)에 남아 있어 보고서 부록의 '시도한 기준'으로 밝힌다.
 CANDIDATES <- list(
-  S1 = list(label = "S1 성별 삼분위",       drink = "cut",    male = c(2.4, 10), female = c(0.4, 2.5)),
-  S2 = list(label = "S2 절주 지침 16/8",    drink = "cut",    male = 16,         female = 8),
-  S3 = list(label = "S3 5·15, 여성 절반",   drink = "cut",    male = c(5, 15),   female = c(2.5, 7.5)),
-  S4 = list(label = "S4 계획 발표 3.5·14",  drink = "cut",    male = c(3.5, 14), female = c(3.5, 14)),
-  S5 = list(label = "S5 연속형 10 g/일당",  drink = "linear", per = 10)
+  S2 = list(label = "S2 절주 지침 16/8",    drink = "cut",    male = 16,         female = 8)
 )
-MAIN_NAME  <- NA_character_   # ⏳ 주분석 기준 이름(예: "S2"). 확정되면 채우고 RUN_MAIN을 TRUE로 바꾼다.
-GRAM_MAIN  <- 7               # ⏳ 1잔의 알코올 g(계획서 4.1, 10장 2번). 현재 ptest·README 값.
+MAIN_NAME  <- "S2"            # ✅ 2026-11-23: 주분석 기준 S2(Lee 2019 비홍조군 적정 상한, 남 16 / 여 8 g/일)
+GRAM_MAIN  <- 7               # ✅ 2026-11-23: 1잔 = 7 g(계획서 4.1, 10장 2번)
 GRAM_SENS  <- c(8, 10)        #    민감도 분석에 쓰는 다른 1잔 g 값
 
 # ---- 보정 묶음 [계획서 4.4] ----
 # meno_cov(폐경 상태)는 여자 모형에만 들어간다. 남녀 통합 모형에서는 여자 전용 지시변수(meno_post, meno_other)로 넣는다.
+# ✅ 2026-11-23: 흡연은 3범주(비흡연·과거흡연·현재흡연, f_smk3)로 보정한다(계획서 10장 13번). 2범주는 민감도.
+# Crude는 보정 전후 비교용(민감도 아님). Model 3은 2026-11-23 결정으로 실행하지 않는다.
 COVSETS <- list(
   "Crude"   = character(0),
-  "Model 2" = c("age", "f_edu", "f_incm", "f_year", "f_smk", "f_pa", "meno_cov"),
-  "Model 3" = c("age", "f_edu", "f_incm", "f_year", "f_smk", "f_pa", "meno_cov", "he_bmi", "f_htn", "f_dm", "egfr10")
+  "Model 2" = c("age", "f_edu", "f_incm", "f_year", "f_smk3", "f_pa", "meno_cov")
 )
 MAIN_COVSET <- "Model 2"      # ✅ 주 모형
 
@@ -148,12 +151,19 @@ stopifnot(nrow(d) == n_raw)
 #     빈도: 월1회미만 0.5회/월, 월1회 1회/월, 월2-4회 3회/월(월 → 주: × 12/52), 주2-3회 2.5회/주, 주4회이상 5.5회/주
 #     1회 잔 수: 1-2잔 1.5, 3-4잔 3.5, 5-6잔 5.5, 7-9잔 8, 10잔 이상은 BD2_14 기입값(없으면 결측)
 freq_main  <- c(`2` = 0.5 * 12 / 52, `3` = 1 * 12 / 52, `4` = 3 * 12 / 52, `5` = 2.5, `6` = 5.5)
-freq_low   <- replace(freq_main, c("2", "6"), c(0.25 * 12 / 52, 4))   # 민감도: 열린 범주를 작게 [6.5]
-freq_high  <- replace(freq_main, c("2", "6"), c(0.75 * 12 / 52, 7))   # 민감도: 열린 범주를 크게 [6.5]
 amt <- c(`1` = 1.5, `2` = 3.5, `3` = 5.5, `4` = 8)
-d[, per_occ := fifelse(bd2_1 == 5, as.numeric(bd2_14), unname(amt[as.character(bd2_1)]))]
-calc_wk <- function(freq) unname(freq[as.character(d$bd1_11)]) * d$per_occ
-d[, `:=`(drinks_wk = calc_wk(freq_main), drinks_wk_low = calc_wk(freq_low), drinks_wk_high = calc_wk(freq_high))]
+#     민감도 [6.5]: 대푯값 전체 하한(L)·전체 상한(U). 정의는 Result/2026-11-18_음주대표값_민감도분석_계획.md 4–5절.
+#       빈도 하한: 월1회미만 연 1회(월 1/12), 월1회 1, 월2-4회 월 2, 주2-3회 주 2, 주4회이상 주 4
+#       빈도 상한: 월1회미만 월 1, 월1회 1, 월2-4회 월 4, 주2-3회 주 3, 주4회이상 주 7
+#       1회량 하한 1·3·5·7잔, 상한 2·4·6·9잔. 10잔 이상은 기입값이라 바꾸지 않는다.
+freq_L <- c(`2` = (1 / 12) * 12 / 52, `3` = 1 * 12 / 52, `4` = 2 * 12 / 52, `5` = 2, `6` = 4)
+freq_U <- c(`2` = 1 * 12 / 52,        `3` = 1 * 12 / 52, `4` = 4 * 12 / 52, `5` = 3, `6` = 7)
+amt_L  <- c(`1` = 1, `2` = 3, `3` = 5, `4` = 7)
+amt_U  <- c(`1` = 2, `2` = 4, `3` = 6, `4` = 9)
+occ_of <- function(a) fifelse(d$bd2_1 == 5, as.numeric(d$bd2_14), unname(a[as.character(d$bd2_1)]))
+d[, per_occ := occ_of(amt)]
+calc_wk <- function(freq, a = amt) unname(freq[as.character(d$bd1_11)]) * occ_of(a)
+d[, `:=`(drinks_wk = calc_wk(freq_main), drinks_wk_L = calc_wk(freq_L, amt_L), drinks_wk_U = calc_wk(freq_U, amt_U))]
 
 # (2) 효과수정인자: 홍조 이력 [4.2]
 d[, flush_now := factor(fcase(bd9_2 == 1, "비홍조", bd9_2 %in% 2:4, "홍조"), c("비홍조", "홍조"))]
@@ -176,6 +186,11 @@ d[, hua := as.integer(uacid >= fifelse(sex == 1, 7.0, 6.0))]
 #     현재흡연 2범주: 주요지표 정의(8기 PDF p.48 / 인쇄 p.40). 평생 5갑 이상이면서 현재 매일·가끔 피움 = 현재흡연
 d[, smk := NA_integer_]
 d[(bs1_1 %in% c(1, 2) & bs3_1 %in% c(1, 2, 3)) | bs1_1 == 3, smk := as.integer(bs1_1 == 2 & bs3_1 %in% c(1, 2))]
+#     흡연 3범주(주 모형, 2026-11-23 확정): 0 비흡연, 1 과거흡연(5갑 이상 & 현재 안 피움), 2 현재흡연. 평생 5갑 미만은 비흡연.
+#     BS1_1·BS3_1 코드: 8기 PDF p.175 / 인쇄 p.167. code/13과 같은 정의
+d[, smk3 := NA_integer_]
+d[(bs1_1 %in% c(1, 2) & bs3_1 %in% c(1, 2, 3)) | bs1_1 == 3,
+  smk3 := fcase(bs1_1 == 2 & bs3_1 %in% c(1, 2), 2L, bs1_1 == 2 & bs3_1 == 3, 1L, default = 0L)]
 #     고혈압·당뇨병: 유병 생성변수 HE_HP = 3, HE_DM_HbA1c = 3을 유병으로, 1·2는 없음으로
 d[, htn := fcase(he_hp == 3, 1L, he_hp %in% 1:2, 0L)]
 d[, dm  := fcase(he_dm_hba1c == 3, 1L, he_dm_hba1c %in% 1:2, 0L)]
@@ -195,7 +210,8 @@ d[, `:=`(
   f_incm = factor(incm, 1:4, c("하", "중하", "중상", "상")),
   f_edu  = factor(edu, 1:4, c("초졸이하", "중졸", "고졸", "대졸이상")),
   f_smk  = factor(smk, 0:1, c("비흡연", "현재흡연")),
-  f_pa   = factor(pa_aerobic, 0:1, c("미실천", "실천")),
+  f_smk3 = factor(smk3, 0:2, c("비흡연", "과거흡연", "현재흡연")),
+  f_pa  = factor(pa_aerobic, 0:1, c("미실천", "실천")),
   f_htn  = factor(htn, 0:1, c("없음", "있음")),
   f_dm   = factor(dm, 0:1, c("없음", "있음")),
   f_hua  = factor(hua, 0:1, c("없음", "있음"))
@@ -282,7 +298,7 @@ round_dt <- function(x, digits = 4) { x <- copy(x); for (nm in names(x)) if (is.
 # ==== 7. 기술 통계 [계획서 6.1, 5장] ========================================
 # 7-1. 대상자 특성표: 성별 × 홍조 패턴(4군), 비가중 n + 가중 %(SE) 또는 가중 평균(SE)
 #      결과(요산·고요산혈증)는 주분석 전까지 홍조군별로 보지 않으므로 여기 넣지 않는다(7-2에서 성별로만 본다).
-t1_vars <- c(age = "나이(세)", f_year = "조사연도", f_edu = "교육수준", f_incm = "소득 4분위", f_smk = "현재흡연",
+t1_vars <- c(age = "나이(세)", f_year = "조사연도", f_edu = "교육수준", f_incm = "소득 4분위", f_smk3 = "흡연 3범주",
              f_pa = "유산소 신체활동 실천", meno_cov = "폐경 상태(여자)", he_bmi = "체질량지수(kg/m2)",
              f_htn = "고혈압 유병", f_dm = "당뇨병 유병", egfr = "eGFR(CKD-EPI 2009)", drinks_wk = "주당 음주 잔 수")
 t1_block <- function(design, v) {
@@ -439,21 +455,7 @@ if (!RUN_MAIN) {
         cel[[s]] <- merge(cn, wp[, .(홍조이력 = as.character(홍조이력), 음주 = as.character(음주), 가중유병률)],
                           by.x = c("홍조이력", "음주"), by.y = c("홍조이력", "음주"), all.x = TRUE)
       }
-      # 부질문 2·3: 범주 중앙값 점수로 1 df 경향성 교호작용 [계획서 1장, 6.2]
-      # 2군 기준이면 공동 검정과 같고, 연속형이면 주질문·부질문 1이 이미 1 df라 따로 내지 않는다.
-      if (is_cut && length(lv) > 2) {
-        rt <- fit_svy(D, mk_form(spec$y, "drk_sc * flush_hist", covs_s), fam)
-        add_test("부질문 2(주질문의 경향성, 10 g/일당): 지속 홍조 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist지속 홍조")), c("비홍조", "지속 홍조"))
-        add_test("부질문 3(부질문 1의 경향성, 10 g/일당): 홍조 소실 vs 비홍조", s, rt, list(setNames(1, "drk_sc:flush_hist홍조 소실")), c("비홍조", "홍조 소실"))
-        # 효과 크기: 기울기의 비(해당 홍조군의 10 g/일당 OR ÷ 비홍조군의 10 g/일당 OR) [6.2]
-        for (g in c("지속 홍조", "홍조 소실")) {
-          e <- lincomb(rt$fit, setNames(1, paste0("drk_sc:flush_hist", g)), tr)
-          eff[[length(eff) + 1L]] <- data.table(성별 = s, 홍조이력 = paste(g, "÷ 비홍조"),
-                                                음주 = if (spec$y == "hua") "기울기의 비(10 g/일당)" else "기울기 차이(10 g/일당, mg/dL)",
-                                                추정치 = e[["est"]], CI하한 = e[["lo"]], CI상한 = e[["hi"]], 모형n = rt$n,
-                                                비고 = tst[[length(tst) - (g == "지속 홍조")]]$비고)
-        }
-      }
+      # 경향성 분석(이전 부질문 2·3)은 2026-11-23 결정으로 하지 않는다. 주분석이 2군이라 결과도 공동 검정과 같다.
       # 참고: 현재 홍조 2군(계획 발표 때의 주분석) [6.4]
       if (isTRUE(spec$extra)) {
         rn <- fit_svy(D, mk_form(spec$y, "drk * flush_now", covs_s), fam)
@@ -471,17 +473,15 @@ if (!RUN_MAIN) {
   main <- CANDIDATES[[MAIN_NAME]]
   sp <- function(crit, role, covset = MAIN_COVSET, gram = GRAM_MAIN, wk_var = "drinks_wk", pop = "inc", y = "hua", extra = FALSE)
     list(crit = crit, role = role, covset = covset, gram = gram, wk_var = wk_var, pop = pop, y = y, extra = extra)
+  # 2026-11-23 확정: 주분석(고요산혈증) + 보조(혈청 요산 다중회귀) + 보정 전 비교 + 민감도 4개(1잔 8·10 g, 대푯값 L·U)
   specs <- c(
-    list(sp(main, "주분석", extra = TRUE),
-         sp(main, "주분석(혈청 요산)", y = "uacid"),
+    list(sp(main, "주분석"),
+         sp(main, "보조: 혈청 요산(다중회귀)", y = "uacid"),
          sp(main, "비교: 보정 없음", covset = "Crude"),
-         sp(main, "민감도: Model 3", covset = "Model 3"),
-         sp(main, "민감도: 빈도 대푯값 작게", wk_var = "drinks_wk_low"),
-         sp(main, "민감도: 빈도 대푯값 크게", wk_var = "drinks_wk_high"),
-         sp(main, "민감도: 통풍 진단자 포함", pop = "inc_gout_dx"),
-         sp(main, "민감도: 통풍 모름·무응답 포함", pop = "inc_gout_unk")),
+         sp(main, "비교(혈청 요산): 보정 없음", covset = "Crude", y = "uacid")),
     lapply(GRAM_SENS, function(g) sp(main, paste0("민감도: 1잔 ", g, " g"), gram = g)),
-    lapply(setdiff(names(CANDIDATES), MAIN_NAME), function(nm) sp(CANDIDATES[[nm]], "민감도: 다른 음주 기준"))
+    list(sp(main, "민감도: 대푯값 전체 하한(L)", wk_var = "drinks_wk_L"),
+         sp(main, "민감도: 대푯값 전체 상한(U)", wk_var = "drinks_wk_U"))
   )
   res <- lapply(specs, run_spec)
   main_effects <- rbindlist(lapply(res, `[[`, "effects"), fill = TRUE)
@@ -491,6 +491,21 @@ if (!RUN_MAIN) {
   fwrite(round_dt(main_effects), file.path(out_dir, "11_effects_by_flush.csv"), bom = TRUE)
   fwrite(main_cells,             file.path(out_dir, "12_cell_counts.csv"), bom = TRUE)
   cat("※ 10–12번 파일: 모형n·n은 비가중 표본 수, 효과는 복합표본 가중 추정치. '분리'나 '사례 10명 미만' 표시가 있는 칸은 해석하지 않는다.\n")
+
+  # 13. 홍조 이력별 결과·음주 분포(주분석 대상): 비가중 n과 가중 추정치(SE) [계획서 6.1, 7장]
+  sdm <- des; sdm$variables <- make_drink(des$variables, main, GRAM_MAIN, "drinks_wk")
+  sdm <- dsub(sdm, sdm$variables$inc == 1 & sdm$variables$meno_ok == 1 & !is.na(sdm$variables$flush_hist))
+  dm_ <- dat_of(sdm); hi <- attr(sdm$variables, "levels_drk")[2]
+  sdm$variables$drk_hi <- as.integer(sdm$variables$drk == hi)
+  flush_outcome <- rbindlist(lapply(sexes, function(s) rbindlist(lapply(levels(dm_$flush_hist), function(g) {
+    k <- dm_$f_sex == s & dm_$flush_hist == g; D <- dsub(sdm, k)
+    e1 <- svymean(~hua, D); e2 <- svymean(~uacid, D); e3 <- svymean(~drk_hi, D); e4 <- svymean(~gday, D)
+    data.table(성별 = s, 홍조이력 = g, n = sum(k), 고음주_n = sum(dm_$drk[k] == hi), 고음주_가중pct = 100 * unname(coef(e3)), 고음주_SE = 100 * as.numeric(SE(e3)),
+               음주_g일_가중평균 = unname(coef(e4)), 음주_SE = as.numeric(SE(e4)),
+               고요산혈증_n = sum(dm_$hua[k]), 고요산혈증_가중pct = 100 * unname(coef(e1)), 고요산혈증_SE = 100 * as.numeric(SE(e1)),
+               요산_가중평균 = unname(coef(e2)), 요산_SE = as.numeric(SE(e2)))
+  }))))
+  fwrite(round_dt(flush_outcome), file.path(out_dir, "13_outcome_by_flush.csv"), bom = TRUE)
 }
 
 # ==== 9. 재현성 기록 [계획서 8.2] ===========================================
