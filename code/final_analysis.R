@@ -9,7 +9,8 @@
 # 2026-11-23 주분석 확정(김준현 요청): 질문 구조 확정, 음주 기준 S2(남 16 / 여 8 g/일, 2군), 1잔 7 g → RUN_MAIN = TRUE.
 #            흡연 보정은 3범주(비·과거·현재)로 확정.
 #            경향성 분석(부질문 2·3)은 하지 않기로 결정: 고요산혈증(절단점)을 주결과로, 혈청 요산(연속형)은 보조 다중회귀.
-#            민감도는 1잔 8·10 g과 대푯값 전체 하한·상한(L·U)만 한다. Model 3·통풍·다른 음주 기준 등은 실행 목록에서 뺐다.
+#            민감도는 1잔 8·10 g과 대푯값 전체 하한·상한(L·U)만 한다. 통풍·다른 음주 기준 등은 실행 목록에서 뺐다.
+#            보정 모형은 Crude·M2S(주 모형)·M3S 세 가지만 쓴다(같은 날 결정). S = 흡연 3범주.
 # 실행: 프로젝트 폴더에서  Rscript --vanilla code/final_analysis.R
 # 재현성 확인(코드를 짜지 않은 조원):
 #   Rscript --vanilla .claude/skills/knhanes-analysis/scripts/check_reproducibility.R code/final_analysis.R output/final_analysis
@@ -42,12 +43,14 @@ GRAM_SENS  <- c(8, 10)        #    민감도 분석에 쓰는 다른 1잔 g 값
 # ---- 보정 묶음 [계획서 4.4] ----
 # meno_cov(폐경 상태)는 여자 모형에만 들어간다. 남녀 통합 모형에서는 여자 전용 지시변수(meno_post, meno_other)로 넣는다.
 # ✅ 2026-11-23: 흡연은 3범주(비흡연·과거흡연·현재흡연, f_smk3)로 보정한다(계획서 10장 13번). 2범주는 민감도.
-# Crude는 보정 전후 비교용(민감도 아님). Model 3은 2026-11-23 결정으로 실행하지 않는다.
+# ✅ 2026-11-23: 보정 모형은 Crude, M2S, M3S 세 가지만 쓴다(S = 흡연 3범주, ptest 표의 묶음 이름과 같음).
+#   Crude: 보정 없음(보정 전후 비교) · M2S: 주 모형 · M3S: M2S + 대사 변수(매개변수일 수 있어 참고로 해석)
 COVSETS <- list(
-  "Crude"   = character(0),
-  "Model 2" = c("age", "f_edu", "f_incm", "f_year", "f_smk3", "f_pa", "meno_cov")
+  "Crude" = character(0),
+  "M2S"   = c("age", "f_edu", "f_incm", "f_year", "f_smk3", "f_pa", "meno_cov"),
+  "M3S"   = c("age", "f_edu", "f_incm", "f_year", "f_smk3", "f_pa", "meno_cov", "he_bmi", "f_htn", "f_dm", "egfr10")
 )
-MAIN_COVSET <- "Model 2"      # ✅ 주 모형
+MAIN_COVSET <- "M2S"          # ✅ 주 모형
 
 # ---- 공식 통계값 [계획서 8.1] ----
 # 2019년 만 19세 이상 조율(crude) 값과 응답자 수. 연령표준화 값이 아니다.
@@ -473,12 +476,14 @@ if (!RUN_MAIN) {
   main <- CANDIDATES[[MAIN_NAME]]
   sp <- function(crit, role, covset = MAIN_COVSET, gram = GRAM_MAIN, wk_var = "drinks_wk", pop = "inc", y = "hua", extra = FALSE)
     list(crit = crit, role = role, covset = covset, gram = gram, wk_var = wk_var, pop = pop, y = y, extra = extra)
-  # 2026-11-23 확정: 주분석(고요산혈증) + 보조(혈청 요산 다중회귀) + 보정 전 비교 + 민감도 4개(1잔 8·10 g, 대푯값 L·U)
+  # 2026-11-23 확정: 주분석(고요산혈증, M2S) + 보조(혈청 요산 다중회귀, M2S) + 보정 모형 Crude·M3S + 민감도 4개(1잔 8·10 g, 대푯값 L·U, M2S)
   specs <- c(
     list(sp(main, "주분석"),
          sp(main, "보조: 혈청 요산(다중회귀)", y = "uacid"),
          sp(main, "비교: 보정 없음", covset = "Crude"),
-         sp(main, "비교(혈청 요산): 보정 없음", covset = "Crude", y = "uacid")),
+         sp(main, "비교(혈청 요산): 보정 없음", covset = "Crude", y = "uacid"),
+         sp(main, "추가 보정: M3S", covset = "M3S"),
+         sp(main, "추가 보정(혈청 요산): M3S", covset = "M3S", y = "uacid")),
     lapply(GRAM_SENS, function(g) sp(main, paste0("민감도: 1잔 ", g, " g"), gram = g)),
     list(sp(main, "민감도: 대푯값 전체 하한(L)", wk_var = "drinks_wk_L"),
          sp(main, "민감도: 대푯값 전체 상한(U)", wk_var = "drinks_wk_U"))
