@@ -84,7 +84,7 @@ $($t2 -join "`n")
 <p class="note"><b>출처</b> · 수치는 팀 분석 코드 code/13_v3_main_analysis.R의 결과 파일 output/13_v3_main_analysis/12a_four_models.csv를 그대로 옮긴 것이다(이 표를 만들면서 새로 계산하지 않음). 표 생성: code/25_adjusted_or_table_pdf.ps1</p>
 <p class="note"><b>분석 버전</b> · 이 표는 연구계획서 V3 기준 분석(노출: 현재 홍조 2군, 보정변수 10개, 폐경 상태 미포함)의 결과이다. 2026-11-16에 개정된 연구 질문(주질문: 지속 홍조 vs 비홍조)과 여성 폐경 상태 보정은 반영되지 않았다.</p>
 <p class="note"><b>AI 사용</b> · 결과 파일의 수치를 표로 옮기고 PDF로 만드는 과정에 생성형 AI(Claude)를 사용했다. 수치는 바꾸지 않았다.</p>
-<p class="note"><b>참고</b> · 이 결과는 보정변수 10개 기준이다. 교육수준·소득·조사연도를 뺀 7개 보정 모형은 아직 분석하지 않았다. 참고로 이 세 변수를 하나씩 넣었을 때 고음주 OR의 변화는 3% 안팎이었다(output/13_v3_main_analysis/13_change_in_estimate.csv).</p>
+<p class="note"><b>참고</b> · 이 결과는 보정변수 10개 기준이다(폐경 상태 미포함).</p>
 </div>
 </body></html>
 "@
