@@ -1,7 +1,7 @@
 # Brenner & Blettner (1997). Controlling for continuous confounders in epidemiologic research
 
 - 서지: Brenner H, Blettner M. Controlling for continuous confounders in epidemiologic research. Epidemiology. 1997;8(4):429-434.
-- DOI: PubMed에 DOI가 등록되어 있지 않음 (게재 식별자 00001648-199707000-00014)
+- DOI: https://doi.org/10.1097/00001648-199707000-00014 (Crossref에서 등록 확인. PubMed 기록에는 DOI가 빠져 있음)
 - PubMed: https://pubmed.ncbi.nlm.nih.gov/9209859/
 - 원문 파일: 없음(구독 논문이거나 공개 라이선스를 확인하지 못해 공개 저장소에 올리지 않음). 요약을 다른 근거와 함께 보도록 `summaries/`가 아닌 `full text/`에 둔다.
 - 요약 근거: 초록
