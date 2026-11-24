@@ -1,0 +1,27 @@
+script: code/final_analysis.R
+time: 2026-11-24 21:02:57
+result: PASS
+                        file                             run1
+ 01_variable_definitions.csv da7397332690f592ebfd9893ef1a0aa1
+    02a_participant_flow.csv 64b60438d09715d8c5ba2f2b5923ae61
+      02b_flow_vs_README.csv 64b9864ad8c339e3fd3de98beb5f5fe4
+               03_table1.csv dddfb7762c581fa9d4259a3fc4605b5b
+       04_outcome_by_sex.csv ef84fc25e044af30bfc797bc9d8d5dd0
+ 05_included_vs_excluded.csv 3bbfca875cb12901d442b9dc21629c4c
+       06_official_check.csv ef6a2faa71bba1cc9260c5e264df51cb
+    10_interaction_tests.csv e8c1e812f1808237df84772d84c70e66
+     11_effects_by_flush.csv fdcd52ac65bd8ca8d9785d0545516f17
+          12_cell_counts.csv 21b137a7487e3d74680cd15294987940
+     13_outcome_by_flush.csv 895f897c79f7d7d2caec163619c069ae
+                             run2 same
+ da7397332690f592ebfd9893ef1a0aa1 TRUE
+ 64b60438d09715d8c5ba2f2b5923ae61 TRUE
+ 64b9864ad8c339e3fd3de98beb5f5fe4 TRUE
+ dddfb7762c581fa9d4259a3fc4605b5b TRUE
+ ef84fc25e044af30bfc797bc9d8d5dd0 TRUE
+ 3bbfca875cb12901d442b9dc21629c4c TRUE
+ ef6a2faa71bba1cc9260c5e264df51cb TRUE
+ e8c1e812f1808237df84772d84c70e66 TRUE
+ fdcd52ac65bd8ca8d9785d0545516f17 TRUE
+ 21b137a7487e3d74680cd15294987940 TRUE
+ 895f897c79f7d7d2caec163619c069ae TRUE

@@ -296,7 +296,9 @@ lincomb <- function(fit, l, tr) {          # 계수 선형결합의 추정치와
   e <- sum(w * b); se <- sqrt(as.numeric(t(w) %*% V %*% w)); q <- qt(0.975, fit$df.residual)
   c(est = tr(e), lo = tr(e - q * se), hi = tr(e + q * se))
 }
-round_dt <- function(x, digits = 4) { x <- copy(x); for (nm in names(x)) if (is.double(x[[nm]])) set(x, j = nm, value = signif(x[[nm]], digits)); x }
+# 2026-11-24: 유효숫자 4자리로 저장하면 보고서에서 소수 둘째 자리로 다시 반올림할 때 값이 어긋난다
+#             (예: OR 1.05518 → 저장 1.055 → 보고 1.05, 맞는 값은 1.06). 그래서 7자리로 저장한다.
+round_dt <- function(x, digits = 7) { x <- copy(x); for (nm in names(x)) if (is.double(x[[nm]])) set(x, j = nm, value = signif(x[[nm]], digits)); x }
 
 # ==== 7. 기술 통계 [계획서 6.1, 5장] ========================================
 # 7-1. 대상자 특성표: 성별 × 홍조 패턴(4군), 비가중 n + 가중 %(SE) 또는 가중 평균(SE)
