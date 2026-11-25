@@ -73,6 +73,30 @@ g4 <- ggplot(fpd, aes(x = 추정치, y = 분석)) + geom_vline(xintercept = 1, l
   facet_grid(성별 ~ 질문) + labs(x = "OR의 비 (홍조군 OR ÷ 비홍조군 OR, 95% CI, 로그 눈금)", y = NULL) +
   theme_bw(base_family = fam, base_size = 11) + theme(legend.position = "bottom", strip.text = element_text(size = 10.5), strip.text.y = element_text(angle = 0), panel.spacing.x = unit(1.2, "lines"))
 save_fig(g4, "fig4_주질문_부질문_forest.png", h = 6)
+# 그림 5: 대상자 선정 흐름도(논문 그림 1) — 02a 흐름표에서 그린다. 2026-11-25 추가
+fl <- copy(flow); fl[, n := as.integer(n)]; fl[, 남 := as.integer(남)]; fl[, 여 := as.integer(여)]
+main_lab <- c("국민건강영양조사 2019–2021 기본DB", "건강설문·검진조사 가중치 있음", "만 19세 이상", "최근 1년 음주자",
+              "음주량·홍조·혈청 요산 있음", "통풍 의사진단 없음", "보정변수 모두 응답(최종 분석 대상)")
+exc_lab <- c("가중치 없음", "19세 미만", "최근 1년 비음주", "음주량·홍조·요산 결측", "통풍 진단 또는 모름·무응답", "보정변수 결측")
+fc <- function(x) formatC(x, big.mark = ",", format = "d"); k <- nrow(fl); y <- rev(seq_len(k)) * 1.45
+boxes <- data.table(x = 0, y = y, lab = sprintf("%s
+n = %s (남 %s · 여 %s)", main_lab, fc(fl$n), fc(fl$남), fc(fl$여)))
+ex <- data.table(x = 2.35, y = (y[-k] + y[-1]) / 2, lab = sprintf("제외: %s
+n = %s", exc_lab, fc(fl$n[-k] - fl$n[-1])))
+g5 <- ggplot() +
+  geom_segment(data = data.table(y1 = y[-k] - 0.36, y2 = y[-1] + 0.36), aes(x = 0, xend = 0, y = y1, yend = y2), arrow = arrow(length = unit(2.2, "mm")), colour = "grey30") +
+  geom_segment(data = ex, aes(x = 0, xend = 1.35, y = y, yend = y), arrow = arrow(length = unit(2, "mm")), colour = "grey45") +
+  geom_tile(data = boxes, aes(x = x, y = y), width = 2.3, height = 0.72, fill = c(rep("#F1F5FB", k - 1), "#DCE6F2"), colour = "#1F3864") +
+  geom_text(data = boxes, aes(x = x, y = y, label = lab), family = fam, size = 3.1, lineheight = 0.95) +
+  geom_tile(data = ex, aes(x = x, y = y), width = 2.0, height = 0.62, fill = "white", colour = "grey55") +
+  geom_text(data = ex, aes(x = x, y = y, label = lab), family = fam, size = 2.8, lineheight = 0.95, colour = "grey20") +
+  annotate("text", x = 1.05, y = min(y) - 0.75, family = fam, size = 2.8, colour = "grey25",
+           label = sprintf("홍조 이력 분석: 신규 홍조(남 %s · 여 %s)와 폐경 상태 결측 여자 2명 제외
+→ 남 %s명 · 여 %s명",
+                           t1[성별 == "남자" & 홍조패턴 == "신규 홍조", 집단n[1]], t1[성별 == "여자" & 홍조패턴 == "신규 홍조", 집단n[1]],
+                           format(tst[분석 == A_MAIN & Q == "주질문" & 대상 == "남자", 모형n], big.mark = ","), format(tst[분석 == A_MAIN & Q == "주질문" & 대상 == "여자", 모형n], big.mark = ","))) +
+  coord_cartesian(xlim = c(-1.25, 3.4), ylim = c(min(y) - 1, max(y) + 0.5)) + theme_void(base_family = fam)
+save_fig(g5, "fig5_대상자_선정_흐름도.png", h = 7.5)
 
 # ---- 표 도구 ----
 md_tab <- function(dt) { h <- names(dt); c(paste("|", paste(h, collapse = " | "), "|"), paste("|", paste(rep("---", length(h)), collapse = " | "), "|"),
