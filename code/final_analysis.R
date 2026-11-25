@@ -328,6 +328,26 @@ table1 <- rbindlist(lapply(sexes, function(s) rbindlist(lapply(c("전체", level
   cbind(성별 = s, 홍조패턴 = g, 집단n = sum(k), rbindlist(lapply(vv, function(v) t1_block(dsub(sdes, k), v))))
 }))))
 fwrite(table1, file.path(out_dir, "03_table1.csv"), bom = TRUE)
+# 7-1b. 홍조 이력 3군(비홍조·홍조 소실·지속 홍조) 사이 비교 p [2026-11-25 추가, 논문 표 1]
+#   범주형: Rao-Scott 보정 χ² 검정(svychisq, F 통계량), 연속형: 복합표본 선형회귀의 홍조 이력 공동 Wald 검정(regTermTest)
+t1p_one <- function(D, v) {
+  dv <- dat_of(D)
+  if (all(is.na(dv[[v]]))) return(NA_real_)
+  if (is.factor(dv[[v]])) {
+    k <- !is.na(dv[[v]]); DD <- dsub(D, k); DD$variables[[v]] <- droplevels(DD$variables[[v]])
+    if (nlevels(DD$variables[[v]]) < 2) return(NA_real_)
+    as.numeric(svychisq(as.formula(paste0("~", v, " + flush_hist")), DD, statistic = "F")$p.value)
+  } else {
+    f <- svyglm(as.formula(paste0(v, " ~ flush_hist")), design = dsub(D, !is.na(dv[[v]])))
+    as.numeric(regTermTest(f, ~flush_hist)$p)
+  }
+}
+table1_p <- rbindlist(lapply(sexes, function(s) {
+  D <- dsub(sdes, d_sub$f_sex == s & !is.na(d_sub$flush_hist))
+  D$variables$flush_hist <- droplevels(D$variables$flush_hist)
+  vv <- if (s == "남자") setdiff(names(t1_vars), "meno_cov") else names(t1_vars)
+  rbindlist(lapply(vv, function(v) data.table(성별 = s, 변수 = t1_vars[[v]], p = t1p_one(D, v))))
+}))
 cat("※ 03_table1.csv: n은 비가중 표본 수, 추정치는 가중 %(SE) 또는 가중 평균(SE)\n")
 
 # 7-2. 결과 변수 분포(성별만)
@@ -523,6 +543,14 @@ if (!RUN_MAIN) {
                요산_가중평균 = unname(coef(e2)), 요산_SE = as.numeric(SE(e2)))
   }))))
   fwrite(round_dt(flush_outcome), file.path(out_dir, "13_outcome_by_flush.csv"), bom = TRUE)
+  # 표 1의 결과 행(고음주·고요산혈증·혈청 요산·하루 음주량)의 홍조 이력 3군 비교 p(모형 분석 대상 기준) [2026-11-25 추가]
+  sdm$variables$f_drk_hi <- factor(sdm$variables$drk_hi, 0:1); sdm$variables$f_hua <- factor(sdm$variables$hua, 0:1)
+  out_p <- rbindlist(lapply(sexes, function(s) {
+    D <- dsub(sdm, dat_of(sdm)$f_sex == s); D$variables$flush_hist <- droplevels(D$variables$flush_hist)
+    data.table(성별 = s, 변수 = c("고음주", "고요산혈증", "혈청 요산", "하루 음주량(g/일)"),
+               p = c(t1p_one(D, "f_drk_hi"), t1p_one(D, "f_hua"), t1p_one(D, "uacid"), t1p_one(D, "gday")))
+  }))
+  fwrite(round_dt(rbind(table1_p, out_p)), file.path(out_dir, "14_table1_pvalues.csv"), bom = TRUE)
 }
 
 # ==== 9. 재현성 기록 [계획서 8.2] ===========================================

@@ -6,6 +6,9 @@
 #   - 표와 본문의 숫자는 모두 output/final_analysis/ 결과 파일에서 읽어 넣는다(손으로 옮겨 적지 않음).
 # 입력: output/final_analysis/ 01·02a·03·05·06·10·11·12·13, _reproducibility.txt, 그림(fig1, fig4, fig5),
 #       Result/2026-11-18_ptest_전체표_조건과p.csv(부록: 분석 조건을 정하기 전에 검토한 음주 기준)
+# 2026-11-25 개정: 저장소의 국건영 분석 논문(Kang & Oh 2023, Kang 2024, Kim 2026, Yook 2024, Hong 2017, Choi 2026, Lee 2021, Yoo 2025 등)의
+#   형식 관행을 반영 — 영문 초록, 주제어 5개, 국건영 소개 문단, 표 1의 군 간 p(Rao-Scott χ²), 소프트웨어·버전과 Taylor 선형화,
+#   연구 윤리(질병관리청 IRB·서면 동의·소속 기관 심의) 문단, 약어, 연구비·이해관계·자료 이용·저자 기여·감사의 글.
 # 출력: output/최종발표/논문_완성본_홍조_음주_고요산혈증.docx, .pdf
 # 실행: python code/41_paper_build.py   (final_analysis.R, 39_main_report.R를 먼저 실행. PDF는 Edge·Chrome 필요)
 # 생성형 AI(Claude) 도움으로 작성. 빨간 글씨는 조원 확인이 필요한 곳이다.
@@ -42,6 +45,7 @@ def rd(p):
 flow, vdef, t1, inc = rd(FA / "02a_participant_flow.csv"), rd(FA / "01_variable_definitions.csv"), rd(FA / "03_table1.csv"), rd(FA / "05_included_vs_excluded.csv")
 off, tst, eff, cel, fo = rd(FA / "06_official_check.csv"), rd(FA / "10_interaction_tests.csv"), rd(FA / "11_effects_by_flush.csv"), rd(FA / "12_cell_counts.csv"), rd(FA / "13_outcome_by_flush.csv")
 gcrit = rd(Path("Result/2026-11-18_ptest_전체표_조건과p.csv"))
+t1p = {(x["성별"], x["변수"]): float(x["p"]) for x in rd(FA / "14_table1_pvalues.csv")}
 repro = (FA / "_reproducibility.txt").read_text(encoding="utf-8") if (FA / "_reproducibility.txt").exists() else ""
 repro_res = next((l.split(":", 1)[1].strip() for l in repro.splitlines() if l.startswith("result:")), "확인 안 함")
 
@@ -220,7 +224,15 @@ P(f"<b>배경:</b> 음주는 고요산혈증의 위험요인이다. 음주 후 �
 P(f"<b>방법:</b> 국민건강영양조사 2019–2021년 자료에서 만 19세 이상 최근 1년 음주자 가운데 통풍 의사진단자와 진단 여부 무응답자, 보정변수 결측자를 제외한 {n0(fin['n'])}명(남 {n0(fin['남'])}명, 여 {n0(fin['여'])}명)을 분석하였다. 하루 알코올 섭취량이 남자 16 g, 여자 8 g 이상이면 고음주로 정의하였고, 홍조 이력은 비홍조, 홍조 소실, 지속 홍조로 나누었다. 고요산혈증은 혈청 요산 남자 7.0 mg/dL, 여자 6.0 mg/dL 이상으로 정의하였다. 남녀 각각 복합표본 로지스틱 회귀로 음주 × 홍조 이력 교호작용을 검정하고, 효과수정의 크기를 오즈비(OR)의 비로 제시하였다.")
 P(f"<b>결과:</b> 남자 비홍조군에서 고음주의 고요산혈증 OR은 {ci(A_MAIN, '남자', '비홍조')}였고, 지속 홍조군은 {ci(A_MAIN, '남자', '지속 홍조')}, 홍조 소실군은 {ci(A_MAIN, '남자', '홍조 소실')}이었다. 지속 홍조군과 비홍조군의 OR의 비는 {r_main_m}로 차이가 확인되지 않았고(p = {fp(trow(A_MAIN, '주질문', '남자')['p'])}), 홍조 소실군과 비홍조군의 OR의 비는 {r_sub_m}였다(p = {fp(trow(A_MAIN, '부질문', '남자')['p'])}). 여자는 비홍조군에서도 고음주와 고요산혈증이 연관되었고(OR {ci(A_MAIN, '여자', '비홍조')}), 지속 홍조군과의 차이는 없었다(OR의 비 {r_main_f}, p = {fp(trow(A_MAIN, '주질문', '여자')['p'])}). 혈청 요산 분석에서는 남녀 모두 홍조 이력에 따른 차이가 없었다. 민감도 분석에서 남자 홍조 소실군의 OR의 비는 {SR}로 주분석과 비슷하였으나 p는 {min(sens_sub_p):.3f}–{max(sens_sub_p):.3f}로 경계 근처였다.")
 P("<b>결론:</b> 지속 홍조가 음주와 고요산혈증의 연관을 강화한다는 근거는 확인되지 않았다. 남자 홍조 소실군에서 연관이 더 컸으나 탐색적 결과로, 유전형 자료와 종단 자료를 이용한 후속 연구로 확인해야 한다.")
-P("<b>주제어:</b> 안면홍조, 알데히드 탈수소효소 2, 음주, 고요산혈증, 효과수정, 국민건강영양조사")
+P("<b>주제어:</b> 안면홍조, 음주, 고요산혈증, 효과수정, 국민건강영양조사")
+H1("Abstract")
+P(f"<b>Background:</b> Alcohol consumption is a risk factor for hyperuricemia. Alcohol-related facial flushing reflects reduced aldehyde dehydrogenase 2 (ALDH2) activity, and alcohol may be more harmful in flushers. Whether the association between alcohol consumption and hyperuricemia differs by past and current flushing history has not been examined in a nationally representative sample.")
+P(f"<b>Methods:</b> We analyzed {n0(fin['n'])} current drinkers aged ≥19 years ({n0(fin['남'])} men and {n0(fin['여'])} women) from the Korea National Health and Nutrition Examination Survey 2019–2021. High-risk drinking was defined as ≥16 g/day of alcohol in men and ≥8 g/day in women. Flushing history was classified as never, lost (past only), or persistent (past and current) flushing. Hyperuricemia was defined as serum uric acid ≥7.0 mg/dL in men and ≥6.0 mg/dL in women. Sex-specific survey-weighted logistic regression models with a drinking × flushing history interaction were fitted, and effect modification was expressed as the ratio of odds ratios (ORs).")
+P(f"<b>Results:</b> Among men, the OR of high-risk drinking for hyperuricemia was {ci(A_MAIN, '남자', '비홍조').replace('−', '-')} in never flushers, {ci(A_MAIN, '남자', '지속 홍조').replace('−', '-')} in persistent flushers, and {ci(A_MAIN, '남자', '홍조 소실').replace('−', '-')} in lost flushers. The ratio of ORs was {r_main_m} for persistent versus never flushers (P = {fp(trow(A_MAIN, '주질문', '남자')['p'])}) and {r_sub_m} for lost versus never flushers (P = {fp(trow(A_MAIN, '부질문', '남자')['p'])}). Among women, the association did not differ between persistent and never flushers (ratio of ORs {r_main_f}, P = {fp(trow(A_MAIN, '주질문', '여자')['p'])}). No effect modification was observed for serum uric acid as a continuous outcome.")
+P("<b>Conclusions:</b> Persistent flushing did not significantly strengthen the association between alcohol consumption and hyperuricemia. The stronger association in men with lost flushing should be regarded as exploratory and confirmed in studies with ALDH2 genotype and longitudinal data.")
+P("<b>Keywords:</b> Flushing; Alcohol drinking; Hyperuricemia; Effect modification; Korea National Health and Nutrition Examination Survey")
+H1("약어")
+P("ALDH2, 알데히드 탈수소효소 2(aldehyde dehydrogenase 2); CI, 신뢰구간(confidence interval); eGFR, 추정사구체여과율(estimated glomerular filtration rate); KNHANES, 국민건강영양조사(Korea National Health and Nutrition Examination Survey); OR, 오즈비(odds ratio); SE, 표준오차(standard error)")
 
 # ===== 1. 서론 =====
 H1("1. 서론")
@@ -232,48 +244,64 @@ P("이에 본 연구는 국민건강영양조사 2019–2021년 자료를 이용
 
 # ===== 2. 방법 =====
 H1("2. 연구 방법")
-H2("2.1 자료와 연구 설계")
-P(f"국민건강영양조사 제8기 2019·2020·2021년 기본 원시자료(hn19_all, hn20_all, hn21_all)를 합쳐 사용한 단면연구이다. 복합표본설계를 반영하기 위해 건강설문–검진조사 가중치(wt_itvex), 분산추정 층(kstrata), 집락(psu)을 사용하였다{G('91–92', '83–84')}. 제8기는 각 연도의 조사기간에 비례해 통합하며, 세 해 모두 조사기간이 1년이므로 각 연도 가중치에 1/3을 곱하였다{G(36, 28)}. 대상자가 아닌 사람의 행을 지우지 않고 전체 자료로 설계를 만든 뒤 대상자만 부분집단으로 지정하여 분산을 추정하였다.")
-H2("2.2 연구 대상")
+H2("2.1 자료원과 연구 대상")
+P(f"국민건강영양조사는 질병관리청이 국민의 건강 수준, 건강 관련 의식과 행태, 식품과 영양 섭취 실태를 파악하기 위해 매년 시행하는 전국 단위의 단면 조사로, 건강설문조사, 검진조사, 영양조사로 구성된다{R('guide')}. 시설 거주자를 제외한 국민을 모집단으로 하며, 지역과 주택 유형을 기준으로 한 다단계 층화집락표본추출로 표본을 뽑는다. 음주 후 안면홍조 문항은 2019년부터 조사되었다{R('lee2023')}.")
+P(f"본 연구는 국민건강영양조사 제8기 2019·2020·2021년 기본 원시자료(hn19_all, hn20_all, hn21_all)를 합쳐 사용한 단면연구이다. 복합표본설계를 반영하기 위해 건강설문–검진조사 가중치(wt_itvex), 분산추정 층(kstrata), 집락(psu)을 사용하였다{G('91–92', '83–84')}. 제8기는 각 연도의 조사기간에 비례해 통합하며, 세 해 모두 조사기간이 1년이므로 각 연도 가중치에 1/3을 곱하였다{G(36, 28)}. 대상자가 아닌 사람의 행을 지우지 않고 전체 자료로 설계를 만든 뒤 대상자만 부분집단으로 지정하여 분산을 추정하였다.")
 P(f"만 19세 이상 최근 1년 음주자 가운데 음주량을 계산할 수 있고, 과거·현재 홍조 문항에 응답했으며, 혈청 요산을 측정한 사람을 대상으로 하였다. 통풍 의사진단자와 진단 여부를 모르거나 응답하지 않은 사람은 치료로 요산 수치가 달라질 수 있고 요산강하제 복용 정보가 없어 제외하였다. 보정변수에 결측이 있는 사람을 제외한 최종 대상자는 {n0(fin['n'])}명(남 {n0(fin['남'])}명, 여 {n0(fin['여'])}명)이었다(그림 1). 홍조 이력 분석에서는 세 군에 속하지 않는 신규 홍조(남 {n0(new_flush['남자'])}명, 여 {n0(new_flush['여자'])}명)와 폐경 상태가 결측인 여자 2명을 제외하여 남자 {nm:,}명, 여자 {nf:,}명을 분석하였다. 혈청 요산이 \"1.0 mg/dL 미만\"으로 표기된 경우는 측정값이 없는 것으로 보았고, 임신·수유 중인 여성 4명은 포함하여 폐경 전으로 분류하였다.")
 FIG("Result/2026-11-23_주분석_그림/fig5_대상자_선정_흐름도.png", "그림 1. 연구 대상자 선정 과정. n은 가중치를 적용하지 않은 표본 수.", 13.5)
-H2("2.3 변수")
+H2("2.2 변수")
 P(f"<b>음주 수준(노출).</b> 하루 알코올 섭취량(g/일)은 1년간 음주빈도(BD1_11)의 대푯값 × 한 번에 마시는 잔 수(BD2_1)의 대푯값 × 7 g ÷ 7일로 계산하였다{G('161–162', '153–154')}. 빈도의 대푯값은 월 1회 미만 0.5회/월, 월 1회 1회/월, 월 2–4회 3회/월, 주 2–3회 2.5회/주, 주 4회 이상 5.5회/주로, 잔 수의 대푯값은 1–2잔 1.5잔, 3–4잔 3.5잔, 5–6잔 5.5잔, 7–9잔 8잔으로 두었고, 10잔 이상은 직접 적은 잔 수(BD2_14)를 사용하였다. 지침서에는 1잔의 알코올 양이 없어 선행연구의 값인 7 g을 가정하였다{R('jeon2022')}. 하루 섭취량이 남자 16 g 이상, 여자 8 g 이상이면 고음주, 그 미만이면 저음주(기준)로 정의하였다. 이 절단점은 한국인 홍조 기반 절주 지침의 65세 이하 비홍조군 적정 음주 상한(남자 주 8잔, 여자 주 4잔, 1잔 14 g)을 하루 양으로 바꾼 값이다{R('lee2019')}.")
 P(f"<b>홍조 이력(효과수정인자).</b> 처음 술을 마시던 1–2년 동안의 홍조(BD9_1: 예, 아니오)와 현재의 홍조(BD9_2: 아니오, 가끔, 자주, 늘)를 조합하였다{G('163–164', '155–156')}. 과거와 현재 모두 없으면 비홍조(기준), 과거에는 있었으나 현재 없으면 홍조 소실, 과거에 있었고 현재 가끔·자주·늘 있으면 지속 홍조로 분류하였다. 과거에는 없었으나 현재 있는 신규 홍조는 세 군 어디에도 속하지 않아 분석에서 제외하였다{R('yook2024')}.")
 P(f"<b>결과 변수.</b> 주결과는 고요산혈증으로, 혈청 요산(HE_Uacid)이 남자 7.0 mg/dL 이상, 여자 6.0 mg/dL 이상인 경우로 정의하였다{G(200, 192)}. 지침서에는 고요산혈증 기준이 없어 국민건강영양조사를 이용한 선행연구의 기준을 따랐다{R('bae2023')}. 보조 결과로 혈청 요산(mg/dL, 연속형)을 분석하였다.")
 P(f"<b>보정변수.</b> 보정변수는 교란변수 선정 원칙에 따라 음주 또는 고요산혈증과 관련된 변수로 정하였다{R('vanderweele')}. 주 모형(Model 2)은 연령(연속형), 교육수준(4범주), 소득(성·연령별 가구균등화소득 4분위), 조사연도, 흡연(비흡연·과거흡연·현재흡연){R('kimchoe')}, 유산소 신체활동 실천 여부를 보정하였고, 여자는 폐경 상태(폐경 전·폐경 후·기타)를 추가로 보정하였다{R('hak')}. 흡연은 평생 5갑 이상 피웠고 현재 매일 또는 가끔 피우면 현재흡연, 평생 5갑 이상 피웠으나 현재 피우지 않으면 과거흡연, 그 밖은 비흡연으로 분류하였다{G(175, 167)}. 체질량지수, 고혈압, 당뇨병, 추정사구체여과율(eGFR, CKD-EPI 2009식{R('levey')})은 음주와 고요산혈증 사이의 매개변수일 수 있어 추가 보정 모형(Model 3)에만 넣었다. 연속형 변수는 잔여 교란을 줄이기 위해 범주로 나누지 않았다{R('brenner')}. 모름·무응답(9, 99, 999)은 결측으로, 비해당(8, 88, 888)은 변수마다 지침서에서 의미를 확인해 처리하였다(부록 표 1).")
-H2("2.4 통계 분석")
-P("남녀를 나누어 분석하였다. 홍조 이력별 특성은 가중치를 적용하지 않은 표본 수(n)와 가중 % 또는 가중 평균(표준오차)으로 제시하였다. 주분석은 복합표본 로지스틱 회귀(quasibinomial)로 고요산혈증 ~ 음주 수준 + 홍조 이력 + 음주 수준 × 홍조 이력 + 보정변수의 모형을 적합하고, 각 홍조군 안에서 저음주 대비 고음주의 OR과 95% 신뢰구간(CI)을 구하였다.")
+H2("2.3 통계 분석")
+P("국민건강영양조사의 복합표본설계(가중치, 층, 집락)를 모든 분석에 반영하였고, 표준오차는 Taylor 급수 선형화 방법으로 추정하였다. 남녀를 나누어 분석하였다. 홍조 이력별 특성은 가중치를 적용하지 않은 표본 수(n)와 가중 %, 또는 가중 평균(표준오차)으로 제시하였고, 홍조 이력 3군 간 차이는 범주형 변수에 Rao-Scott χ² 검정을, 연속형 변수에 복합표본 선형회귀의 Wald 검정을 사용하였다. 주분석은 복합표본 로지스틱 회귀(quasibinomial)로 고요산혈증 ~ 음주 수준 + 홍조 이력 + 음주 수준 × 홍조 이력 + 보정변수의 모형을 적합하고, 각 홍조군 안에서 저음주 대비 고음주의 OR과 95% 신뢰구간(CI)을 구하였다.")
 P("효과수정은 곱셈 척도의 교호작용 항에 대한 Wald 검정(1 자유도)으로 평가하였다. 주질문은 음주 × 지속 홍조 항, 부질문은 음주 × 홍조 소실 항이며, 효과 크기는 교호작용 항의 지수값, 곧 OR의 비(홍조군 OR ÷ 비홍조군 OR)와 95% CI로 제시하였다. OR의 비가 1보다 크면 그 홍조군에서 음주와 고요산혈증의 연관이 더 크다는 뜻이다. 홍조 소실군과 지속 홍조군의 비교는 탐색적으로만 보았다.")
-P("보정 모형은 보정하지 않은 모형(Crude), 주 모형(Model 2), Model 3의 세 가지를 사용하였고, 결론은 주 모형으로 내렸다. 혈청 요산은 같은 구조의 복합표본 다중 선형회귀로 분석하였다. 유의수준은 양측 0.05로 하였다. 비교하는 칸 가운데 고요산혈증 사례가 10명 미만인 칸이 있으면 그 OR과 검정은 해석하지 않았다(†). 보정변수를 모두 응답한 사람만 분석하였다(완전 응답자 분석). 분석에는 R 4.6.0과 survey 패키지를 사용하였다.")
-H2("2.5 민감도 분석")
+P("보정 모형은 보정하지 않은 모형(Crude), 주 모형(Model 2), Model 3의 세 가지를 사용하였고, 결론은 주 모형으로 내렸다. 혈청 요산은 같은 구조의 복합표본 다중 선형회귀로 분석하였다. 비교하는 칸 가운데 고요산혈증 사례가 10명 미만인 칸이 있으면 그 OR과 검정은 해석하지 않았다(†). 보정변수를 모두 응답한 사람만 분석하였다(완전 응답자 분석). 모든 분석은 R 4.6.0(R Foundation for Statistical Computing, Vienna, Austria)과 survey 패키지 4.5로 수행하였고, 양측 p < 0.05를 통계적으로 유의한 것으로 보았다.")
+H2("2.4 민감도 분석")
 P("주분석의 가정을 바꾸어 결과의 방향과 크기가 유지되는지 확인하였다. (1) 1잔의 알코올을 8 g{0}, (2) 10 g으로 바꾸었고, 음주 대푯값을 (3) 모두 범주 하한(예: 주 2–3회 → 주 2회, 1–2잔 → 1잔), (4) 모두 범주 상한(예: 주 4회 이상 → 주 7회, 1–2잔 → 2잔)으로 바꾸었다. 10잔 이상은 직접 적은 잔 수라 바꾸지 않았다. 판단 기준은 p < 0.05의 유지 여부가 아니라 OR의 비의 방향과 크기가 주분석과 같은지로 두었다.".replace("{0}", R("lee2023")))
-H2("2.6 분석 조건의 결정과 검증")
+H2("2.5 분석 조건의 결정과 검증")
 P("음주 기준, 1잔의 알코올 양, 흡연 범주, 보정 모형, 민감도 분석 목록은 여러 음주 기준과 보정 묶음의 교호작용 결과를 검토한 뒤(2026년 11월 16–23일) 확정하였다. 검토한 기준과 그 결과는 부록 표 3에 모두 제시하였다. 분석의 정확성을 점검하기 위해 같은 코드로 2019년 만 19세 이상 월간음주율과 고위험음주율을 재현하여 국가 공식 통계와 비교하였고(부록 표 4), 새 R 세션에서 분석을 두 번 실행해 결과 파일이 같은지 확인하였다. 주분석의 p 값은 별도의 분석 도구로 다시 계산해 같음을 확인하였다.")
-H2("2.7 연구 윤리")
-P("본 연구는 질병관리청이 공개한 국민건강영양조사 원시자료를 이용한 이차 자료 분석으로, 개인을 식별할 수 없는 자료를 사용하였다. <span class='red'>[기관생명윤리위원회 심의 면제 여부와 근거 문구: 과제 안내와 질병관리청 원시자료 이용 안내를 확인해 기재]</span>")
+H2("2.6 연구 윤리")
+P("국민건강영양조사는 질병관리청 연구윤리심의위원회의 승인을 받아 수행되었으며, 모든 참여자는 조사 전에 서면 동의를 하였다 <span class='red'>[승인번호와 연도별 심의 면제 여부를 질병관리청 원시자료 이용 안내에서 확인해 기재. 같은 2019–2021년 자료를 쓴 선행연구는 2018-01-03-5C-A를 제시하였다]</span>. 본 연구는 공개된 비식별 원시자료를 이용한 이차 분석이다 <span class='red'>[소속 기관 연구윤리심의위원회의 심의 면제 여부와 번호 기재]</span>. 연구는 헬싱키 선언의 원칙에 따라 수행하였다.")
 
 # ===== 3. 결과 =====
 H1("3. 결과")
 H2("3.1 대상자 특성")
 m_nf, m_lf, m_pf = fo_("남자", "비홍조"), fo_("남자", "홍조 소실"), fo_("남자", "지속 홍조")
 f_nf, f_pf = fo_("여자", "비홍조"), fo_("여자", "지속 홍조")
-P(f"홍조 이력 분석 대상은 남자 {nm:,}명(비홍조 {n0(m_nf['n'])}명, 홍조 소실 {n0(m_lf['n'])}명, 지속 홍조 {n0(m_pf['n'])}명), 여자 {nf:,}명(비홍조 {n0(f_nf['n'])}명, 홍조 소실 {n0(fo_('여자', '홍조 소실')['n'])}명, 지속 홍조 {n0(f_pf['n'])}명)이었다(표 1). 홍조 소실군은 남녀 모두 나이가 가장 많았다. 지속 홍조군의 하루 음주량은 비홍조군의 절반 이하였고(남 {float(m_pf['음주_g일_가중평균']):.1f} vs {float(m_nf['음주_g일_가중평균']):.1f} g/일, 여 {float(f_pf['음주_g일_가중평균']):.1f} vs {float(f_nf['음주_g일_가중평균']):.1f} g/일), 고음주 비율도 낮았다. 남자 홍조 소실군은 하루 음주량({float(m_lf['음주_g일_가중평균']):.1f} g/일)과 고음주 비율({float(m_lf['고음주_가중pct']):.1f}%)이 가장 높았다. 고요산혈증은 남자 {n0(ocs['남자']['고요산혈증_n'])}명(가중 {float(ocs['남자']['고요산혈증_가중pct']):.1f}%), 여자 {n0(ocs['여자']['고요산혈증_n'])}명({float(ocs['여자']['고요산혈증_가중pct']):.1f}%)이었다.")
-heads = ["특성"] + [f"{SXS[s]} · {g}" for s in SX for g in FL]
-rows = [["n"] + [n0(t1n(s, g)) for s in SX for g in FL]]
+P(f"홍조 이력 분석 대상은 남자 {nm:,}명(비홍조 {n0(m_nf['n'])}명, 홍조 소실 {n0(m_lf['n'])}명, 지속 홍조 {n0(m_pf['n'])}명), 여자 {nf:,}명(비홍조 {n0(f_nf['n'])}명, 홍조 소실 {n0(fo_('여자', '홍조 소실')['n'])}명, 지속 홍조 {n0(f_pf['n'])}명)이었다(표 1). 홍조 소실군은 남녀 모두 나이가 가장 많았다. 지속 홍조군의 하루 음주량은 비홍조군의 절반 이하였고(남 {float(m_pf['음주_g일_가중평균']):.1f} vs {float(m_nf['음주_g일_가중평균']):.1f} g/일, 여 {float(f_pf['음주_g일_가중평균']):.1f} vs {float(f_nf['음주_g일_가중평균']):.1f} g/일), 고음주 비율도 낮았다. 홍조 이력 3군은 남녀 모두 나이, 교육수준, 고혈압 유병, 하루 음주량에서 차이가 있었다(모두 p < 0.001). 남자 홍조 소실군은 하루 음주량({float(m_lf['음주_g일_가중평균']):.1f} g/일)과 고음주 비율({float(m_lf['고음주_가중pct']):.1f}%)이 가장 높았다. 고요산혈증은 남자 {n0(ocs['남자']['고요산혈증_n'])}명(가중 {float(ocs['남자']['고요산혈증_가중pct']):.1f}%), 여자 {n0(ocs['여자']['고요산혈증_n'])}명({float(ocs['여자']['고요산혈증_가중pct']):.1f}%)이었다.")
+def p1(s, var):
+    v = t1p.get((s, var))
+    return "" if v is None else ("<0.001" if v < 0.001 else f"{v:.3f}")
+
+
+heads = ["특성"] + [f"남 · {g}" for g in FL] + ["p(남)"] + [f"여 · {g}" for g in FL] + ["p(여)"]
+rows = [["n"] + [n0(t1n("남자", g)) for g in FL] + [""] + [n0(t1n("여자", g)) for g in FL] + [""]]
+first_seen = set()
 spec = [("나이(세), 평균", "나이(세)", "평균"), ("교육: 대졸 이상", "교육수준", "대졸이상"), ("소득: 하", "소득 4분위", "하"), ("소득: 상", "소득 4분위", "상"),
         ("흡연: 과거흡연", "흡연 3범주", "과거흡연"), ("흡연: 현재흡연", "흡연 3범주", "현재흡연"), ("유산소 신체활동 실천", "유산소 신체활동 실천", "실천"),
         ("폐경 후(여자)", "폐경 상태(여자)", "폐경 후"), ("체질량지수(kg/m²), 평균", "체질량지수(kg/m2)", "평균"), ("고혈압", "고혈압 유병", "있음"),
         ("당뇨병", "당뇨병 유병", "있음"), ("eGFR, 평균", "eGFR(CKD-EPI 2009)", "평균")]
 for lab, var, lev in spec:
-    rows.append([lab] + [("-" if (var.startswith("폐경") and s == "남자") else t1v(s, g, var, lev)) for s in SX for g in FL])
-rows.append(["하루 음주량(g/일), 평균"] + [f'{float(fo_(s, g)["음주_g일_가중평균"]):.1f} ({float(fo_(s, g)["음주_SE"]):.1f})' for s in SX for g in FL])
-rows.append(["고음주"] + [f'{n0(fo_(s, g)["고음주_n"])} ({float(fo_(s, g)["고음주_가중pct"]):.1f})' for s in SX for g in FL])
-rows.append(["고요산혈증"] + [f'{n0(fo_(s, g)["고요산혈증_n"])} ({float(fo_(s, g)["고요산혈증_가중pct"]):.1f})' for s in SX for g in FL])
-rows.append(["혈청 요산(mg/dL), 평균"] + [f'{float(fo_(s, g)["요산_가중평균"]):.2f} ({float(fo_(s, g)["요산_SE"]):.2f})' for s in SX for g in FL])
+    showp = var not in first_seen
+    first_seen.add(var)
+    row = [lab]
+    for s in SX:
+        row += [("-" if (var.startswith("폐경") and s == "남자") else t1v(s, g, var, lev)) for g in FL]
+        row.append(p1(s, var) if (showp and not (var.startswith("폐경") and s == "남자")) else "")
+    rows.append(row)
+for lab, var, fn in [("하루 음주량(g/일), 평균", "하루 음주량(g/일)", lambda s, g: f'{float(fo_(s, g)["음주_g일_가중평균"]):.1f} ({float(fo_(s, g)["음주_SE"]):.1f})'),
+                     ("고음주", "고음주", lambda s, g: f'{n0(fo_(s, g)["고음주_n"])} ({float(fo_(s, g)["고음주_가중pct"]):.1f})'),
+                     ("고요산혈증", "고요산혈증", lambda s, g: f'{n0(fo_(s, g)["고요산혈증_n"])} ({float(fo_(s, g)["고요산혈증_가중pct"]):.1f})'),
+                     ("혈청 요산(mg/dL), 평균", "혈청 요산", lambda s, g: f'{float(fo_(s, g)["요산_가중평균"]):.2f} ({float(fo_(s, g)["요산_SE"]):.2f})')]:
+    row = [lab]
+    for s in SX:
+        row += [fn(s, g) for g in FL] + [p1(s, var)]
+    rows.append(row)
 TAB("표 1. 성별 · 홍조 이력별 대상자 특성", heads, rows,
-    "범주형은 n (가중 %), 연속형은 가중 평균(표준오차). n은 가중치를 적용하지 않은 표본 수. 국민건강영양조사 2019–2021, 가중치 wt_itvex × 1/3, 층 kstrata, 집락 psu 반영. 고음주·고요산혈증·혈청 요산·하루 음주량은 모형 분석 대상 기준(여자 비홍조 3,271명, 폐경 상태 결측 2명 제외). 고음주: 남 16 g/일, 여 8 g/일 이상.",
-    small=True)
+    "범주형은 n (가중 %), 연속형은 가중 평균(표준오차). n은 가중치를 적용하지 않은 표본 수. p: 홍조 이력 3군 비교(범주형 Rao-Scott χ² 검정, 연속형 복합표본 선형회귀의 Wald 검정). 범주형 변수의 p는 그 변수 전체 범주의 비교이며 첫 줄에 적었다. 국민건강영양조사 2019–2021, 가중치 wt_itvex × 1/3, 층 kstrata, 집락 psu 반영. 고음주·고요산혈증·혈청 요산·하루 음주량은 모형 분석 대상 기준(여자 비홍조 3,271명, 폐경 상태 결측 2명 제외). 고음주: 남 16 g/일, 여 8 g/일 이상.",
+    widths=[17, 9.5, 9.5, 9.5, 6, 9.5, 9.5, 9.5, 6], small=True)
 
 H2("3.2 홍조 이력별 고음주와 고요산혈증")
 P(f"남자 비홍조군에서는 저음주와 고음주의 고요산혈증 유병률이 비슷하였으나({float(cell('남자', '비홍조', '저음주')['가중유병률']):.1f}% vs {float(cell('남자', '비홍조', '고음주')['가중유병률']):.1f}%), 홍조 소실군({float(cell('남자', '홍조 소실', '저음주')['가중유병률']):.1f}% vs {float(cell('남자', '홍조 소실', '고음주')['가중유병률']):.1f}%)과 지속 홍조군({float(cell('남자', '지속 홍조', '저음주')['가중유병률']):.1f}% vs {float(cell('남자', '지속 홍조', '고음주')['가중유병률']):.1f}%)에서는 고음주군의 유병률이 높았다(표 2). 주 모형에서 남자 비홍조군의 고음주 OR은 {ci(A_MAIN, '남자', '비홍조')}로 연관이 없었고, 지속 홍조군은 {ci(A_MAIN, '남자', '지속 홍조')}, 홍조 소실군은 {ci(A_MAIN, '남자', '홍조 소실')}이었다(그림 2). 여자는 비홍조군 {ci(A_MAIN, '여자', '비홍조')}, 지속 홍조군 {ci(A_MAIN, '여자', '지속 홍조')}였고, 홍조 소실군은 고음주 칸의 사례가 {cell('여자', '홍조 소실', '고음주')['고요산혈증_n']}명뿐이라 해석하지 않았다.")
@@ -354,10 +382,18 @@ H1("5. 결론")
 P("국민건강영양조사 2019–2021년 성인 음주자에서 지속 홍조군의 음주–고요산혈증 연관이 비홍조군보다 강하다는 근거는 확인되지 않았다. 남자에서는 과거에 홍조가 있었으나 지금은 없는 홍조 소실군에서 고음주와 고요산혈증의 연관이 비홍조군보다 컸으나, p 값이 경계 근처이고 군의 크기가 작아 가설을 만드는 결과로 보아야 한다.")
 
 # ===== 기타 =====
-H1("기타")
-P("<b>자료 이용:</b> 국민건강영양조사 원시자료는 질병관리청 국민건강영양조사 누리집에서 신청 후 이용할 수 있다. 분석 코드는 팀 저장소(code/final_analysis.R)에 있다.")
-P("<b>생성형 AI 사용:</b> 분석 코드 작성과 문서 정리에 생성형 AI(Claude)를 활용하였으며, 모든 결과와 문장은 조원이 검토하였다.")
-P("<b>이해관계:</b> <span class='red'>[없음 — 조원 확인]</span>")
+H1("감사의 글")
+P("<span class='red'>[지도교수와 도움을 준 분께 드리는 감사 문구 — 조원 작성]</span>")
+H1("연구비")
+P("<span class='red'>[본 연구는 별도의 연구비 지원을 받지 않았다 — 조원 확인]</span>")
+H1("이해관계")
+P("<span class='red'>[저자들은 이 연구와 관련하여 밝힐 이해관계가 없다 — 조원 확인]</span>")
+H1("자료 이용")
+P("국민건강영양조사 원시자료는 질병관리청 국민건강영양조사 누리집(https://knhanes.kdca.go.kr)에서 신청 후 이용할 수 있다. 분석 코드는 팀 저장소의 code/final_analysis.R에 있다.")
+H1("저자 기여")
+P("<span class='red'>[연구 설계, 자료 분석, 해석, 원고 작성, 검토에 대한 저자별 기여 — 조원 작성]</span>")
+H1("생성형 AI 사용")
+P("분석 코드 작성과 문서 정리에 생성형 AI(Claude)를 활용하였으며, 모든 결과와 문장은 저자들이 검토하였다.")
 
 # ===== 참고문헌 =====
 H1("참고문헌")
