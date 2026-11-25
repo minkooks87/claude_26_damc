@@ -54,6 +54,25 @@ g3 <- ggplot(es, aes(x = 추정치, y = 분석, colour = 홍조이력)) + geom_v
   scale_colour_manual(values = c("비홍조" = "grey40", "홍조 소실" = "#C55A11", "지속 홍조" = "#2F5597"), name = NULL) +
   labs(x = "남자 고음주 vs 저음주 고요산혈증 OR (95% CI, 로그 눈금)", y = NULL) + theme_bw(base_family = fam, base_size = 12) + theme(legend.position = "bottom")
 save_fig(g3, "fig3_민감도_남자_OR.png", h = 4.5)
+# 그림 4: 주질문·부질문 forest plot — 교호작용 효과(홍조군 OR ÷ 비홍조군 OR, 고음주 vs 저음주)와 95% CI
+#   보정 모형(Crude·M2S·M3S)과 민감도 4개(M2S)를 한 그림에. 2026-11-25 추가
+FP_AN <- c(A_CR, A_MAIN, A_M3, A_SENS)
+FP_LAB <- c("Crude", "M2S (주 모형)", "M3S", "민감도: 1잔 8 g", "민감도: 1잔 10 g", "민감도: 대푯값 하한", "민감도: 대푯값 상한")
+fpd <- eff[분석 %in% FP_AN & grepl("OR의 비", 음주)]
+fpd[, 질문 := factor(fifelse(grepl("^지속", 홍조이력), "주질문: 지속 홍조 ÷ 비홍조", "부질문: 홍조 소실 ÷ 비홍조"),
+                     c("주질문: 지속 홍조 ÷ 비홍조", "부질문: 홍조 소실 ÷ 비홍조"))]
+fpd[, 분석 := factor(분석, rev(FP_AN), rev(FP_LAB))]
+fpd[, 해석 := fifelse(grepl("10명", 비고), "사례 10명 미만(해석하지 않음)", "해석 가능")]
+fpd[, 주 := 분석 == "M2S (주 모형)"]
+g4 <- ggplot(fpd, aes(x = 추정치, y = 분석)) + geom_vline(xintercept = 1, linetype = 2, colour = "grey50") +
+  geom_errorbar(aes(xmin = CI하한, xmax = CI상한, colour = 주), width = 0.25, orientation = "y") +
+  geom_point(aes(shape = 해석, colour = 주), size = 2.6, fill = "white") +
+  scale_shape_manual(values = c("해석 가능" = 16, "사례 10명 미만(해석하지 않음)" = 21), name = NULL) +
+  scale_colour_manual(values = c(`TRUE` = "#C00000", `FALSE` = "grey25"), guide = "none") +
+  scale_x_log10(breaks = c(0.5, 1, 2, 4, 8), labels = c("0.5", "1", "2", "4", "8")) +
+  facet_grid(성별 ~ 질문) + labs(x = "OR의 비 (홍조군 OR ÷ 비홍조군 OR, 95% CI, 로그 눈금)", y = NULL) +
+  theme_bw(base_family = fam, base_size = 11) + theme(legend.position = "bottom", strip.text = element_text(size = 10.5), strip.text.y = element_text(angle = 0), panel.spacing.x = unit(1.2, "lines"))
+save_fig(g4, "fig4_주질문_부질문_forest.png", h = 6)
 
 # ---- 표 도구 ----
 md_tab <- function(dt) { h <- names(dt); c(paste("|", paste(h, collapse = " | "), "|"), paste("|", paste(rep("---", length(h)), collapse = " | "), "|"),
@@ -134,6 +153,16 @@ add("### 4-2. 홍조 이력별 고음주의 OR (저음주 대비)", "", "![그�
     md_tab(eff_wide(c(A_CR, A_MAIN, A_M3), c("Crude", "**M2S (주 모형)**", "M3S"))), "")
 add("### 4-3. 효과수정 검정 p (Wald, 1 df)", "", md_tab(p_wide(c(A_CR, A_MAIN, A_M3), c("Crude", "**M2S (주 모형)**", "M3S"))), "",
     "- 주질문 = 음주 × 지속 홍조, 부질문 = 음주 × 홍조 소실(모두 비홍조 대비, 곱셈 척도). 소실 vs 지속은 탐색으로만 봅니다.", "")
+
+ir <- eff[분석 %in% c(A_CR, A_MAIN, A_M3) & grepl("OR의 비", 음주)]
+ir[, 값 := paste0(f2(추정치), " (", f2(CI하한), "–", f2(CI상한), ")", fifelse(grepl("10명", 비고), " †", ""))]
+ir[, 질문 := fifelse(grepl("^지속", 홍조이력), "주질문 (지속 ÷ 비홍조)", "부질문 (소실 ÷ 비홍조)")]
+irw <- dcast(ir, 질문 + 성별 ~ 분석, value.var = "값"); irw[, 질문 := factor(질문, c("주질문 (지속 ÷ 비홍조)", "부질문 (소실 ÷ 비홍조)"))]; setorder(irw, 질문, 성별)
+setcolorder(irw, c("질문", "성별", A_CR, A_MAIN, A_M3)); setnames(irw, c(A_CR, A_MAIN, A_M3), c("Crude", "**M2S (주 모형)**", "M3S"))
+add("### 4-4. 주질문·부질문의 효과 크기와 forest plot", "",
+    "효과 크기는 교호작용 항, 곧 **OR의 비 = 홍조군의 고음주 OR ÷ 비홍조군의 고음주 OR**입니다. 1보다 크면 그 홍조군에서 음주의 영향이 더 큽니다. 검정 p는 4-3과 같습니다.", "",
+    md_tab(irw), "", "![그림 4](2026-11-23_주분석_그림/fig4_주질문_부질문_forest.png)", "",
+    "- 빨간색이 주 모형(M2S)입니다. 민감도 4개는 M2S로 계산했습니다. 빈 원은 사례 10명 미만 칸이 있어 해석하지 않습니다.", "")
 
 add("## 5. 보조: 혈청 요산 다중회귀", "", "![그림 2](2026-11-23_주분석_그림/fig2_혈청요산_차이_홍조이력별.png)", "",
     "고음주 vs 저음주 혈청 요산 차이(mg/dL, 95% CI):", "", md_tab(eff_wide(c(A_CRU, A_UA, A_M3U), c("Crude", "**M2S**", "M3S"), sep = ", ")), "",

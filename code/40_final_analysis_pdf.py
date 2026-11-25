@@ -1,7 +1,7 @@
 # 40_final_analysis_pdf.py
 # 목적: 확정 조건으로 실행한 최종 분석(code/final_analysis.R)의 결과를 knhanes-analysis 스킬의 보고 형식
 #       (자료·설계 → 변수 정의 → 대상자 흐름 → Table 1 → 본 분석 → 검증 → 가정·한계)으로 PDF 한 부에 정리한다.
-# 입력: output/final_analysis/ 의 01, 02a, 03, 06, 10, 11, 12, 13, _reproducibility.txt, 그림 3장
+# 입력: output/final_analysis/ 의 01, 02a, 03, 06, 10, 11, 12, 13, _reproducibility.txt, 그림 4장(2026-11-25 그림 4 forest plot 추가)
 # 출력: Result/2026-11-23_최종분석_정리.pdf
 # 실행: python code/40_final_analysis_pdf.py   (Edge 또는 Chrome 필요. final_analysis.R과 39_main_report.R을 먼저 실행)
 # 숫자는 모두 결과 파일에서 읽어 넣는다(손으로 옮겨 적지 않음). 생성형 AI(Claude) 도움으로 작성, 조원 검토 필요.
@@ -85,9 +85,9 @@ def table(head, rows, widths=None, cls=""):
             + "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in rows) + "</tbody></table>")
 
 
-def fig(name, cap):
+def fig(name, cap, w=88):
     p = (FA / name).resolve()
-    return f'<figure><img src="{p.as_uri()}"><figcaption>{cap}</figcaption></figure>'
+    return f'<figure><img src="{p.as_uri()}" style="max-width:{w}%"><figcaption>{cap}</figcaption></figure>'
 
 
 CSS = """
@@ -153,7 +153,7 @@ A(f"""<div class="cover"><div class="top"><div class="kicker">국민건강영양
 # ---- 목차 + 1. 자료와 설계 ----
 A("""<section><div class="toc"><h2>차례</h2><ol>
 <li>1. 자료와 표본설계</li><li>2. 확정한 분석 조건</li><li>3. 변수 정의(지침서 쪽수)</li><li>4. 대상자 선정 흐름</li>
-<li>5. 홍조 이력별 특성(Table 1 요약)</li><li>6. 본 분석: 고요산혈증</li><li>7. 보조 분석: 혈청 요산</li><li>8. 민감도 분석</li>
+<li>5. 홍조 이력별 특성(Table 1 요약)</li><li>6. 본 분석: 고요산혈증(주질문·부질문 forest plot 포함)</li><li>7. 보조 분석: 혈청 요산</li><li>8. 민감도 분석</li>
 <li>9. 검증: 공식 통계 대조와 재현성</li><li>10. 가정한 것과 확인하지 못한 것</li></ol></div>""")
 A("<h2 style='margin-top:14px'>1. 자료와 표본설계</h2>" + table(["항목", "내용", "근거"], [
     ["자료", "국민건강영양조사 제8기 2019·2020·2021년 기본DB(<code>hn19_all</code>, <code>hn20_all</code>, <code>hn21_all</code>)", "지침서"],
@@ -229,6 +229,25 @@ A("<section><h2>6. 본 분석: 그림</h2>" + fig("fig1_고요산혈증_OR_홍�
 <li>주질문: 지속 홍조군 OR({eci(A_MAIN, '남자', '지속 홍조')})이 비홍조군보다 크지만 차이는 통계적으로 확인되지 않았습니다(p = {fp(pnum(A_MAIN, '주질문', '남자'))}). M3S에서는 p = {fp(pnum(A_M3, '주질문', '남자'))}이지만, M3S 변수는 매개변수일 수 있어 결론은 M2S로 냅니다.</li>
 <li>부질문: 남자 홍조 소실군의 OR이 비홍조군보다 컸습니다(p = {fp(pnum(A_MAIN, '부질문', '남자'))}).</li>
 <li>여자는 비홍조군에서도 연관이 있었고(OR {eci(A_MAIN, '여자', '비홍조')}), 홍조 이력에 따른 차이는 없었습니다.</li></ul></div></section>""")
+
+# ---- 6-1. 주질문·부질문 forest plot (2026-11-25 추가) ----
+def rci(an, s, g):
+    r = next(x for x in eff if x["분석"] == an and x["성별"] == s and x["홍조이력"] == f"{g} ÷ 비홍조" and "OR의 비" in x["음주"])
+    t = f'{float(r["추정치"]):.2f} ({float(r["CI하한"]):.2f}–{float(r["CI상한"]):.2f})'
+    return t + (" †" if "10명" in r["비고"] else "")
+
+
+irow = [[lab, s, rci(A_CR, s, g), f"<b>{rci(A_MAIN, s, g)}</b>", rci(A_M3, s, g), ptxt(A_MAIN, q, s)]
+        for q, g, lab in [("주질문", "지속 홍조", "주질문 (지속 ÷ 비홍조)"), ("부질문", "홍조 소실", "부질문 (소실 ÷ 비홍조)")] for s in SEXES]
+A("<section><h2>6. 본 분석: 주질문·부질문 forest plot</h2>"
+  + "<p>주질문·부질문의 효과 크기는 교호작용 항, 곧 <b>OR의 비 = 홍조군의 고음주 OR ÷ 비홍조군의 고음주 OR</b>입니다. 1보다 크면 그 홍조군에서 음주의 영향이 더 크고, 신뢰구간이 1을 포함하면 차이가 확인되지 않은 것입니다.</p>"
+  + table(["질문", "성별", "Crude", "M2S (주 모형)", "M3S", "p (M2S)"], irow, [24, 8, 19, 19, 19, 11])
+  + fig("fig4_주질문_부질문_forest.png", "그림 4. 주질문·부질문의 OR의 비(95% CI). 빨간색이 주 모형(M2S), 민감도 4개는 M2S로 계산. 빈 원은 사례 10명 미만이라 해석하지 않음", w=66)
+  + f"""<div class="box info"><b>읽는 법</b><ul>
+<li><b>주질문(남):</b> OR의 비 {rci(A_MAIN, '남자', '지속 홍조')}. 지속 홍조군에서 음주의 영향이 약 {round((float(next(x['추정치'] for x in eff if x['분석'] == A_MAIN and x['성별'] == '남자' and x['홍조이력'] == '지속 홍조 ÷ 비홍조' and 'OR의 비' in x['음주'])) - 1) * 100)}% 큰 쪽이지만 구간이 1을 포함해 차이는 확인되지 않았습니다. 모든 민감도에서 같은 방향입니다.</li>
+<li><b>주질문(여):</b> OR의 비 {rci(A_MAIN, '여자', '지속 홍조')}로 차이가 없습니다. 다만 구간이 넓어 같다고 확정할 수는 없습니다.</li>
+<li><b>부질문(남):</b> OR의 비 {rci(A_MAIN, '남자', '홍조 소실')}로 약 2배이며, 모든 분석에서 크기가 비슷합니다. 구간 하한은 1 근처(0.95–1.14)라 p가 경계 근처에서 오갑니다.</li>
+<li><b>부질문(여):</b> 소실군 고음주 칸의 사례가 5명이라 해석하지 않습니다(†).</li></ul></div></section>""")
 
 # ---- 7. 혈청 요산 ----
 urow = [[s, g, eci(A_CRU, s, g, ", "), f"<b>{eci(A_UA, s, g, ', ')}</b>", eci(A_M3U, s, g, ", ")] for s in SEXES for g in FLUSH]

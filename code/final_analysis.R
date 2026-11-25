@@ -452,6 +452,16 @@ if (!RUN_MAIN) {
                                               추정치 = e[["est"]], CI하한 = e[["lo"]], CI상한 = e[["hi"]], 모형n = r$n,
                                               비고 = if (few_e) "사례 10명 미만 칸 있음(해석하지 않음)" else "")
       }
+      # 주질문·부질문의 효과 크기: 교호작용 항 = 홍조군 OR ÷ 비홍조군 OR(혈청 요산은 β 차이)과 95% CI [6.2]
+      # 2026-11-25 추가(forest plot용). 비고는 같은 질문 검정의 비고(사례 10명 미만·분리)를 그대로 쓴다.
+      q_note <- c("지속 홍조" = tst[[length(tst) - 2L]]$비고, "홍조 소실" = tst[[length(tst) - 1L]]$비고)
+      for (g in c("지속 홍조", "홍조 소실")) for (t in base_terms) {
+        e <- lincomb(r$fit, setNames(1, paste0(t, ":flush_hist", g)), tr)
+        eff[[length(eff) + 1L]] <- data.table(성별 = s, 홍조이력 = paste(g, "÷ 비홍조"),
+                                              음주 = paste0(if (is_cut) sub("^drk", "", t) else paste0(crit$per, " g/일당"),
+                                                            if (spec$y == "hua") ": OR의 비" else ": β 차이"),
+                                              추정치 = e[["est"]], CI하한 = e[["lo"]], CI상한 = e[["hi"]], 모형n = r$n, 비고 = q_note[[g]])
+      }
       if (is_cut) {                                     # 칸 표: 비가중 n·사례 수와 가중 유병률(%) [계획서 6.1, 7장]
         cn <- r$data[, .(n = .N, 고요산혈증_n = sum(hua)), keyby = .(성별 = f_sex, 홍조이력 = flush_hist, 음주 = drk)]
         wp <- as.data.table(svyby(~hua, ~flush_hist + drk, r$design, svymean, na.rm = TRUE, keep.var = FALSE))
